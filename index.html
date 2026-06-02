@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Domo Cafe — Staff Intelligence System</title>
+<title>Domo Cafe — Staff Intelligence System v2.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -41,7 +41,7 @@ h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .tab-btn:hover:not(.active){color:var(--text)}
 
 /* CONTENT */
-.tab-content{display:none;padding:24px;max-width:1100px;margin:0 auto}
+.tab-content{display:none;padding:24px;max-width:1200px;margin:0 auto}
 .tab-content.active{display:block}
 
 /* CARDS */
@@ -166,6 +166,74 @@ tr:hover td{background:#FAFAF8}
 .text-sm{font-size:13px}
 .text-xs{font-size:11px;color:var(--muted)}
 .font-mono{font-family:'JetBrains Mono',monospace}
+
+/* ======= FLOOR MAP STYLES ======= */
+.floor-layout{display:flex;gap:16px;align-items:flex-start}
+.floor-chips-sidebar{width:180px;flex-shrink:0}
+.floor-chips-sidebar .card-title{margin-bottom:8px}
+.staff-chip{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:700;cursor:grab;margin-bottom:6px;user-select:none;transition:all 0.2s;border:2px solid rgba(0,0,0,0.1)}
+.staff-chip.foh-chip{background:#8B4513;color:#fff}
+.staff-chip.boh-chip{background:#2D2D2D;color:#fff}
+.staff-chip.mgmt-chip{background:#065F46;color:#fff}
+.staff-chip:active{cursor:grabbing;transform:scale(0.96)}
+.staff-chip.chip-assigned{opacity:0.35;cursor:default}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);flex-shrink:0}
+
+.floor-map-wrap{flex:1}
+.cafe-floor-plan{position:relative;background:var(--card);border:2px solid var(--border);border-radius:12px;overflow:hidden}
+.cafe-floor-svg{width:100%;height:auto;display:block}
+
+.floor-zone-panel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+.floor-zone{background:var(--bg);border:2px dashed var(--border);border-radius:10px;padding:10px;min-height:72px;transition:all 0.2s}
+.floor-zone.drag-over{background:#FEF3C7;border-color:var(--brown);border-style:solid}
+.floor-zone-label{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px}
+.floor-zone-chips{display:flex;flex-wrap:wrap;gap:4px;min-height:28px}
+.floor-zone .staff-chip{margin-bottom:0;font-size:10px;padding:4px 8px;cursor:pointer}
+.floor-zone .staff-chip:hover{opacity:0.8}
+
+.zone-a{border-color:#8B4513;background:#FFF8F3}
+.zone-b{border-color:#1E40AF;background:#F0F4FF}
+.zone-c{border-color:#065F46;background:#F0FDF4}
+.zone-2tops{border-color:#7C3AED;background:#F5F3FF}
+.zone-bar{border-color:#D97706;background:#FFFBEB}
+.zone-expo{border-color:#DC2626;background:#FFF5F5}
+.zone-kitchen{border-color:#374151;background:#F9FAFB}
+
+.floor-clear-btn{margin-top:10px}
+.no-schedule-msg{color:var(--muted);font-size:12px;text-align:center;padding:16px}
+
+/* ======= AVAILABILITY STYLES ======= */
+.avail-wrap{overflow-x:auto}
+.avail-table{min-width:700px;border-collapse:collapse}
+.avail-table th{padding:10px 8px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);text-align:center;position:sticky;top:0;background:white;z-index:5}
+.avail-table th:first-child{text-align:left}
+.avail-table td{padding:8px;border-bottom:1px solid #F0EDE8;vertical-align:middle}
+.avail-table tr:hover td{background:#FAFAF8}
+.avail-cell{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;text-align:center;min-width:44px}
+.avail-ALL{background:#D1FAE5;color:#065F46}
+.avail-AM{background:#DBEAFE;color:#1E40AF}
+.avail-PM{background:#FEF3C7;color:#92400E}
+.avail-dash{background:#F3F4F6;color:#9CA3AF}
+.avail-x{background:#FEE2E2;color:#991B1B}
+.avail-group-header td{background:#F7F5F2;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;padding:6px 8px}
+.avail-event-row td{background:#FEF3C7;font-size:11px;color:#92400E;font-weight:600;text-align:center;padding:6px 8px}
+.avail-event-row td:first-child{text-align:left}
+.avail-filter-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.filter-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif}
+.filter-btn.active{background:var(--brown);color:#fff;border-color:var(--brown)}
+.filter-btn:hover:not(.active){border-color:var(--brown);color:var(--brown)}
+.avail-legend{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:11px}
+.avail-legend span{display:flex;align-items:center;gap:4px}
+.legend-dot{width:24px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+
+/* ======= SCHEDULE UPGRADE STYLES ======= */
+.avail-badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:600}
+.avail-badge-warn{background:#FEF3C7;color:#92400E}
+.avail-badge-danger{background:#FEE2E2;color:#991B1B}
+.avail-badge-ok{background:#D1FAE5;color:#065F46}
+.hours-remaining{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-left:auto;padding-right:4px}
+.hours-over{color:var(--danger);font-weight:700}
+
 </style>
 </head>
 <body>
@@ -184,7 +252,7 @@ tr:hover td{background:#FAFAF8}
 <!-- APP -->
 <div id="app">
   <div class="topbar">
-    <div class="topbar-title">⚙️ Domo Cafe — Staff Intelligence System <span style="font-size:10px;opacity:0.6;font-family:'JetBrains Mono',monospace;margin-left:8px">v1.2</span></div>
+    <div class="topbar-title">⚙️ Domo Cafe — Staff Intelligence System <span style="font-size:10px;opacity:0.6;font-family:'JetBrains Mono',monospace;margin-left:8px">v2.0</span></div>
     <div class="topbar-right">
       <span id="topDate"></span>
       <span onclick="doLogout()">Sign Out</span>
@@ -192,11 +260,13 @@ tr:hover td{background:#FAFAF8}
   </div>
 
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="showTab('dashboard')">📊 Dashboard</button>
-    <button class="tab-btn" onclick="showTab('staff')">👥 Staff Directory</button>
-    <button class="tab-btn" onclick="showTab('schedule')">📅 Schedule Builder</button>
-    <button class="tab-btn" onclick="showTab('skills')">🎯 Skill Matrix</button>
-    <button class="tab-btn" onclick="showTab('optimizer')">⚡ Labor Optimizer</button>
+    <button class="tab-btn active" onclick="showTab('dashboard',this)">📊 Dashboard</button>
+    <button class="tab-btn" onclick="showTab('staff',this)">👥 Staff Directory</button>
+    <button class="tab-btn" onclick="showTab('schedule',this)">📅 Schedule Builder</button>
+    <button class="tab-btn" onclick="showTab('skills',this)">🎯 Skill Matrix</button>
+    <button class="tab-btn" onclick="showTab('optimizer',this)">⚡ Labor Optimizer</button>
+    <button class="tab-btn" onclick="showTab('floormap',this)">🗺️ Floor Map</button>
+    <button class="tab-btn" onclick="showTab('availability',this)">📋 Availability</button>
   </div>
 
   <!-- DASHBOARD -->
@@ -226,9 +296,7 @@ tr:hover td{background:#FAFAF8}
         <div class="kpi-label">Sales Needed for 30%</div>
       </div>
     </div>
-
     <div class="sep"></div>
-
     <div class="grid-2 mt-16">
       <div class="card">
         <div class="card-title">Today's Projected Sales</div>
@@ -248,9 +316,7 @@ tr:hover td{background:#FAFAF8}
         <div id="weekSummary" style="font-size:13px;color:var(--muted)">Loading...</div>
       </div>
     </div>
-
     <div class="sep"></div>
-
     <div class="card mt-16">
       <div class="card-title">Staff Scheduled Today</div>
       <table id="todayTable">
@@ -277,18 +343,9 @@ tr:hover td{background:#FAFAF8}
     </div>
     <div class="sep"></div>
     <div class="grid-3">
-      <div class="card kpi">
-        <div class="kpi-val" id="dir-total">—</div>
-        <div class="kpi-label">Total Staff</div>
-      </div>
-      <div class="card kpi">
-        <div class="kpi-val" id="dir-foh">—</div>
-        <div class="kpi-label">FOH</div>
-      </div>
-      <div class="card kpi">
-        <div class="kpi-val" id="dir-boh">—</div>
-        <div class="kpi-label">BOH</div>
-      </div>
+      <div class="card kpi"><div class="kpi-val" id="dir-total">—</div><div class="kpi-label">Total Staff</div></div>
+      <div class="card kpi"><div class="kpi-val" id="dir-foh">—</div><div class="kpi-label">FOH</div></div>
+      <div class="card kpi"><div class="kpi-val" id="dir-boh">—</div><div class="kpi-label">BOH</div></div>
     </div>
   </div>
 
@@ -419,7 +476,6 @@ tr:hover td{background:#FAFAF8}
         </div>
       </div>
     </div>
-
     <div class="card mt-16">
       <div class="card-title">Staff Crew Builder</div>
       <div id="optimizerRoles"></div>
@@ -434,13 +490,295 @@ tr:hover td{background:#FAFAF8}
         </div>
       </div>
     </div>
-
     <div class="card mt-16" id="opt-recommendation" style="display:none">
       <div class="card-title">Recommendation</div>
       <div id="opt-rec-body"></div>
     </div>
   </div>
-</div>
+
+  <!-- FLOOR MAP TAB -->
+  <div id="tab-floormap" class="tab-content">
+    <div class="section-header">
+      <h2>🗺️ Floor Map</h2>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="floorDateSelect" onchange="renderFloorMap()" style="padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:var(--bg)"></select>
+        <button class="btn btn-outline btn-sm" onclick="clearFloorAssignments()">Clear Floor</button>
+      </div>
+    </div>
+    <div class="alert alert-warn" style="font-size:12px;padding:10px 14px;margin-bottom:16px">
+      <strong>How to assign:</strong> Drag staff chips from the sidebar → drop onto a section or station. Click an assigned chip to unassign.
+    </div>
+    <div class="floor-layout">
+      <!-- Sidebar chips -->
+      <div class="floor-chips-sidebar card" style="padding:14px">
+        <div class="card-title">Scheduled Today</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px">FOH</div>
+        <div id="floorChipsFOH"></div>
+        <div style="font-size:11px;color:var(--muted);margin:10px 0 6px">BOH</div>
+        <div id="floorChipsBOH"></div>
+      </div>
+
+      <!-- Floor plan -->
+      <div class="floor-map-wrap">
+        <!-- SVG Floor Plan Visual -->
+        <div class="cafe-floor-plan">
+          <svg class="cafe-floor-svg" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+            <!-- BOH Background -->
+            <rect x="0" y="0" width="272" height="520" fill="#1E1E2E" rx="0"/>
+
+            <!-- BOH Room borders -->
+            <rect x="4" y="4" width="122" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="65" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle" font-weight="bold">📋</text>
+            <text x="65" y="64" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Office</text>
+
+            <rect x="130" y="4" width="66" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="163" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">📦</text>
+            <text x="163" y="64" fill="#8888BB" font-size="9" font-family="sans-serif" text-anchor="middle">Storage 1</text>
+
+            <rect x="200" y="4" width="66" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="233" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">📦</text>
+            <text x="233" y="64" fill="#8888BB" font-size="9" font-family="sans-serif" text-anchor="middle">Storage 2</text>
+
+            <rect x="4" y="120" width="130" height="120" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="69" y="172" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">❄️</text>
+            <text x="69" y="186" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Walk-in</text>
+
+            <rect x="138" y="120" width="128" height="120" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="202" y="172" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">🔪</text>
+            <text x="202" y="186" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Prep</text>
+
+            <rect x="4" y="244" width="130" height="110" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="69" y="292" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">🚿</text>
+            <text x="69" y="306" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Wash</text>
+
+            <!-- Kitchen Line (BOH cooking zone, near counter) -->
+            <rect x="4" y="358" width="264" height="158" fill="#1A2A1A" rx="4" stroke="#2D4A2D" stroke-width="2"/>
+            <text x="132" y="418" fill="#4A8A4A" font-size="13" font-family="sans-serif" text-anchor="middle" font-weight="bold">🔥 Kitchen Line</text>
+            <text x="132" y="436" fill="#4A8A4A" font-size="10" font-family="sans-serif" text-anchor="middle">BOH Cooking Zone</text>
+
+            <!-- Cooking (adjacent to counter) -->
+            <rect x="138" y="244" width="128" height="110" fill="#252040" rx="4" stroke="#4A3A5C" stroke-width="1.5"/>
+            <text x="202" y="292" fill="#9A88BB" font-size="11" font-family="sans-serif" text-anchor="middle">🍳</text>
+            <text x="202" y="306" fill="#9A88BB" font-size="10" font-family="sans-serif" text-anchor="middle">Cooking</text>
+
+            <!-- BOH label -->
+            <text x="136" y="18" fill="#6666AA" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">BOH</text>
+
+            <!-- Counter Bar (vertical separator) -->
+            <rect x="272" y="0" width="36" height="520" fill="#8B4513"/>
+            <text x="290" y="260" fill="#FFEEDD" font-size="10" font-family="sans-serif" text-anchor="middle" transform="rotate(-90 290 260)" font-weight="bold" letter-spacing="2">COUNTER BAR</text>
+
+            <!-- Service Windows (cutouts in counter) -->
+            <rect x="272" y="140" width="36" height="52" fill="#D4A070" rx="2"/>
+            <text x="290" y="163" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">EXPO</text>
+            <text x="290" y="174" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle">WIN 1</text>
+
+            <rect x="272" y="300" width="36" height="52" fill="#D4A070" rx="2"/>
+            <text x="290" y="323" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">PASS</text>
+            <text x="290" y="334" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle">WIN 2</text>
+
+            <!-- FOH Dining Room Background (curved right wall) -->
+            <path d="M 308,0 L 840,0 Q 900,0 900,60 L 900,460 Q 900,520 840,520 L 308,520 Z" fill="#FFFDF5"/>
+
+            <!-- Entry arch at top center of curve -->
+            <rect x="540" y="0" width="64" height="8" fill="#FFFDF5"/>
+            <path d="M 540,8 Q 572,30 604,8" fill="none" stroke="#8B4513" stroke-width="2" stroke-dasharray="4,2"/>
+            <text x="572" y="22" fill="#8B4513" font-size="9" font-family="sans-serif" text-anchor="middle" font-weight="bold">⬆ ENTRY</text>
+
+            <!-- Secondary entry (right wall) -->
+            <rect x="892" y="240" width="8" height="60" fill="#FFFDF5"/>
+            <text x="875" y="275" fill="#8B4513" font-size="9" font-family="sans-serif" text-anchor="end">EXIT →</text>
+
+            <!-- FOH dining room outline -->
+            <path d="M 308,0 L 840,0 Q 900,0 900,60 L 900,240 M 900,300 L 900,460 Q 900,520 840,520 L 308,520" fill="none" stroke="#D4C4B0" stroke-width="2"/>
+
+            <!-- Section A highlight (T1-T4) -->
+            <rect x="315" y="46" width="155" height="212" fill="none" stroke="#8B4513" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="392" y="62" fill="#8B4513" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION A</text>
+
+            <!-- Section B highlight (T5-T9) -->
+            <rect x="480" y="36" width="168" height="272" fill="none" stroke="#1E40AF" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="564" y="52" fill="#1E40AF" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION B</text>
+
+            <!-- Section C highlight (T10-T12) -->
+            <rect x="658" y="46" width="210" height="172" fill="none" stroke="#065F46" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="763" y="62" fill="#065F46" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION C</text>
+
+            <!-- 2-tops highlight -->
+            <rect x="315" y="320" width="230" height="75" fill="none" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="430" y="336" fill="#7C3AED" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">2-TOPS</text>
+
+            <!-- Bar station highlight (FOH side of counter) -->
+            <rect x="308" y="62" width="36" height="72" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4,2" rx="4"/>
+            <text x="326" y="92" fill="#D97706" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">BAR</text>
+
+            <!-- 4-TOP TABLES: T1-T4 (Section A) -->
+            <!-- T1 -->
+            <rect x="323" y="70" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="346" y="97" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T1</text>
+            <!-- T2 -->
+            <rect x="407" y="70" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="430" y="97" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T2</text>
+            <!-- T3 -->
+            <rect x="323" y="170" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="346" y="197" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T3</text>
+            <!-- T4 -->
+            <rect x="407" y="170" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="430" y="197" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T4</text>
+
+            <!-- 4-TOP TABLES: T5-T9 (Section B) -->
+            <!-- T5 -->
+            <rect x="490" y="60" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="513" y="87" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T5</text>
+            <!-- T6 -->
+            <rect x="590" y="60" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="613" y="87" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T6</text>
+            <!-- T7 -->
+            <rect x="490" y="160" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="513" y="187" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T7</text>
+            <!-- T8 -->
+            <rect x="590" y="160" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="613" y="187" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T8</text>
+            <!-- T9 -->
+            <rect x="540" y="262" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="563" y="289" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T9</text>
+
+            <!-- 4-TOP TABLES: T10-T12 (Section C) -->
+            <!-- T10 -->
+            <rect x="668" y="70" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
+            <text x="691" y="97" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T10</text>
+            <!-- T11 -->
+            <rect x="766" y="70" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
+            <text x="789" y="97" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T11</text>
+            <!-- T12 -->
+            <rect x="716" y="178" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
+            <text x="739" y="205" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T12</text>
+
+            <!-- 2-TOP TABLES: T13-T15 -->
+            <!-- T13 -->
+            <rect x="325" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
+            <text x="345" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T13</text>
+            <!-- T14 -->
+            <rect x="405" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
+            <text x="425" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T14</text>
+            <!-- T15 -->
+            <rect x="485" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
+            <text x="505" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T15</text>
+
+            <!-- Seating count label -->
+            <text x="870" y="490" fill="#B0A090" font-size="9" font-family="sans-serif" text-anchor="middle">54 seats total</text>
+          </svg>
+        </div>
+
+        <!-- Zone Assignment Panel -->
+        <div style="margin-top:12px">
+          <div class="card-title" style="margin-bottom:10px;font-size:12px">🖱️ STAFF ASSIGNMENTS — drag chips below or click to unassign</div>
+          <div class="floor-zone-panel">
+            <div class="floor-zone zone-a" id="zone-section-a" data-zone="section-a"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'section-a')">
+              <div class="floor-zone-label">📍 Section A — T1–T4</div>
+              <div class="floor-zone-chips" id="zone-chips-section-a"></div>
+            </div>
+            <div class="floor-zone zone-b" id="zone-section-b" data-zone="section-b"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'section-b')">
+              <div class="floor-zone-label">📍 Section B — T5–T9</div>
+              <div class="floor-zone-chips" id="zone-chips-section-b"></div>
+            </div>
+            <div class="floor-zone zone-c" id="zone-section-c" data-zone="section-c"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'section-c')">
+              <div class="floor-zone-label">📍 Section C — T10–T12</div>
+              <div class="floor-zone-chips" id="zone-chips-section-c"></div>
+            </div>
+            <div class="floor-zone zone-2tops" id="zone-2tops" data-zone="2tops"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'2tops')">
+              <div class="floor-zone-label">🪑 2-Top Tables T13–T15</div>
+              <div class="floor-zone-chips" id="zone-chips-2tops"></div>
+            </div>
+            <div class="floor-zone zone-bar" id="zone-bar" data-zone="bar"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'bar')">
+              <div class="floor-zone-label">☕ Bar Station</div>
+              <div class="floor-zone-chips" id="zone-chips-bar"></div>
+            </div>
+            <div class="floor-zone zone-expo" id="zone-expo" data-zone="expo"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'expo')">
+              <div class="floor-zone-label">📋 Expo Window</div>
+              <div class="floor-zone-chips" id="zone-chips-expo"></div>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <div class="floor-zone zone-kitchen" id="zone-kitchen" data-zone="kitchen"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'kitchen')">
+              <div class="floor-zone-label">🔥 Kitchen Line — BOH Cooking Zone</div>
+              <div class="floor-zone-chips" id="zone-chips-kitchen" style="min-height:40px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AVAILABILITY TAB -->
+  <div id="tab-availability" class="tab-content">
+    <div class="section-header">
+      <h2>📋 Staff Availability</h2>
+      <div style="font-size:12px;color:var(--muted)">Weekly availability + pre-opening events</div>
+    </div>
+
+    <!-- Legend + Filter -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <div class="avail-filter-bar">
+        <button class="filter-btn active" onclick="filterAvail('all',this)">Show All</button>
+        <button class="filter-btn" onclick="filterAvail('foh',this)">FOH Only</button>
+        <button class="filter-btn" onclick="filterAvail('boh',this)">BOH Only</button>
+      </div>
+      <div class="avail-legend">
+        <span><span class="legend-dot avail-ALL">ALL</span> Available all day</span>
+        <span><span class="legend-dot avail-AM">AM</span> Morning only</span>
+        <span><span class="legend-dot avail-PM">PM</span> Evening only</span>
+        <span><span class="legend-dot avail-dash">—</span> Limited/ask</span>
+        <span><span class="legend-dot avail-x">✗</span> Not available</span>
+      </div>
+    </div>
+
+    <!-- Pre-opening events banner -->
+    <div class="alert" style="background:#EDE9FE;color:#4C1D95;border:1px solid #C4B5FD;margin-bottom:16px;font-size:13px;padding:12px 16px">
+      📅 <strong>Pre-opening schedule:</strong>
+      &nbsp;F&amp;F Dinner: <strong>Jun 5 (Fri)</strong>
+      &nbsp;·&nbsp; Soft Open: <strong>Jun 6–7 (Sat–Sun)</strong>
+      &nbsp;·&nbsp; Media Day: <strong>Jun 11 (Thu)</strong>
+      &nbsp;·&nbsp; Grand Opening: <strong>Jun 13 (Sat)</strong>
+    </div>
+
+    <div class="card">
+      <div class="avail-wrap">
+        <table class="avail-table" id="availTable">
+          <thead>
+            <tr>
+              <th style="min-width:160px;text-align:left">Staff</th>
+              <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+            </tr>
+          </thead>
+          <tbody id="availBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #app -->
 
 <!-- ADD STAFF MODAL -->
 <div class="modal-overlay" id="addStaffModal">
@@ -450,22 +788,12 @@ tr:hover td{background:#FAFAF8}
       <span class="modal-close" onclick="closeModal('addStaffModal')">✕</span>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>First Name</label>
-        <input type="text" id="sf-first" placeholder="First">
-      </div>
-      <div class="form-group">
-        <label>Last Name</label>
-        <input type="text" id="sf-last" placeholder="Last">
-      </div>
+      <div class="form-group"><label>First Name</label><input type="text" id="sf-first" placeholder="First"></div>
+      <div class="form-group"><label>Last Name</label><input type="text" id="sf-last" placeholder="Last"></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>Preferred / Goes By</label>
-        <input type="text" id="sf-nick" placeholder="Nickname">
-      </div>
-      <div class="form-group">
-        <label>Department</label>
+      <div class="form-group"><label>Preferred / Goes By</label><input type="text" id="sf-nick" placeholder="Nickname"></div>
+      <div class="form-group"><label>Department</label>
         <select id="sf-dept">
           <option value="FOH">FOH (Front of House)</option>
           <option value="BOH">BOH (Back of House)</option>
@@ -474,18 +802,11 @@ tr:hover td{background:#FAFAF8}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>Phone</label>
-        <input type="text" id="sf-phone" placeholder="714-000-0000">
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="sf-email" placeholder="email@gmail.com">
-      </div>
+      <div class="form-group"><label>Phone</label><input type="text" id="sf-phone" placeholder="714-000-0000"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="sf-email" placeholder="email@gmail.com"></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>Primary Role</label>
+      <div class="form-group"><label>Primary Role</label>
         <select id="sf-role">
           <option value="Server">Server (FOH)</option>
           <option value="Barista">Barista (FOH)</option>
@@ -498,8 +819,7 @@ tr:hover td{background:#FAFAF8}
           <option value="Ops Consultant">Ops Consultant</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Employment Type</label>
+      <div class="form-group"><label>Employment Type</label>
         <select id="sf-type">
           <option value="hourly">Hourly</option>
           <option value="salary">Salary</option>
@@ -508,26 +828,18 @@ tr:hover td{background:#FAFAF8}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>Hourly Rate / Salary (Annual)</label>
-        <input type="number" id="sf-rate" placeholder="e.g. 18.90" step="0.01">
-      </div>
-      <div class="form-group">
-        <label>Start Date</label>
-        <input type="date" id="sf-start">
-      </div>
+      <div class="form-group"><label>Hourly Rate / Salary (Annual)</label><input type="number" id="sf-rate" placeholder="e.g. 18.90" step="0.01"></div>
+      <div class="form-group"><label>Start Date</label><input type="date" id="sf-start"></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>Food Handler Status</label>
+      <div class="form-group"><label>Food Handler Status</label>
         <select id="sf-foodhandler">
           <option value="Active">✅ Active</option>
           <option value="No card">🚨 No Card</option>
           <option value="Renew soon">⚠️ Renew Soon</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Status</label>
+      <div class="form-group"><label>Status</label>
         <select id="sf-status">
           <option value="active">Active</option>
           <option value="training">In Training</option>
@@ -544,11 +856,12 @@ tr:hover td{background:#FAFAF8}
 
 <!-- SHIFT MODAL -->
 <div class="modal-overlay" id="shiftModal">
-  <div class="modal" style="width:400px">
+  <div class="modal" style="width:500px">
     <div class="modal-header">
       <h3 id="shiftModalTitle">Assign Shift</h3>
       <span class="modal-close" onclick="closeModal('shiftModal')">✕</span>
     </div>
+    <div id="shiftAvailNote" style="display:none;margin-bottom:12px"></div>
     <div id="shiftStaffList"></div>
     <div class="sep"></div>
     <div class="form-group" style="margin-bottom:16px">
@@ -569,7 +882,7 @@ tr:hover td{background:#FAFAF8}
 </div>
 
 <script>
-// ==================== DATA ====================
+// ==================== CONSTANTS ====================
 const APP_PW = 'Domo@2026';
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const ROLES_FOH = ['Server','Barista','Runner','Busser'];
@@ -591,14 +904,12 @@ const FOOD_HANDLER_BADGE = {
   '—':'<span class="badge badge-l0">—</span>'
 };
 
-// Overtime Rules (GFC BP LLC — No Overtime Policy)
 const OT_RULES = {
-  maxShiftHours: 7,       // Schedule max 7hrs (buffer before 8hr CA OT threshold)
-  maxWeeklyHours: 40,     // No weekly OT
-  maxConsecutiveDays: 6,  // No 7-days-straight
+  maxShiftHours: 7,
+  maxWeeklyHours: 40,
+  maxConsecutiveDays: 6,
 };
 
-// Shift hours — capped at 7hr max per OT policy
 const SHIFT_HOURS = {
   weekday:{opening:7,full:7,closing:7,split:5},
   weekend:{opening:7,full:7,closing:7,split:5}
@@ -606,9 +917,73 @@ const SHIFT_HOURS = {
 
 function dayType(d){return(d>=5)?'weekend':'weekday'}
 
+// ==================== AVAILABILITY DATA ====================
+// Index 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
+// Values: 'ALL' | 'AM' | 'PM' | '—' | '✗'
+const AVAILABILITY = {
+  // FOH
+  3:  ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Nickolaus Gonzales
+  4:  ['ALL','ALL','ALL','AM','AM','AM','PM'],      // Gabriel Heater
+  5:  ['ALL','ALL','AM','ALL','ALL','PM','AM'],     // Hope Allan
+  6:  ['AM','AM','—','AM','AM','—','—'],            // Chantel Reyes
+  7:  ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Sophia Lomeli
+  8:  ['—','AM','AM','AM','—','AM','AM'],           // Catherine Tran
+  9:  ['—','PM','—','—','AM','—','AM'],             // Jillian Penera
+  10: ['AM','AM','AM','AM','AM','AM','PM'],         // Alana Aguilar
+  11: ['PM','PM','PM','PM','PM','PM','PM'],         // Sierra Sharpless
+  12: ['AM','AM','AM','AM','AM','AM','—'],          // Alice Hahn
+  13: ['AM','AM','AM','AM','AM','AM','—'],          // Dalia Sanchez
+  14: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Jaelynn Lane
+  15: ['PM','PM','PM','PM','AM','AM','AM'],         // Stephanie Delgado
+  16: ['PM','AM','PM','—','PM','PM','AM'],          // Lauren Nguyen
+  17: ['PM','PM','PM','—','AM','ALL','—'],          // Jada Delgado
+  18: ['AM','AM','AM','AM','AM','AM','AM'],         // Laura Renteria
+  19: ['ALL','PM','ALL','ALL','ALL','AM','AM'],     // Kiana Meno
+  20: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Sarah Ramirez
+  21: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Yash Patel
+  22: ['AM','AM','AM','AM','AM','ALL','ALL'],       // Daniel Flores
+  23: ['AM','AM','AM','—','—','—','AM'],            // Isabella Rodriguez
+  // BOH
+  24: ['PM','PM','PM','PM','PM','ALL','ALL'],       // James Clark
+  25: ['—','—','PM','—','—','AM','AM'],             // Bryce Machado
+  26: ['✗','✗','✗','✗','✗','ALL','AM'],            // Eduardo Santos
+  27: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Jessica Gomez
+  28: ['AM','AM','AM','AM','AM','AM','AM'],         // Ashley Lazcano
+  29: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Rebekah Snyder
+  30: ['—','AM','AM','—','ALL','ALL','ALL'],        // Jubilee Xieu
+  31: ['AM','—','—','—','AM','AM','AM'],            // Janet Delgado
+  32: ['ALL','ALL','ALL','ALL','ALL','AM','AM'],    // Josue Irineo
+  33: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Isaac Cho
+  34: ['AM','AM','AM','AM','AM','AM','AM'],         // Jesus Alarcon
+  35: ['PM','PM','PM','PM','PM','AM','AM'],         // Viviana Sanchez
+  36: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Graciela Arias
+  37: ['PM','PM','PM','PM','PM','PM','PM'],         // Gian Gabriel Guillermo
+  38: ['PM','PM','PM','—','ALL','—','PM'],          // Miguel Salas
+};
+
+function getAvailStatus(staffId, dayIdx) {
+  const av = AVAILABILITY[staffId];
+  if (!av) return 'ALL';
+  return av[dayIdx] || 'ALL';
+}
+
+function availClass(val) {
+  if (val === 'ALL') return 'avail-ALL';
+  if (val === 'AM') return 'avail-AM';
+  if (val === 'PM') return 'avail-PM';
+  if (val === '✗') return 'avail-x';
+  return 'avail-dash';
+}
+
+function availLabel(val) {
+  return val === '—' ? '—' : val;
+}
+
+// ==================== STORAGE ====================
 function load(k,def){try{const v=localStorage.getItem('sis_'+k);return v?JSON.parse(v):def}catch(e){return def}}
 function save(k,v){localStorage.setItem('sis_'+k,JSON.stringify(v))}
 
+// ==================== SEED DATA ====================
 const SEED_STAFF = [
   {id:1,first:'Hailey',last:'Salamanca',nick:'Hailey',phone:'',email:'hailey@domokuncafe.com',role:'GM',dept:'MGMT',type:'salary',rate:99800,start:'2026-06-01',status:'active',foodHandler:'Active'},
   {id:2,first:'TBD',last:'Head Chef',nick:'Chef',phone:'',email:'',role:'Head Chef',dept:'BOH',type:'salary',rate:92100,start:'2026-06-13',status:'active',foodHandler:'Active'},
@@ -654,7 +1029,9 @@ let staff = load('staff', null);
 if (!staff) { staff = SEED_STAFF; save('staff', staff); }
 let schedule = load('schedule',{});
 let skills = load('skills',{});
+let floorAssignments = load('floorAssignments',{});
 let nextId = load('nextId', 39);
+let currentAvailFilter = 'all';
 
 // ==================== LOGIN ====================
 function doLogin(){
@@ -679,6 +1056,7 @@ function initApp(){
   document.getElementById('topDate').textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   document.getElementById('todayLabel').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   populateWeekSelect();
+  populateFloorDateSelect();
   renderAll();
 }
 
@@ -688,16 +1066,20 @@ function renderAll(){
   renderSchedule();
   renderSkillMatrix();
   renderOptimizer();
+  renderFloorMap();
+  renderAvailability();
 }
 
 // ==================== TABS ====================
-function showTab(id){
+function showTab(id, btn){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  event.target.classList.add('active');
-  if(id==='dashboard')recalcDashboard();
-  if(id==='optimizer')runOptimizer();
+  if(btn) btn.classList.add('active');
+  if(id==='dashboard') recalcDashboard();
+  if(id==='optimizer') runOptimizer();
+  if(id==='floormap') renderFloorMap();
+  if(id==='availability') renderAvailability();
 }
 
 // ==================== STAFF ====================
@@ -715,7 +1097,6 @@ function renderStaffTable(){
     alertEl.innerHTML = alerts.length ? alerts.map(a=>`<div class="alert ${a.startsWith('🚨')?'alert-danger':a.startsWith('⚠️')?'alert-warn':'alert-warn'}" style="margin-bottom:6px">${a}</div>`).join('') : '';
   }
   tbody.innerHTML = staff.map(s=>{
-    const typeBadge = s.type==='salary'?'badge-mgmt':s.type==='contract'?'badge-consultant':'badge-foh';
     const deptBadge = s.dept==='FOH'?'badge-foh':s.dept==='BOH'?'badge-boh':'badge-mgmt';
     const rateStr = s.type==='salary'?'$'+s.rate.toLocaleString()+'/yr':'$'+s.rate.toFixed(2)+'/hr';
     const fhBadge = FOOD_HANDLER_BADGE[s.foodHandler||'—']||FOOD_HANDLER_BADGE['—'];
@@ -755,10 +1136,7 @@ function openAddStaff(prefill=null){
   document.getElementById('addStaffModal')._editId = prefill?.id||null;
   openModal('addStaffModal');
 }
-
-function editStaff(id){
-  openAddStaff(staff.find(s=>s.id===id));
-}
+function editStaff(id){ openAddStaff(staff.find(s=>s.id===id)); }
 
 function saveStaff(){
   const editId = document.getElementById('addStaffModal')._editId;
@@ -796,55 +1174,51 @@ function removeStaff(id){
 // ==================== DASHBOARD ====================
 function recalcDashboard(){
   const today = new Date();
-  const dow = today.getDay()===0?6:today.getDay()-1; // 0=Mon...6=Sun
+  const dow = today.getDay()===0?6:today.getDay()-1;
   const weekKey = getWeekKey(today);
-  const todayKey = weekKey+'_d'+dow;
-  const dayShifts = schedule[todayKey]||[];
   const isWeekend = dow>=5;
-
-  // Hours per shift type
   const hrs = SHIFT_HOURS[isWeekend?'weekend':'weekday'];
   let laborCost = 0;
   let staffToday = [];
 
-  dayShifts.forEach(entry=>{
-    const s = staff.find(x=>x.id===entry.staffId);
-    if(!s||s.type==='salary')return;
-    const h = hrs[entry.shiftType]||hrs.full;
-    const cost = s.type==='contract'?s.rate*h:s.rate*h;
-    laborCost += cost;
-    staffToday.push({...s, shiftType:entry.shiftType, hours:h, cost});
+  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+  groupedRoles.forEach(role=>{
+    const ck = weekKey+'_d'+dow+'_'+role;
+    (schedule[ck]||[]).forEach(entry=>{
+      const s = staff.find(x=>x.id===entry.staffId);
+      if(!s||s.type==='salary')return;
+      const h = hrs[entry.shiftType]||hrs.full;
+      const cost = s.rate*h;
+      laborCost += cost;
+      staffToday.push({...s, shiftType:entry.shiftType, hours:h, cost});
+    });
   });
 
   const projSales = parseFloat(document.getElementById('projSales').value)||0;
   const laborPct = projSales>0?(laborCost/projSales)*100:0;
   const salesFor30 = laborCost>0?(laborCost/0.30):0;
 
-  document.getElementById('dash-staff-today').textContent = dayShifts.length;
+  document.getElementById('dash-staff-today').textContent = staffToday.length;
   document.getElementById('dash-labor-cost').textContent = '$'+laborCost.toFixed(0);
-  document.getElementById('dash-labor-pct').textContent = laborPct.toFixed(1)+'%';
 
   const pctEl = document.getElementById('dash-labor-pct');
+  pctEl.textContent = laborPct.toFixed(1)+'%';
   pctEl.className = 'kpi-val '+(laborPct<=30?'green':laborPct<=35?'warn':'red');
-
   document.getElementById('dash-sales-needed').textContent = '$'+salesFor30.toLocaleString('en-US',{maximumFractionDigits:0});
   document.getElementById('dash-labor-target').textContent = laborPct<=30?'✅ On target':laborPct<=35?'⚠️ Watch closely':'🚨 Over target';
 
-  // Progress bar
   const fill = Math.min(100,(laborPct/50)*100);
   const fillEl = document.getElementById('prog-fill');
   fillEl.style.width = fill+'%';
   fillEl.style.background = laborPct<=30?'var(--success)':laborPct<=35?'var(--warn)':'var(--danger)';
   document.getElementById('prog-pct-label').textContent = laborPct.toFixed(1)+'%';
 
-  // Alert banner
   const alertEl = document.getElementById('laborAlert');
   if(laborPct>35) alertEl.innerHTML = `<div class="alert alert-danger">🚨 Labor at ${laborPct.toFixed(1)}% — $${(laborCost-projSales*0.30).toFixed(0)} over budget. Consider reducing crew by 1–2 staff.</div>`;
   else if(laborPct>30) alertEl.innerHTML = `<div class="alert alert-warn">⚠️ Labor at ${laborPct.toFixed(1)}% — slightly over 30% target. Monitor closely.</div>`;
   else if(projSales>0) alertEl.innerHTML = `<div class="alert alert-success">✅ Labor at ${laborPct.toFixed(1)}% — within 30% target. $${(projSales*0.30-laborCost).toFixed(0)} headroom.</div>`;
   else alertEl.innerHTML='';
 
-  // Today's staff table
   document.getElementById('todayBody').innerHTML = staffToday.map(s=>`
     <tr><td>${s.first} ${s.last}</td>
     <td><span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}">${s.role}</span></td>
@@ -853,17 +1227,18 @@ function recalcDashboard(){
     <td class="font-mono">$${s.cost.toFixed(2)}</td></tr>
   `).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No shifts scheduled today</td></tr>';
 
-  // Week summary
-  let weekTotal = 0;
+  let weekTotal=0;
   for(let d=0;d<7;d++){
-    const dk = weekKey+'_d'+d;
-    const shifts = schedule[dk]||[];
-    shifts.forEach(e=>{
-      const s = staff.find(x=>x.id===e.staffId);
-      if(!s||s.type==='salary')return;
-      const isW = d>=5;
-      const h = SHIFT_HOURS[isW?'weekend':'weekday'][e.shiftType]||9;
-      weekTotal += s.rate*h;
+    const isW=d>=5;
+    const hs=SHIFT_HOURS[isW?'weekend':'weekday'];
+    const groupedR=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+    groupedR.forEach(role=>{
+      const ck=weekKey+'_d'+d+'_'+role;
+      (schedule[ck]||[]).forEach(e=>{
+        const s=staff.find(x=>x.id===e.staffId);
+        if(!s||s.type==='salary')return;
+        weekTotal+=s.rate*(hs[e.shiftType]||hs.full);
+      });
     });
   }
   document.getElementById('weekSummary').innerHTML = `
@@ -873,6 +1248,7 @@ function recalcDashboard(){
     <div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:700"><span>Total est. weekly labor</span><span class="font-mono">$${(weekTotal+1771+1919).toFixed(0)}</span></div>
   `;
 }
+function renderDashboard(){ recalcDashboard(); }
 
 // ==================== SCHEDULE ====================
 function getWeekKey(date){
@@ -896,6 +1272,23 @@ function populateWeekSelect(){
     if(w===0)opt.selected=true;
     sel.appendChild(opt);
   }
+}
+
+// Calculate weekly hours for a staff member in a given week
+function getWeeklyHours(staffId, weekKey) {
+  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+  let total = 0;
+  for(let d=0;d<7;d++){
+    const isW=d>=5;
+    const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];
+    groupedRoles.forEach(role=>{
+      const ck=weekKey+'_d'+d+'_'+role;
+      (schedule[ck]||[]).forEach(e=>{
+        if(e.staffId===staffId) total+=(hrs[e.shiftType]||hrs.full);
+      });
+    });
+  }
+  return total;
 }
 
 let currentShiftCell = null;
@@ -938,7 +1331,7 @@ function renderSchedule(){
     groupedRoles.forEach(role=>{
       const ck=weekKey+'_d'+d+'_'+role;
       (schedule[ck]||[]).forEach(e=>{
-        if(staffHours[e.staffId]) staffHours[e.staffId].hours[d]+=hrs[e.shiftType]||hrs.full;
+        if(staffHours[e.staffId]) staffHours[e.staffId].hours[d]+=(hrs[e.shiftType]||hrs.full);
       });
     });
   }
@@ -957,7 +1350,7 @@ function renderSchedule(){
     if(overDay) otWarnings.push(`⚠️ ${sh.name}: shift over 7h on at least one day`);
     if(overDays) otWarnings.push(`⚠️ ${sh.name}: ${daysWorked} days this week (max 6 consecutive)`);
     return `<tr style="${overWeek||overDay?'background:#FEF2F2':''}"><td>${sh.name}${overWeek?'<span style="color:var(--danger);font-size:10px;margin-left:4px">⚠ OT</span>':''}</td><td><span class="badge ${ROLES_FOH.includes(sh.role)?'badge-foh':'badge-boh'}">${sh.role}</span></td>
-      ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center;${h>OT_RULES.maxShiftHours?'color:var(--danger);font-weight:700':''}"> ${h>0?h+'h':'—'}</td>`).join('')}
+      ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center;${h>OT_RULES.maxShiftHours?'color:var(--danger);font-weight:700':''}">${h>0?h+'h':'—'}</td>`).join('')}
       <td class="font-mono" style="${overWeek?'color:var(--danger);font-weight:700':''}">${totalH}h</td>
       <td class="font-mono">$${cost.toFixed(0)}</td></tr>`;
   });
@@ -968,22 +1361,55 @@ function renderSchedule(){
 }
 
 function openShiftModal(weekKey,dayIdx,role){
-  currentShiftCell = {weekKey,dayIdx:parseInt(dayIdx),role};
-  const dayName=DAYS[dayIdx];
+  const di = parseInt(dayIdx);
+  currentShiftCell = {weekKey,dayIdx:di,role};
+  const dayName=DAYS[di];
   document.getElementById('shiftModalTitle').textContent=`${dayName} — ${role}`;
-  const roleStaff = staff.filter(s=>(s.role===role||s.status==='active')&&s.type!=='salary'&&s.status==='active');
-  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
+
+  // Availability note for this day
+  const availNoteEl = document.getElementById('shiftAvailNote');
+  availNoteEl.style.display='block';
+  availNoteEl.innerHTML=`<div class="alert" style="background:#F0F4FF;border:1px solid #BFDBFE;color:#1E3A8A;font-size:12px;padding:8px 12px;margin:0">
+    📅 <strong>${dayName}</strong> — Availability badges shown next to each staff name. Check budget column (hrs remaining this week).
+  </div>`;
+
+  const roleStaff = staff.filter(s=>s.status==='active'&&s.type!=='salary');
+  const cellKey=weekKey+'_d'+di+'_'+role;
   const existing=(schedule[cellKey]||[]).map(e=>e.staffId);
+
+  // Calculate weekly hours for each staff member
+  const staffWeeklyHrs = {};
+  roleStaff.forEach(s=>{
+    staffWeeklyHrs[s.id] = getWeeklyHours(s.id, weekKey);
+  });
+
   document.getElementById('shiftStaffList').innerHTML=`
-    <div class="card-title">Select Staff</div>
-    ${roleStaff.map(s=>`
-      <label style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid ${existing.includes(s.id)?'var(--brown)':'var(--border)'}">
-        <input type="checkbox" value="${s.id}" ${existing.includes(s.id)?'checked':''} style="accent-color:var(--brown)">
-        <span style="font-size:13px;font-weight:600">${s.first} ${s.last}</span>
-        <span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}" style="margin-left:auto">${s.role}</span>
-        <span class="font-mono" style="font-size:11px;color:var(--muted)">$${s.rate.toFixed(2)}/hr</span>
-      </label>
-    `).join('')||'<div style="color:var(--muted);font-size:13px;padding:12px">No active staff for this role</div>'}
+    <div class="card-title" style="margin-bottom:8px">Select Staff</div>
+    ${roleStaff.map(s=>{
+      const av = getAvailStatus(s.id, di);
+      let avBadge = '';
+      if(av==='✗') avBadge=`<span class="avail-badge avail-badge-danger">✗ unavailable</span>`;
+      else if(av==='—') avBadge=`<span class="avail-badge avail-badge-warn">— limited</span>`;
+      else if(av==='AM') avBadge=`<span class="avail-badge" style="background:#DBEAFE;color:#1E40AF">AM only</span>`;
+      else if(av==='PM') avBadge=`<span class="avail-badge" style="background:#FEF3C7;color:#92400E">PM only</span>`;
+      else avBadge=`<span class="avail-badge avail-badge-ok">✓ all day</span>`;
+
+      const weekHrs = staffWeeklyHrs[s.id]||0;
+      const shiftH = 7;
+      const remaining = OT_RULES.maxWeeklyHours - weekHrs;
+      const wouldExceed = (weekHrs + shiftH) > OT_RULES.maxWeeklyHours;
+      const hrsLabel = `<span class="hours-remaining ${wouldExceed?'hours-over':''}">${remaining}h left</span>`;
+
+      return `
+        <label style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid ${existing.includes(s.id)?'var(--brown)':'var(--border)'}">
+          <input type="checkbox" value="${s.id}" ${existing.includes(s.id)?'checked':''} style="accent-color:var(--brown)">
+          <span style="font-size:13px;font-weight:600;flex:1">${s.first} ${s.last}</span>
+          ${avBadge}
+          <span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}" style="font-size:10px">${s.role}</span>
+          ${hrsLabel}
+        </label>
+      `;
+    }).join('')||'<div style="color:var(--muted);font-size:13px;padding:12px">No active staff</div>'}
   `;
   const existing0=schedule[cellKey];
   if(existing0&&existing0[0]) document.getElementById('shiftType').value=existing0[0].shiftType||'full';
@@ -1047,7 +1473,6 @@ function renderSkillMatrix(){
     </tr>`;
   }).join('')||'<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px">No active staff yet</td></tr>';
 
-  // Pin grid
   const pinGrid = document.getElementById('pinGrid');
   pinGrid.innerHTML = SKILL_ROLES.map(r=>{
     const earnedCount = activeStaff.filter(s=>(skills[s.id]||{})[r]===3).length;
@@ -1088,7 +1513,7 @@ function renderOptimizer(){
   container.innerHTML=OPT_ROLES.map(r=>`
     <div class="optimizer-row">
       <div>
-        <div class="opt-role">${r.role} <span class="badge ${r.type==='FOH'?'badge-foh':r.type==='BOH'?'badge-boh':'badge-consultant'}">${r.type}</span></div>
+        <div class="opt-role">${r.role} <span class="badge ${r.type==='FOH'?'badge-foh':r.type==='BOH'?'badge-boh':'badge-consultant'">${r.type}</span></div>
         <div class="opt-cost">$${r.rate.toFixed(2)}/hr</div>
       </div>
       <div class="opt-count">
@@ -1114,7 +1539,6 @@ function runOptimizer(){
   const daytype=document.getElementById('opt-daytype')?.value||'weekday';
   const hrs=SHIFT_HOURS[daytype].full;
   const budget=sales*(target/100);
-
   let totalCost=0;
   OPT_ROLES.forEach(r=>{
     const cnt=optCounts[r.role]||0;
@@ -1125,10 +1549,8 @@ function runOptimizer(){
     if(cntEl)cntEl.textContent=cnt;
     if(costEl)costEl.textContent='$'+cost.toFixed(0);
   });
-
   const pct=sales>0?(totalCost/sales)*100:0;
   const variance=budget-totalCost;
-
   if(document.getElementById('opt-budget'))document.getElementById('opt-budget').textContent='$'+budget.toFixed(0);
   if(document.getElementById('opt-current-cost'))document.getElementById('opt-current-cost').textContent='$'+totalCost.toFixed(0);
   if(document.getElementById('opt-variance')){
@@ -1143,10 +1565,7 @@ function runOptimizer(){
   }
   const fill=Math.min(100,(pct/(target*2))*100);
   const fillEl=document.getElementById('opt-prog-fill');
-  if(fillEl){
-    fillEl.style.width=fill+'%';
-    fillEl.style.background=pct<=target?'var(--success)':pct<=target+5?'var(--warn)':'var(--danger)';
-  }
+  if(fillEl){fillEl.style.width=fill+'%';fillEl.style.background=pct<=target?'var(--success)':pct<=target+5?'var(--warn)':'var(--danger)';}
   if(document.getElementById('opt-prog-label'))document.getElementById('opt-prog-label').textContent=pct.toFixed(1)+'% / '+target+'% target';
 }
 
@@ -1156,13 +1575,9 @@ function autoOptimize(){
   const daytype=document.getElementById('opt-daytype').value;
   const hrs=SHIFT_HOURS[daytype].full;
   const budget=sales*(target/100);
-
-  // Start from minimums and add until budget is filled
   const mins={Server:2,Barista:1,Runner:1,Busser:1,'Line Cook':2,Expo:1,'Ops Consultant':0};
   let counts={...mins};
   let cost=OPT_ROLES.reduce((a,r)=>a+((counts[r.role]||0)*r.rate*hrs),0);
-
-  // Priority order to add staff
   const priority=['Server','Line Cook','Barista','Runner','Busser','Expo','Ops Consultant'];
   let iter=0;
   while(cost<budget*0.92&&iter<30){
@@ -1170,20 +1585,13 @@ function autoOptimize(){
     for(const role of priority){
       const r=OPT_ROLES.find(x=>x.role===role);
       const tryCost=cost+r.rate*hrs;
-      if(tryCost<=budget){
-        counts[role]=(counts[role]||0)+1;
-        cost=tryCost;
-        added=true;
-        break;
-      }
+      if(tryCost<=budget){counts[role]=(counts[role]||0)+1;cost=tryCost;added=true;break;}
     }
     if(!added)break;
     iter++;
   }
-
   optCounts={...counts};
   save('optCounts',optCounts);
-
   const rec=document.getElementById('opt-recommendation');
   const recBody=document.getElementById('opt-rec-body');
   rec.style.display='block';
@@ -1201,6 +1609,185 @@ function autoOptimize(){
     </div>
   `;
   renderOptimizer();
+}
+
+// ==================== FLOOR MAP ====================
+const FLOOR_ZONES = ['section-a','section-b','section-c','2tops','bar','expo','kitchen'];
+
+function populateFloorDateSelect(){
+  const sel = document.getElementById('floorDateSelect');
+  sel.innerHTML='';
+  const today = new Date();
+  for(let d=-1;d<=6;d++){
+    const dt = new Date(today);
+    dt.setDate(dt.getDate()+d);
+    const key = dt.toISOString().split('T')[0];
+    const label = dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    const opt = document.createElement('option');
+    opt.value=key; opt.textContent=label;
+    if(d===0)opt.selected=true;
+    sel.appendChild(opt);
+  }
+}
+
+function getFloorDateKey(){
+  return document.getElementById('floorDateSelect')?.value || new Date().toISOString().split('T')[0];
+}
+
+function getTodayScheduledStaff(dateKey){
+  // Get day of week for the date
+  const dt = new Date(dateKey+'T12:00:00');
+  const dow = dt.getDay()===0?6:dt.getDay()-1;
+  const weekKey = getWeekKey(dt);
+  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+  const staffIds = new Set();
+  groupedRoles.forEach(role=>{
+    const ck = weekKey+'_d'+dow+'_'+role;
+    (schedule[ck]||[]).forEach(e=>staffIds.add(e.staffId));
+  });
+  return staff.filter(s=>staffIds.has(s.id)&&s.type!=='salary');
+}
+
+function renderFloorMap(){
+  const dateKey = getFloorDateKey();
+  const scheduledStaff = getTodayScheduledStaff(dateKey);
+  const fa = floorAssignments[dateKey] || {};
+
+  // Build set of assigned staff IDs
+  const assignedIds = new Set();
+  FLOOR_ZONES.forEach(z=>{ (fa[z]||[]).forEach(id=>assignedIds.add(id)); });
+
+  // Render FOH chips
+  const fohStaff = scheduledStaff.filter(s=>s.dept==='FOH');
+  const bohStaff = scheduledStaff.filter(s=>s.dept!=='FOH');
+
+  document.getElementById('floorChipsFOH').innerHTML = fohStaff.length
+    ? fohStaff.map(s=>chipHTML(s, assignedIds.has(s.id))).join('')
+    : '<div class="no-schedule-msg">No FOH scheduled</div>';
+
+  document.getElementById('floorChipsBOH').innerHTML = bohStaff.length
+    ? bohStaff.map(s=>chipHTML(s, assignedIds.has(s.id))).join('')
+    : '<div class="no-schedule-msg">No BOH scheduled</div>';
+
+  // Render zone chips
+  FLOOR_ZONES.forEach(zone=>{
+    const el = document.getElementById('zone-chips-'+zone);
+    if(!el) return;
+    const zoneStaffIds = fa[zone]||[];
+    el.innerHTML = zoneStaffIds.map(id=>{
+      const s = staff.find(x=>x.id===id);
+      if(!s) return '';
+      const cls = s.dept==='FOH'?'foh-chip':'boh-chip';
+      return `<div class="staff-chip ${cls}" onclick="unassignFromZone('${zone}',${id})" title="Click to unassign">${s.nick||s.first}</div>`;
+    }).join('');
+    if(!zoneStaffIds.length) el.innerHTML='<div style="font-size:11px;color:var(--muted);opacity:0.6">drop here</div>';
+  });
+}
+
+function chipHTML(s, assigned){
+  const cls = s.dept==='FOH'?'foh-chip':'boh-chip';
+  if(assigned){
+    return `<div class="staff-chip ${cls} chip-assigned" title="Already assigned to a zone">${s.nick||s.first}</div>`;
+  }
+  return `<div class="staff-chip ${cls}" draggable="true" data-staff-id="${s.id}"
+    ondragstart="dragStart(event,${s.id})"
+    title="Drag to assign">${s.nick||s.first}</div>`;
+}
+
+let dragStaffId = null;
+
+function dragStart(event, staffId){
+  dragStaffId = staffId;
+  event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('text/plain', String(staffId));
+}
+
+function dropToZone(event, zone){
+  event.preventDefault();
+  const zoneEl = document.getElementById('zone-'+zone);
+  if(zoneEl) zoneEl.classList.remove('drag-over');
+  const id = parseInt(event.dataTransfer.getData('text/plain')) || dragStaffId;
+  if(!id) return;
+  const dateKey = getFloorDateKey();
+  if(!floorAssignments[dateKey]) floorAssignments[dateKey]={};
+  if(!floorAssignments[dateKey][zone]) floorAssignments[dateKey][zone]=[];
+  // Remove from other zones first
+  FLOOR_ZONES.forEach(z=>{
+    floorAssignments[dateKey][z] = (floorAssignments[dateKey][z]||[]).filter(x=>x!==id);
+  });
+  // Add to this zone
+  if(!floorAssignments[dateKey][zone].includes(id)){
+    floorAssignments[dateKey][zone].push(id);
+  }
+  save('floorAssignments',floorAssignments);
+  renderFloorMap();
+}
+
+function unassignFromZone(zone, staffId){
+  const dateKey = getFloorDateKey();
+  if(!floorAssignments[dateKey]) return;
+  floorAssignments[dateKey][zone] = (floorAssignments[dateKey][zone]||[]).filter(x=>x!==staffId);
+  save('floorAssignments',floorAssignments);
+  renderFloorMap();
+}
+
+function clearFloorAssignments(){
+  if(!confirm('Clear all floor assignments for this date?')) return;
+  const dateKey = getFloorDateKey();
+  delete floorAssignments[dateKey];
+  save('floorAssignments',floorAssignments);
+  renderFloorMap();
+}
+
+// ==================== AVAILABILITY ====================
+function renderAvailability(){
+  const tbody = document.getElementById('availBody');
+  const fohStaff = staff.filter(s=>s.dept==='FOH'&&s.status==='active'&&s.type!=='salary');
+  const bohStaff = staff.filter(s=>s.dept==='BOH'&&s.status==='active'&&s.type!=='salary');
+
+  // Pre-opening events (Jun 2026, Mon=0)
+  // Jun 5 = Fri (di=4), Jun 6 = Sat (di=5), Jun 7 = Sun (di=6), Jun 11 = Thu (di=3), Jun 13 = Sat (di=5)
+  const events = [
+    {label:'🎉 F&F Dinner — Jun 5',cols:[null,null,null,null,'F&F',null,null]},
+    {label:'🟢 Soft Open — Jun 6–7',cols:[null,null,null,null,null,'SOFT','SOFT']},
+    {label:'📸 Media Day — Jun 11',cols:[null,null,null,'MEDIA',null,null,null]},
+    {label:'🎊 Grand Opening — Jun 13',cols:[null,null,null,null,null,'OPEN',null]},
+  ];
+
+  let html = '';
+
+  // Events rows
+  events.forEach(ev=>{
+    html+=`<tr class="avail-event-row"><td style="font-size:11px;font-weight:600;color:#4C1D95">${ev.label}</td>`;
+    ev.cols.forEach(c=>{
+      html+=`<td>${c?`<span style="font-size:10px;font-weight:700;color:#5B21B6">${c}</span>`:''}</td>`;
+    });
+    html+='</tr>';
+  });
+
+  function staffRows(list, groupLabel, filterKey){
+    if(currentAvailFilter!=='all'&&currentAvailFilter!==filterKey) return '';
+    let r=`<tr class="avail-group-header"><td colspan="8">${groupLabel}</td></tr>`;
+    list.forEach(s=>{
+      const av = AVAILABILITY[s.id]||['ALL','ALL','ALL','ALL','ALL','ALL','ALL'];
+      r+=`<tr>
+        <td><strong>${s.first} ${s.last}</strong><br><span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
+        ${av.map(v=>`<td style="text-align:center"><span class="avail-cell ${availClass(v)}">${availLabel(v)}</span></td>`).join('')}
+      </tr>`;
+    });
+    return r;
+  }
+
+  html += staffRows(fohStaff,'👥 Front of House (FOH)','foh');
+  html += staffRows(bohStaff,'🍳 Back of House (BOH)','boh');
+  tbody.innerHTML = html;
+}
+
+function filterAvail(filter, btn){
+  currentAvailFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderAvailability();
 }
 
 // ==================== MODAL ====================
