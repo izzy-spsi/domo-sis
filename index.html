@@ -294,6 +294,9 @@ tr:hover td{background:#FAFAF8}
 
   <!-- SCHEDULE BUILDER -->
   <div id="tab-schedule" class="tab-content">
+    <div class="alert" style="background:#EDE9FE;color:#4C1D95;border:1px solid #C4B5FD;margin-bottom:16px;font-size:13px">
+      ⏰ <strong>OT Policy:</strong> Max 7hrs/shift &nbsp;··&nbsp; Max 40hrs/week &nbsp;··&nbsp; Max 6 consecutive days &nbsp;··&nbsp; No exceptions
+    </div>
     <div class="section-header">
       <h2>Weekly Schedule Builder</h2>
       <div style="display:flex;gap:8px">
@@ -317,6 +320,7 @@ tr:hover td{background:#FAFAF8}
       <div class="card-title">Click a cell to assign a shift</div>
       <div class="schedule-grid" id="schedGrid"></div>
     </div>
+    <div id="schedOTWarnings" class="mt-16"></div>
     <div class="card mt-16">
       <div class="card-title">This Week's Shifts</div>
       <table><thead><tr><th>Staff</th><th>Role</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th><th>Total Hrs</th><th>Est. Pay</th></tr></thead>
@@ -587,10 +591,17 @@ const FOOD_HANDLER_BADGE = {
   '—':'<span class="badge badge-l0">—</span>'
 };
 
-// Shift hours
+// Overtime Rules (GFC BP LLC — No Overtime Policy)
+const OT_RULES = {
+  maxShiftHours: 7,       // Schedule max 7hrs (buffer before 8hr CA OT threshold)
+  maxWeeklyHours: 40,     // No weekly OT
+  maxConsecutiveDays: 6,  // No 7-days-straight
+};
+
+// Shift hours — capped at 7hr max per OT policy
 const SHIFT_HOURS = {
-  weekday:{opening:9+1,full:9,closing:9+1.5,split:6},
-  weekend:{opening:10+1,full:10,closing:10+1.5,split:6}
+  weekday:{opening:7,full:7,closing:7,split:5},
+  weekend:{opening:7,full:7,closing:7,split:5}
 };
 
 function dayType(d){return(d>=5)?'weekend':'weekday'}
@@ -933,15 +944,25 @@ function renderSchedule(){
   }
 
   let weekCost=0;
+  let otWarnings=[];
   const rows = Object.values(staffHours).map(sh=>{
     const totalH=sh.hours.reduce((a,b)=>a+b,0);
     const cost=totalH*sh.rate;
     weekCost+=cost;
-    return `<tr><td>${sh.name}</td><td><span class="badge ${ROLES_FOH.includes(sh.role)?'badge-foh':'badge-boh'}">${sh.role}</span></td>
-      ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center">${h>0?h+'h':'—'}</td>`).join('')}
-      <td class="font-mono">${totalH}h</td>
+    const daysWorked=sh.hours.filter(h=>h>0).length;
+    const overWeek=totalH>OT_RULES.maxWeeklyHours;
+    const overDay=sh.hours.some(h=>h>OT_RULES.maxShiftHours);
+    const overDays=daysWorked>OT_RULES.maxConsecutiveDays;
+    if(overWeek) otWarnings.push(`🚨 ${sh.name}: ${totalH}h this week (max 40h)`);
+    if(overDay) otWarnings.push(`⚠️ ${sh.name}: shift over 7h on at least one day`);
+    if(overDays) otWarnings.push(`⚠️ ${sh.name}: ${daysWorked} days this week (max 6 consecutive)`);
+    return `<tr style="${overWeek||overDay?'background:#FEF2F2':''}"><td>${sh.name}${overWeek?'<span style="color:var(--danger);font-size:10px;margin-left:4px">⚠ OT</span>':''}</td><td><span class="badge ${ROLES_FOH.includes(sh.role)?'badge-foh':'badge-boh'}">${sh.role}</span></td>
+      ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center;${h>OT_RULES.maxShiftHours?'color:var(--danger);font-weight:700':''}"> ${h>0?h+'h':'—'}</td>`).join('')}
+      <td class="font-mono" style="${overWeek?'color:var(--danger);font-weight:700':''}">${totalH}h</td>
       <td class="font-mono">$${cost.toFixed(0)}</td></tr>`;
   });
+  const otEl=document.getElementById('schedOTWarnings');
+  if(otEl) otEl.innerHTML=otWarnings.length?otWarnings.map(w=>`<div class="alert ${w.startsWith('🚨')?'alert-danger':'alert-warn'}" style="margin-bottom:4px;padding:8px 12px;font-size:12px">${w}</div>`).join(''):'<div class="alert alert-success" style="padding:8px 12px;font-size:12px">✅ No OT violations this week</div>';
   document.getElementById('schedSummaryBody').innerHTML=rows.join('')||'<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px">No shifts scheduled this week</td></tr>';
   document.getElementById('sch-week-cost').textContent='$'+weekCost.toFixed(0);
 }
