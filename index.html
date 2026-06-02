@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Domo Cafe — Staff Intelligence System</title>
+<title>Domo Cafe — Staff Intelligence System v2.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -42,7 +42,7 @@ h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .tab-btn:hover:not(.active){color:var(--text)}
 
 /* CONTENT */
-.tab-content{display:none;padding:24px;max-width:1100px;margin:0 auto}
+.tab-content{display:none;padding:24px;max-width:1200px;margin:0 auto}
 .tab-content.active{display:block}
 
 /* CARDS */
@@ -217,6 +217,73 @@ tr:hover td{background:#FAFAF8}
 
 /* CRED LIST */
 .cred-row{font-family:'JetBrains Mono',monospace;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+
+/* ======= FLOOR MAP STYLES ======= */
+.floor-layout{display:flex;gap:16px;align-items:flex-start}
+.floor-chips-sidebar{width:180px;flex-shrink:0}
+.floor-chips-sidebar .card-title{margin-bottom:8px}
+.staff-chip{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:700;cursor:grab;margin-bottom:6px;user-select:none;transition:all 0.2s;border:2px solid rgba(0,0,0,0.1)}
+.staff-chip.foh-chip{background:#8B4513;color:#fff}
+.staff-chip.boh-chip{background:#2D2D2D;color:#fff}
+.staff-chip.mgmt-chip{background:#065F46;color:#fff}
+.staff-chip:active{cursor:grabbing;transform:scale(0.96)}
+.staff-chip.chip-assigned{opacity:0.35;cursor:default}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);flex-shrink:0}
+
+.floor-map-wrap{flex:1}
+.cafe-floor-plan{position:relative;background:var(--card);border:2px solid var(--border);border-radius:12px;overflow:hidden}
+.cafe-floor-svg{width:100%;height:auto;display:block}
+
+.floor-zone-panel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+.floor-zone{background:var(--bg);border:2px dashed var(--border);border-radius:10px;padding:10px;min-height:72px;transition:all 0.2s}
+.floor-zone.drag-over{background:#FEF3C7;border-color:var(--brown);border-style:solid}
+.floor-zone-label{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px}
+.floor-zone-chips{display:flex;flex-wrap:wrap;gap:4px;min-height:28px}
+.floor-zone .staff-chip{margin-bottom:0;font-size:10px;padding:4px 8px;cursor:pointer}
+.floor-zone .staff-chip:hover{opacity:0.8}
+
+.zone-a{border-color:#8B4513;background:#FFF8F3}
+.zone-b{border-color:#1E40AF;background:#F0F4FF}
+.zone-c{border-color:#065F46;background:#F0FDF4}
+.zone-2tops{border-color:#7C3AED;background:#F5F3FF}
+.zone-bar{border-color:#D97706;background:#FFFBEB}
+.zone-expo{border-color:#DC2626;background:#FFF5F5}
+.zone-kitchen{border-color:#374151;background:#F9FAFB}
+
+.floor-clear-btn{margin-top:10px}
+.no-schedule-msg{color:var(--muted);font-size:12px;text-align:center;padding:16px}
+
+/* ======= AVAILABILITY STYLES ======= */
+.avail-wrap{overflow-x:auto}
+.avail-table{min-width:700px;border-collapse:collapse}
+.avail-table th{padding:10px 8px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);text-align:center;position:sticky;top:0;background:white;z-index:5}
+.avail-table th:first-child{text-align:left}
+.avail-table td{padding:8px;border-bottom:1px solid #F0EDE8;vertical-align:middle}
+.avail-table tr:hover td{background:#FAFAF8}
+.avail-cell{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;text-align:center;min-width:44px}
+.avail-ALL{background:#D1FAE5;color:#065F46}
+.avail-AM{background:#DBEAFE;color:#1E40AF}
+.avail-PM{background:#FEF3C7;color:#92400E}
+.avail-dash{background:#F3F4F6;color:#9CA3AF}
+.avail-x{background:#FEE2E2;color:#991B1B}
+.avail-group-header td{background:#F7F5F2;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;padding:6px 8px}
+.avail-event-row td{background:#FEF3C7;font-size:11px;color:#92400E;font-weight:600;text-align:center;padding:6px 8px}
+.avail-event-row td:first-child{text-align:left}
+.avail-filter-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.filter-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif}
+.filter-btn.active{background:var(--brown);color:#fff;border-color:var(--brown)}
+.filter-btn:hover:not(.active){border-color:var(--brown);color:var(--brown)}
+.avail-legend{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:11px}
+.avail-legend span{display:flex;align-items:center;gap:4px}
+.legend-dot{width:24px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+
+/* ======= SCHEDULE UPGRADE STYLES ======= */
+.avail-badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:600}
+.avail-badge-warn{background:#FEF3C7;color:#92400E}
+.avail-badge-danger{background:#FEE2E2;color:#991B1B}
+.avail-badge-ok{background:#D1FAE5;color:#065F46}
+.hours-remaining{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-left:auto;padding-right:4px}
+.hours-over{color:var(--danger);font-weight:700}
 </style>
 </head>
 <body>
@@ -392,6 +459,215 @@ tr:hover td{background:#FAFAF8}
     <div class="card mt-16" id="opt-recommendation" style="display:none"><div class="card-title">Recommendation</div><div id="opt-rec-body"></div></div>
   </div>
 
+  <!-- FLOOR MAP TAB -->
+  <div id="tab-floormap" class="tab-content">
+    <div class="section-header">
+      <h2>🗺️ Floor Map</h2>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="floorDateSelect" onchange="renderFloorMap()" style="padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:var(--bg)"></select>
+        <button class="btn btn-outline btn-sm" onclick="clearFloorAssignments()">Clear Floor</button>
+      </div>
+    </div>
+    <div class="alert alert-warn" style="font-size:12px;padding:10px 14px;margin-bottom:16px">
+      <strong>How to assign:</strong> Drag staff chips from the sidebar → drop onto a section or station. Click an assigned chip to unassign.
+    </div>
+    <div class="floor-layout">
+      <div class="floor-chips-sidebar card" style="padding:14px">
+        <div class="card-title">Scheduled Today</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px">FOH</div>
+        <div id="floorChipsFOH"></div>
+        <div style="font-size:11px;color:var(--muted);margin:10px 0 6px">BOH</div>
+        <div id="floorChipsBOH"></div>
+      </div>
+      <div class="floor-map-wrap">
+        <div class="cafe-floor-plan">
+          <svg class="cafe-floor-svg" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="272" height="520" fill="#1E1E2E" rx="0"/>
+            <rect x="4" y="4" width="122" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="65" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle" font-weight="bold">📋</text>
+            <text x="65" y="64" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Office</text>
+            <rect x="130" y="4" width="66" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="163" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">📦</text>
+            <text x="163" y="64" fill="#8888BB" font-size="9" font-family="sans-serif" text-anchor="middle">Storage 1</text>
+            <rect x="200" y="4" width="66" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="233" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">📦</text>
+            <text x="233" y="64" fill="#8888BB" font-size="9" font-family="sans-serif" text-anchor="middle">Storage 2</text>
+            <rect x="4" y="120" width="130" height="120" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="69" y="172" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">❄️</text>
+            <text x="69" y="186" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Walk-in</text>
+            <rect x="138" y="120" width="128" height="120" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="202" y="172" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">🔪</text>
+            <text x="202" y="186" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Prep</text>
+            <rect x="4" y="244" width="130" height="110" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
+            <text x="69" y="292" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">🚿</text>
+            <text x="69" y="306" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Wash</text>
+            <rect x="4" y="358" width="264" height="158" fill="#1A2A1A" rx="4" stroke="#2D4A2D" stroke-width="2"/>
+            <text x="132" y="418" fill="#4A8A4A" font-size="13" font-family="sans-serif" text-anchor="middle" font-weight="bold">🔥 Kitchen Line</text>
+            <text x="132" y="436" fill="#4A8A4A" font-size="10" font-family="sans-serif" text-anchor="middle">BOH Cooking Zone</text>
+            <rect x="138" y="244" width="128" height="110" fill="#252040" rx="4" stroke="#4A3A5C" stroke-width="1.5"/>
+            <text x="202" y="292" fill="#9A88BB" font-size="11" font-family="sans-serif" text-anchor="middle">🍳</text>
+            <text x="202" y="306" fill="#9A88BB" font-size="10" font-family="sans-serif" text-anchor="middle">Cooking</text>
+            <text x="136" y="18" fill="#6666AA" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">BOH</text>
+            <rect x="272" y="0" width="36" height="520" fill="#8B4513"/>
+            <text x="290" y="260" fill="#FFEEDD" font-size="10" font-family="sans-serif" text-anchor="middle" transform="rotate(-90 290 260)" font-weight="bold" letter-spacing="2">COUNTER BAR</text>
+            <rect x="272" y="140" width="36" height="52" fill="#D4A070" rx="2"/>
+            <text x="290" y="163" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">EXPO</text>
+            <text x="290" y="174" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle">WIN 1</text>
+            <rect x="272" y="300" width="36" height="52" fill="#D4A070" rx="2"/>
+            <text x="290" y="323" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">PASS</text>
+            <text x="290" y="334" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle">WIN 2</text>
+            <path d="M 308,0 L 840,0 Q 900,0 900,60 L 900,460 Q 900,520 840,520 L 308,520 Z" fill="#FFFDF5"/>
+            <rect x="540" y="0" width="64" height="8" fill="#FFFDF5"/>
+            <path d="M 540,8 Q 572,30 604,8" fill="none" stroke="#8B4513" stroke-width="2" stroke-dasharray="4,2"/>
+            <text x="572" y="22" fill="#8B4513" font-size="9" font-family="sans-serif" text-anchor="middle" font-weight="bold">⬆ ENTRY</text>
+            <rect x="892" y="240" width="8" height="60" fill="#FFFDF5"/>
+            <text x="875" y="275" fill="#8B4513" font-size="9" font-family="sans-serif" text-anchor="end">EXIT →</text>
+            <path d="M 308,0 L 840,0 Q 900,0 900,60 L 900,240 M 900,300 L 900,460 Q 900,520 840,520 L 308,520" fill="none" stroke="#D4C4B0" stroke-width="2"/>
+            <rect x="315" y="46" width="155" height="212" fill="none" stroke="#8B4513" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="392" y="62" fill="#8B4513" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION A</text>
+            <rect x="480" y="36" width="168" height="272" fill="none" stroke="#1E40AF" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="564" y="52" fill="#1E40AF" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION B</text>
+            <rect x="658" y="46" width="210" height="172" fill="none" stroke="#065F46" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="763" y="62" fill="#065F46" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION C</text>
+            <rect x="315" y="320" width="230" height="75" fill="none" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
+            <text x="430" y="336" fill="#7C3AED" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">2-TOPS</text>
+            <rect x="308" y="62" width="36" height="72" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4,2" rx="4"/>
+            <text x="326" y="92" fill="#D97706" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">BAR</text>
+            <rect x="323" y="70" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="346" y="97" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T1</text>
+            <rect x="407" y="70" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="430" y="97" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T2</text>
+            <rect x="323" y="170" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="346" y="197" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T3</text>
+            <rect x="407" y="170" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
+            <text x="430" y="197" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T4</text>
+            <rect x="490" y="60" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="513" y="87" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T5</text>
+            <rect x="590" y="60" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="613" y="87" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T6</text>
+            <rect x="490" y="160" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="513" y="187" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T7</text>
+            <rect x="590" y="160" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="613" y="187" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T8</text>
+            <rect x="540" y="262" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
+            <text x="563" y="289" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T9</text>
+            <rect x="668" y="70" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
+            <text x="691" y="97" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T10</text>
+            <rect x="766" y="70" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
+            <text x="789" y="97" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T11</text>
+            <rect x="716" y="178" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
+            <text x="739" y="205" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T12</text>
+            <rect x="325" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
+            <text x="345" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T13</text>
+            <rect x="405" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
+            <text x="425" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T14</text>
+            <rect x="485" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
+            <text x="505" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T15</text>
+            <text x="870" y="490" fill="#B0A090" font-size="9" font-family="sans-serif" text-anchor="middle">54 seats total</text>
+          </svg>
+        </div>
+        <div style="margin-top:12px">
+          <div class="card-title" style="margin-bottom:10px;font-size:12px">🖱️ STAFF ASSIGNMENTS — drag chips below or click to unassign</div>
+          <div class="floor-zone-panel">
+            <div class="floor-zone zone-a" id="zone-section-a" data-zone="section-a"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'section-a')">
+              <div class="floor-zone-label">📍 Section A — T1–T4</div>
+              <div class="floor-zone-chips" id="zone-chips-section-a"></div>
+            </div>
+            <div class="floor-zone zone-b" id="zone-section-b" data-zone="section-b"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'section-b')">
+              <div class="floor-zone-label">📍 Section B — T5–T9</div>
+              <div class="floor-zone-chips" id="zone-chips-section-b"></div>
+            </div>
+            <div class="floor-zone zone-c" id="zone-section-c" data-zone="section-c"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'section-c')">
+              <div class="floor-zone-label">📍 Section C — T10–T12</div>
+              <div class="floor-zone-chips" id="zone-chips-section-c"></div>
+            </div>
+            <div class="floor-zone zone-2tops" id="zone-2tops" data-zone="2tops"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'2tops')">
+              <div class="floor-zone-label">🪑 2-Top Tables T13–T15</div>
+              <div class="floor-zone-chips" id="zone-chips-2tops"></div>
+            </div>
+            <div class="floor-zone zone-bar" id="zone-bar" data-zone="bar"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'bar')">
+              <div class="floor-zone-label">☕ Bar Station</div>
+              <div class="floor-zone-chips" id="zone-chips-bar"></div>
+            </div>
+            <div class="floor-zone zone-expo" id="zone-expo" data-zone="expo"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'expo')">
+              <div class="floor-zone-label">📋 Expo Window</div>
+              <div class="floor-zone-chips" id="zone-chips-expo"></div>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <div class="floor-zone zone-kitchen" id="zone-kitchen" data-zone="kitchen"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="dropToZone(event,'kitchen')">
+              <div class="floor-zone-label">🔥 Kitchen Line — BOH Cooking Zone</div>
+              <div class="floor-zone-chips" id="zone-chips-kitchen" style="min-height:40px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AVAILABILITY TAB -->
+  <div id="tab-availability" class="tab-content">
+    <div class="section-header">
+      <h2>📋 Staff Availability</h2>
+      <div style="font-size:12px;color:var(--muted)">Weekly availability + pre-opening events</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <div class="avail-filter-bar">
+        <button class="filter-btn active" onclick="filterAvail('all',this)">Show All</button>
+        <button class="filter-btn" onclick="filterAvail('foh',this)">FOH Only</button>
+        <button class="filter-btn" onclick="filterAvail('boh',this)">BOH Only</button>
+      </div>
+      <div class="avail-legend">
+        <span><span class="legend-dot avail-ALL">ALL</span> Available all day</span>
+        <span><span class="legend-dot avail-AM">AM</span> Morning only</span>
+        <span><span class="legend-dot avail-PM">PM</span> Evening only</span>
+        <span><span class="legend-dot avail-dash">—</span> Limited/ask</span>
+        <span><span class="legend-dot avail-x">✗</span> Not available</span>
+      </div>
+    </div>
+    <div class="alert" style="background:#EDE9FE;color:#4C1D95;border:1px solid #C4B5FD;margin-bottom:16px;font-size:13px;padding:12px 16px">
+      📅 <strong>Pre-opening schedule:</strong>
+      &nbsp;F&amp;F Dinner: <strong>Jun 5 (Fri)</strong>
+      &nbsp;·&nbsp; Soft Open: <strong>Jun 6–7 (Sat–Sun)</strong>
+      &nbsp;·&nbsp; Media Day: <strong>Jun 11 (Thu)</strong>
+      &nbsp;·&nbsp; Grand Opening: <strong>Jun 13 (Sat)</strong>
+    </div>
+    <div class="card">
+      <div class="avail-wrap">
+        <table class="avail-table" id="availTable">
+          <thead>
+            <tr>
+              <th style="min-width:160px;text-align:left">Staff</th>
+              <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+            </tr>
+          </thead>
+          <tbody id="availBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <!-- USERS TAB (Admin only) -->
   <div id="tab-users" class="tab-content">
     <div class="section-header">
@@ -407,7 +683,7 @@ tr:hover td{background:#FAFAF8}
     </div>
   </div>
 
-  <!-- CERTIFICATIONS TAB (Admin + Manager) -->
+  <!-- CERTIFICATIONS TAB -->
   <div id="tab-certifications" class="tab-content">
     <div class="section-header">
       <h2>Certifications</h2>
@@ -420,7 +696,6 @@ tr:hover td{background:#FAFAF8}
         <button class="btn btn-primary btn-sm" onclick="openEvalModal()">+ Service Evaluation</button>
       </div>
     </div>
-    <!-- Legend -->
     <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;font-size:12px">
       <span><span class="cert-dot cert-0" style="width:20px;height:20px;line-height:20px;font-size:9px">0</span> Not Assigned</span>
       <span><span class="cert-dot cert-1" style="width:20px;height:20px;line-height:20px;font-size:9px">1</span> In Training</span>
@@ -435,14 +710,8 @@ tr:hover td{background:#FAFAF8}
       </table>
     </div>
     <div class="grid-2 mt-16">
-      <div class="card">
-        <div class="card-title">🕐 Ready for Evaluation</div>
-        <div id="readyForEval"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">🏆 Recent Certifications</div>
-        <div id="recentCerts"></div>
-      </div>
+      <div class="card"><div class="card-title">🕐 Ready for Evaluation</div><div id="readyForEval"></div></div>
+      <div class="card"><div class="card-title">🏆 Recent Certifications</div><div id="recentCerts"></div></div>
     </div>
   </div>
 
@@ -503,8 +772,9 @@ tr:hover td{background:#FAFAF8}
 
 <!-- SHIFT MODAL -->
 <div class="modal-overlay" id="shiftModal">
-  <div class="modal" style="width:400px">
+  <div class="modal" style="width:500px">
     <div class="modal-header"><h3 id="shiftModalTitle">Assign Shift</h3><span class="modal-close" onclick="closeModal('shiftModal')">✕</span></div>
+    <div id="shiftAvailNote" style="display:none;margin-bottom:12px"></div>
     <div id="shiftStaffList"></div>
     <div class="sep"></div>
     <div class="form-group" style="margin-bottom:16px"><label>Shift Type</label><select id="shiftType"><option value="opening">Opening (arrive 1hr early)</option><option value="full" selected>Full Shift</option><option value="closing">Closing (stay 1.5hr after close)</option><option value="split">Split Shift</option></select></div>
@@ -608,6 +878,7 @@ const FOOD_HANDLER_BADGE = {
 };
 const OT_RULES = {maxShiftHours:7,maxWeeklyHours:40,maxConsecutiveDays:6};
 const SHIFT_HOURS = {weekday:{opening:7,full:7,closing:7,split:5},weekend:{opening:7,full:7,closing:7,split:5}};
+const FLOOR_ZONES = ['section-a','section-b','section-c','2tops','bar','expo','kitchen'];
 
 // -------- QUIZ DATA --------
 const QUIZZES = {
@@ -704,6 +975,51 @@ const EVAL_CRITERIA = {
   'Head Chef':['Kitchen leadership','Food quality consistency','Team development','Cost awareness','Health/safety standards','Service recovery']
 };
 
+// -------- AVAILABILITY DATA (Index 0=Mon … 6=Sun) --------
+// Values: 'ALL' | 'AM' | 'PM' | '—' | '✗'
+const AVAILABILITY = {
+  3:  ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  4:  ['ALL','ALL','ALL','AM','AM','AM','PM'],
+  5:  ['ALL','ALL','AM','ALL','ALL','PM','AM'],
+  6:  ['AM','AM','—','AM','AM','—','—'],
+  7:  ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  8:  ['—','AM','AM','AM','—','AM','AM'],
+  9:  ['—','PM','—','—','AM','—','AM'],
+  10: ['AM','AM','AM','AM','AM','AM','PM'],
+  11: ['PM','PM','PM','PM','PM','PM','PM'],
+  12: ['AM','AM','AM','AM','AM','AM','—'],
+  13: ['AM','AM','AM','AM','AM','AM','—'],
+  14: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  15: ['PM','PM','PM','PM','AM','AM','AM'],
+  16: ['PM','AM','PM','—','PM','PM','AM'],
+  17: ['PM','PM','PM','—','AM','ALL','—'],
+  18: ['AM','AM','AM','AM','AM','AM','AM'],
+  19: ['ALL','PM','ALL','ALL','ALL','AM','AM'],
+  20: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  21: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  22: ['AM','AM','AM','AM','AM','ALL','ALL'],
+  23: ['AM','AM','AM','—','—','—','AM'],
+  24: ['PM','PM','PM','PM','PM','ALL','ALL'],
+  25: ['—','—','PM','—','—','AM','AM'],
+  26: ['✗','✗','✗','✗','✗','ALL','AM'],
+  27: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  28: ['AM','AM','AM','AM','AM','AM','AM'],
+  29: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  30: ['—','AM','AM','—','ALL','ALL','ALL'],
+  31: ['AM','—','—','—','AM','AM','AM'],
+  32: ['ALL','ALL','ALL','ALL','ALL','AM','AM'],
+  33: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  34: ['AM','AM','AM','AM','AM','AM','AM'],
+  35: ['PM','PM','PM','PM','PM','AM','AM'],
+  36: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],
+  37: ['PM','PM','PM','PM','PM','PM','PM'],
+  38: ['PM','PM','PM','—','ALL','—','PM'],
+};
+
+function getAvailStatus(staffId,dayIdx){const av=AVAILABILITY[staffId];if(!av)return 'ALL';return av[dayIdx]||'ALL';}
+function availClass(val){if(val==='ALL')return 'avail-ALL';if(val==='AM')return 'avail-AM';if(val==='PM')return 'avail-PM';if(val==='✗')return 'avail-x';return 'avail-dash';}
+function availLabel(val){return val==='—'?'—':val;}
+
 // -------- SEED STAFF --------
 const SEED_STAFF = [
   {id:1,first:'Hailey',last:'Salamanca',nick:'Hailey',phone:'',email:'hailey@domokuncafe.com',role:'GM',dept:'MGMT',type:'salary',rate:99800,start:'2026-06-01',status:'active',foodHandler:'Active'},
@@ -757,51 +1073,52 @@ if(!staff){staff=SEED_STAFF;save('staff',staff);}
 let schedule = load('schedule',{});
 let skills = load('skills',{});
 let nextId = load('nextId',39);
-let certLevels = load('certLevels',{});    // {staffId_role: 0-4}
-let quizResults = load('quizResults',{});  // {staffId_role: {score,total,passed,date}}
-let evalResults = load('evalResults',{});  // {staffId_role: {avg,passed,notes,date,evalBy}}
-let certLog = load('certLog',[]);          // [{date,staffId,staffName,role,level}]
+let certLevels = load('certLevels',{});
+let quizResults = load('quizResults',{});
+let evalResults = load('evalResults',{});
+let certLog = load('certLog',[]);
+let floorAssignments = load('floorAssignments',{});
+let currentAvailFilter = 'all';
 
 // ============================================================
 // SHA-256
 // ============================================================
 async function sha256(msg){
-  const buf = new TextEncoder().encode(msg);
-  const hb = await crypto.subtle.digest('SHA-256',buf);
+  const buf=new TextEncoder().encode(msg);
+  const hb=await crypto.subtle.digest('SHA-256',buf);
   return Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
 // ============================================================
 // AUTH SYSTEM
 // ============================================================
-let currentUser = null; // {id, username, role, staffId, displayName}
-let pendingUserId = null; // for first-login pw change
+let currentUser = null;
+let pendingUserId = null;
 
 function loadUsers(){return load('users',[]);}
 function saveUsers(u){save('users',u);}
 
 async function ensureAdminUser(){
-  let users = loadUsers();
+  let users=loadUsers();
   if(!users.find(u=>u.username==='admin')){
-    const h = await sha256('Domo@2026');
+    const h=await sha256('Domo@2026');
     users.push({id:'admin',username:'admin',passwordHash:h,role:'admin',staffId:null,displayName:'Izzy (Admin)',disabled:false,firstLogin:false,lastLogin:null});
     saveUsers(users);
   }
 }
 
 async function doLogin(){
-  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
-  const password = document.getElementById('loginPassword').value;
+  const username=document.getElementById('loginUsername').value.trim().toLowerCase();
+  const password=document.getElementById('loginPassword').value;
   if(!username||!password){showLoginErr('Enter username and password');return;}
-  const hash = await sha256(password);
-  const users = loadUsers();
-  const user = users.find(u=>u.username===username&&u.passwordHash===hash&&!u.disabled);
+  const hash=await sha256(password);
+  const users=loadUsers();
+  const user=users.find(u=>u.username===username&&u.passwordHash===hash&&!u.disabled);
   if(!user){showLoginErr('Invalid username or password');return;}
-  // Update last login
-  user.lastLogin = new Date().toISOString();
+  user.lastLogin=new Date().toISOString();
   saveUsers(users);
   if(user.firstLogin){
-    pendingUserId = user.id;
+    pendingUserId=user.id;
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('pwChangeScreen').style.display='flex';
     return;
@@ -811,8 +1128,7 @@ async function doLogin(){
 
 function showLoginErr(msg){
   const el=document.getElementById('loginErr');
-  el.textContent=msg;
-  el.style.display='block';
+  el.textContent=msg;el.style.display='block';
   setTimeout(()=>el.style.display='none',3000);
 }
 
@@ -826,9 +1142,7 @@ async function submitPwChange(){
   const users=loadUsers();
   const user=users.find(u=>u.id===pendingUserId);
   if(!user)return;
-  user.passwordHash=hash;
-  user.firstLogin=false;
-  user.lastLogin=new Date().toISOString();
+  user.passwordHash=hash;user.firstLogin=false;user.lastLogin=new Date().toISOString();
   saveUsers(users);
   document.getElementById('pwChangeScreen').style.display='none';
   startSession(user);
@@ -836,22 +1150,18 @@ async function submitPwChange(){
 
 function startSession(user){
   const session={userId:user.id,username:user.username,role:user.role,staffId:user.staffId,displayName:user.displayName,loginTime:Date.now()};
-  save('session',session);
-  currentUser=session;
-  showApp();
+  save('session',session);currentUser=session;showApp();
 }
 
 function checkSession(){
   const s=load('session',null);
   if(!s)return false;
   if(Date.now()-s.loginTime>8*60*60*1000){save('session',null);return false;}
-  currentUser=s;
-  return true;
+  currentUser=s;return true;
 }
 
 function doLogout(){
-  save('session',null);
-  currentUser=null;
+  save('session',null);currentUser=null;
   document.getElementById('app').style.display='none';
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('loginUsername').value='';
@@ -872,6 +1182,7 @@ function showApp(){
   document.getElementById('topUserBadge').innerHTML=`${currentUser.displayName||currentUser.username} <span class="badge badge-${currentUser.role}" style="margin-left:4px">${currentUser.role}</span>`;
   renderNavTabs();
   populateWeekSelect();
+  populateFloorDateSelect();
   const firstTab=getTabsForRole(currentUser.role)[0];
   if(firstTab)showTab(firstTab.id,null,true);
   checkNewCertNotifications();
@@ -883,6 +1194,8 @@ function getTabsForRole(role){
     {id:'staff',label:'👥 Staff Directory'},
     {id:'schedule',label:'📅 Schedule Builder'},
     {id:'skills',label:'🎯 Skill Matrix'},
+    {id:'floormap',label:'🗺️ Floor Map'},
+    {id:'availability',label:'📋 Availability'},
     {id:'optimizer',label:'⚡ Labor Optimizer'},
     {id:'users',label:'👤 Users'},
     {id:'certifications',label:'🏆 Certifications'},
@@ -892,10 +1205,11 @@ function getTabsForRole(role){
     {id:'staff',label:'👥 Staff Directory'},
     {id:'schedule',label:'📅 Schedule Builder'},
     {id:'skills',label:'🎯 Skill Matrix'},
+    {id:'floormap',label:'🗺️ Floor Map'},
+    {id:'availability',label:'📋 Availability'},
     {id:'optimizer',label:'⚡ Labor Optimizer'},
     {id:'certifications',label:'🏆 Certifications'},
   ];
-  // staff
   return [
     {id:'myprofile',label:'👤 My Profile'},
     {id:'myschedule',label:'📅 My Schedule'},
@@ -913,10 +1227,8 @@ function showTab(id,event,skipActive){
     document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   }
-  const el=document.getElementById('tab-'+id);
-  if(el)el.classList.add('active');
-  const btn=document.getElementById('navbtn-'+id);
-  if(btn)btn.classList.add('active');
+  const el=document.getElementById('tab-'+id);if(el)el.classList.add('active');
+  const btn=document.getElementById('navbtn-'+id);if(btn)btn.classList.add('active');
   if(id==='dashboard')recalcDashboard();
   if(id==='optimizer')runOptimizer();
   if(id==='users')renderUsersTable();
@@ -924,17 +1236,11 @@ function showTab(id,event,skipActive){
   if(id==='skills')renderSkillMatrix();
   if(id==='staff')renderStaffTable();
   if(id==='schedule')renderSchedule();
+  if(id==='floormap')renderFloorMap();
+  if(id==='availability')renderAvailability();
   if(id==='myprofile')renderMyProfile();
   if(id==='myschedule')renderMySchedule();
   if(id==='mycertifications')renderMyCertifications();
-}
-
-function renderAll(){
-  renderStaffTable();
-  recalcDashboard();
-  renderSchedule();
-  renderSkillMatrix();
-  runOptimizer();
 }
 
 // ============================================================
@@ -955,23 +1261,11 @@ async function initAllStaff(){
     let role='staff';
     if(s.role==='GM')role='manager';
     if(s.role==='Head Chef')role='manager';
-    const newUser={
-      id:'u_'+Date.now()+'_'+s.id,
-      username:uname,
-      passwordHash:defaultHash,
-      role,
-      staffId:s.id,
-      displayName:`${s.first} ${s.last}`,
-      disabled:false,
-      firstLogin:true,
-      lastLogin:null
-    };
+    const newUser={id:'u_'+Date.now()+'_'+s.id,username:uname,passwordHash:defaultHash,role,staffId:s.id,displayName:`${s.first} ${s.last}`,disabled:false,firstLogin:true,lastLogin:null};
     users.push(newUser);
     creds.push({name:`${s.first} ${s.last}`,username:uname,password:'Domo2026!',role});
   }
-  saveUsers(users);
-  renderUsersTable();
-  // Show printable cred list
+  saveUsers(users);renderUsersTable();
   document.getElementById('credListBody').innerHTML=`
     <div style="margin-bottom:12px;font-size:13px"><strong>Default Password: Domo2026!</strong> — Staff must change on first login.</div>
     <table style="font-size:12px;width:100%"><thead><tr><th>Name</th><th>Username</th><th>Password</th><th>Role</th></tr></thead>
@@ -1005,8 +1299,7 @@ function renderUsersTable(){
 }
 
 function openEditUserModal(uid){
-  const users=loadUsers();
-  const u=users.find(x=>x.id===uid);
+  const users=loadUsers();const u=users.find(x=>x.id===uid);
   if(!u)return;
   document.getElementById('editUserName').textContent=u.displayName||u.username;
   document.getElementById('editUserRole').value=u.role;
@@ -1016,18 +1309,14 @@ function openEditUserModal(uid){
 
 function submitEditUserRole(){
   const uid=document.getElementById('editUserModal')._uid;
-  const users=loadUsers();
-  const u=users.find(x=>x.id===uid);
+  const users=loadUsers();const u=users.find(x=>x.id===uid);
   if(!u)return;
   u.role=document.getElementById('editUserRole').value;
-  saveUsers(users);
-  closeModal('editUserModal');
-  renderUsersTable();
+  saveUsers(users);closeModal('editUserModal');renderUsersTable();
 }
 
 function openResetPw(uid){
-  const users=loadUsers();
-  const u=users.find(x=>x.id===uid);
+  const users=loadUsers();const u=users.find(x=>x.id===uid);
   if(!u)return;
   document.getElementById('resetPwName').textContent=u.displayName||u.username;
   document.getElementById('resetPwInput').value='';
@@ -1040,43 +1329,32 @@ async function submitResetPw(){
   const pw=document.getElementById('resetPwInput').value;
   if(pw.length<6){alert('Password must be at least 6 characters');return;}
   const hash=await sha256(pw);
-  const users=loadUsers();
-  const u=users.find(x=>x.id===uid);
+  const users=loadUsers();const u=users.find(x=>x.id===uid);
   if(!u)return;
-  u.passwordHash=hash;
-  u.firstLogin=true;
-  saveUsers(users);
-  closeModal('resetPwModal');
-  showToast('Password reset. User must change on next login.');
+  u.passwordHash=hash;u.firstLogin=true;
+  saveUsers(users);closeModal('resetPwModal');showToast('Password reset. User must change on next login.');
 }
 
 function toggleUserDisabled(uid){
-  const users=loadUsers();
-  const u=users.find(x=>x.id===uid);
+  const users=loadUsers();const u=users.find(x=>x.id===uid);
   if(!u)return;
   u.disabled=!u.disabled;
-  saveUsers(users);
-  renderUsersTable();
+  saveUsers(users);renderUsersTable();
 }
 
 // ============================================================
 // CERTIFICATION SYSTEM
 // ============================================================
 function certKey(staffId,role){return staffId+'_'+role;}
-
 function getCertLevel(staffId,role){return certLevels[certKey(staffId,role)]||0;}
-function setCertLevel(staffId,role,level){
-  certLevels[certKey(staffId,role)]=level;
-  save('certLevels',certLevels);
-}
+function setCertLevel(staffId,role,level){certLevels[certKey(staffId,role)]=level;save('certLevels',certLevels);}
 
 function renderCertifications(){
   const filter=document.getElementById('certFilter')?.value||'all';
   const activeStaff=staff.filter(s=>s.status!=='inactive'&&(filter==='all'||(filter==='FOH'&&s.dept==='FOH')||(filter==='BOH'&&s.dept==='BOH')));
-
-  // Readiness grid
   const header=document.getElementById('certReadinessHeader');
   const tbody=document.getElementById('certReadinessBody');
+  if(!header||!tbody)return;
   header.innerHTML='<th style="text-align:left;min-width:120px">Staff</th>'+CERT_ROLES.map(r=>`<th>${PIN_EMOJIS[r]||''}<br><span style="font-weight:600">${r}</span></th>`).join('');
   tbody.innerHTML=activeStaff.map(s=>{
     const deptBadge=s.dept==='FOH'?'badge-foh':s.dept==='BOH'?'badge-boh':'badge-mgmt';
@@ -1084,9 +1362,8 @@ function renderCertifications(){
       <td style="text-align:left"><strong>${s.first} ${s.last}</strong><br><span class="badge ${deptBadge}" style="font-size:9px">${s.role}</span></td>
       ${CERT_ROLES.map(r=>{
         const lvl=getCertLevel(s.id,r);
-        const isMyRole=s.role===r||CERT_ROLES.includes(s.role);
         return`<td><div class="readiness-cell">
-          <span class="cert-dot cert-${lvl}" title="Level ${lvl}: ${['Not Assigned','In Training','Knowledge Cert.','Service Cert.','Expert'][lvl]}">${lvl===0?'—':lvl===1?'T':lvl===2?'K':lvl===3?'✓':'★'}</span>
+          <span class="cert-dot cert-${lvl}" title="Level ${lvl}">${lvl===0?'—':lvl===1?'T':lvl===2?'K':lvl===3?'✓':'★'}</span>
           ${lvl===1?`<button class="btn btn-sm" style="font-size:9px;padding:2px 6px;margin-top:2px;background:var(--brown);color:#fff" onclick="setManagerCertLevel(${s.id},'${r}',2,'assign')">Assign L2</button>`:''}
           ${lvl===0?`<button class="btn btn-sm" style="font-size:9px;padding:2px 6px;margin-top:2px" onclick="assignTraining(${s.id},'${r}')">+ Assign</button>`:''}
           ${lvl===3?`<button class="btn btn-sm" style="font-size:9px;padding:2px 6px;margin-top:2px;background:#EDE9FE;color:#5B21B6" onclick="setManagerCertLevel(${s.id},'${r}',4,'expert')">→ Expert</button>`:''}
@@ -1094,55 +1371,42 @@ function renderCertifications(){
       }).join('')}
     </tr>`;
   }).join('');
-
-  // Ready for evaluation
   const readyEl=document.getElementById('readyForEval');
   const readyList=[];
   staff.forEach(s=>{
     CERT_ROLES.forEach(r=>{
       const lvl=getCertLevel(s.id,r);
       const qr=quizResults[certKey(s.id,r)];
-      if(lvl===2&&qr&&qr.passed){readyList.push({staff:s,role:r,quizDate:qr.date});}
+      if(lvl===2&&qr&&qr.passed)readyList.push({staff:s,role:r,quizDate:qr.date});
     });
   });
-  readyEl.innerHTML=readyList.length?readyList.map(x=>`
+  if(readyEl)readyEl.innerHTML=readyList.length?readyList.map(x=>`
     <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div>
-        <strong>${x.staff.first} ${x.staff.last}</strong>
-        <span class="badge badge-l2" style="margin-left:6px">${x.role}</span>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">Quiz passed: ${new Date(x.quizDate).toLocaleDateString()}</div>
-      </div>
+      <div><strong>${x.staff.first} ${x.staff.last}</strong><span class="badge badge-l2" style="margin-left:6px">${x.role}</span>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">Quiz passed: ${new Date(x.quizDate).toLocaleDateString()}</div></div>
       <button class="btn btn-primary btn-sm" onclick="openEvalModal(${x.staff.id},'${x.role}')">Evaluate</button>
-    </div>
-  `).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No staff awaiting evaluation</div>';
-
-  // Recent certs
+    </div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No staff awaiting evaluation</div>';
   const recentEl=document.getElementById('recentCerts');
   const recent=[...certLog].reverse().slice(0,10);
-  recentEl.innerHTML=recent.length?recent.map(e=>`
+  if(recentEl)recentEl.innerHTML=recent.length?recent.map(e=>`
     <div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
       <span style="font-weight:600">${e.staffName}</span>
       <span class="badge cert-${e.level}" style="margin:0 6px;padding:2px 8px;border-radius:4px;font-size:10px">L${e.level} ${e.role}</span>
       <span style="color:var(--muted)">${new Date(e.date).toLocaleDateString()}</span>
-    </div>
-  `).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No certifications yet</div>';
+    </div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No certifications yet</div>';
 }
 
 function assignTraining(staffId,role){
   if(!confirm(`Assign ${staff.find(s=>s.id===staffId)?.first} to train in ${role}?`))return;
-  setCertLevel(staffId,role,1);
-  logCert(staffId,role,1,'Training Assigned');
-  renderCertifications();
-  showToast(`Training assigned for ${role}`);
+  setCertLevel(staffId,role,1);logCert(staffId,role,1,'Training Assigned');
+  renderCertifications();showToast(`Training assigned for ${role}`);
 }
 
 function setManagerCertLevel(staffId,role,level,type){
   const s=staff.find(x=>x.id===staffId);
-  if(!confirm(`Set ${s?.first} to Level ${level} (${['','In Training','Knowledge Cert.','Service Cert.','Expert'][level]}) for ${role}?`))return;
-  setCertLevel(staffId,role,level);
-  logCert(staffId,role,level,'Manager Set');
-  renderCertifications();
-  showToast(`Level updated to ${level}`);
+  if(!confirm(`Set ${s?.first} to Level ${level} for ${role}?`))return;
+  setCertLevel(staffId,role,level);logCert(staffId,role,level,'Manager Set');
+  renderCertifications();showToast(`Level updated to ${level}`);
 }
 
 function logCert(staffId,role,level,type){
@@ -1155,38 +1419,21 @@ function logCert(staffId,role,level,type){
 let evalState={};
 
 function openEvalModal(staffId,role){
-  // Populate staff dropdown
   let html='';
   if(staffId&&role){
-    // Pre-selected
     evalState={staffId,role};
     html=buildEvalForm(staffId,role);
   } else {
-    // Show selectors
     const awaiting=[];
-    staff.forEach(s=>{
-      CERT_ROLES.forEach(r=>{
-        const lvl=getCertLevel(s.id,r);
-        const qr=quizResults[certKey(s.id,r)];
-        if(lvl===2&&qr&&qr.passed)awaiting.push({staffId:s.id,role:r,name:`${s.first} ${s.last}`});
-      });
-    });
-    html=`
-      <div class="form-group" style="margin-bottom:16px">
-        <label>Select Staff & Role</label>
-        <select id="evalStaffSelect" onchange="updateEvalForm()">
-          <option value="">Select...</option>
-          ${awaiting.map(a=>`<option value="${a.staffId}|${a.role}">${a.name} — ${a.role}</option>`).join('')}
-        </select>
-      </div>
-      <div id="evalFormInner"></div>
-    `;
+    staff.forEach(s=>{CERT_ROLES.forEach(r=>{const lvl=getCertLevel(s.id,r);const qr=quizResults[certKey(s.id,r)];if(lvl===2&&qr&&qr.passed)awaiting.push({staffId:s.id,role:r,name:`${s.first} ${s.last}`});});});
+    html=`<div class="form-group" style="margin-bottom:16px"><label>Select Staff & Role</label>
+      <select id="evalStaffSelect" onchange="updateEvalForm()">
+        <option value="">Select...</option>
+        ${awaiting.map(a=>`<option value="${a.staffId}|${a.role}">${a.name} — ${a.role}</option>`).join('')}
+      </select></div><div id="evalFormInner"></div>`;
   }
   document.getElementById('evalBody').innerHTML=html;
-  if(staffId&&role){
-    // Render form directly
-    document.getElementById('evalBody').innerHTML=buildEvalForm(staffId,role);
-  }
+  if(staffId&&role){document.getElementById('evalBody').innerHTML=buildEvalForm(staffId,role);}
   openModal('evalModal');
 }
 
@@ -1200,11 +1447,9 @@ function updateEvalForm(){
 
 function buildEvalForm(staffId,role){
   const s=staff.find(x=>x.id===staffId);
-  return`<div style="margin-bottom:16px">
-    <strong>${s?.first} ${s?.last}</strong> — <span class="badge badge-l2">${role}</span>
-    <div style="font-size:12px;color:var(--muted);margin-top:4px">Pass threshold: average ≥4.0/5.0 on all criteria</div>
-  </div>
-  ${buildEvalCriteria(staffId,role)}`;
+  return`<div style="margin-bottom:16px"><strong>${s?.first} ${s?.last}</strong> — <span class="badge badge-l2">${role}</span>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px">Pass threshold: average ≥4.0/5.0 on all criteria</div></div>
+    ${buildEvalCriteria(staffId,role)}`;
 }
 
 function buildEvalCriteria(staffId,role){
@@ -1214,11 +1459,10 @@ function buildEvalCriteria(staffId,role){
       <div style="margin-bottom:16px">
         <div style="font-size:13px;font-weight:600;margin-bottom:6px">${i+1}. ${c}</div>
         <div class="star-rating" id="stars_${i}">
-          ${[1,2,3,4,5].map(n=>`<span class="star" data-idx="${i}" data-val="${n}" onclick="setEvalStar(${i},${n})">⭐</span>`).join('')}
+          ${[1,2,3,4,5].map(n=>`<span class="star" onclick="setEvalStar(${i},${n})">⭐</span>`).join('')}
         </div>
         <input type="hidden" id="evalScore_${i}" value="0">
-      </div>
-    `).join('')}
+      </div>`).join('')}
     <div class="form-group" style="margin-top:16px">
       <label>Notes (required if failed)</label>
       <textarea id="evalNotes" placeholder="Observations, strengths, areas for improvement..."></textarea>
@@ -1227,8 +1471,7 @@ function buildEvalCriteria(staffId,role){
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-outline" onclick="closeModal('evalModal')">Cancel</button>
       <button class="btn btn-primary" onclick="submitEval()">Submit Evaluation</button>
-    </div>
-  </div>`;
+    </div></div>`;
 }
 
 function setEvalStar(idx,val){
@@ -1246,11 +1489,7 @@ function updateEvalPreview(){
   if(!filled){document.getElementById('evalResultPreview').textContent='Rate all criteria to see result preview';return;}
   const avg=scores.reduce((a,b)=>a+b,0)/scores.length;
   const passed=avg>=4.0;
-  document.getElementById('evalResultPreview').innerHTML=`
-    <div style="padding:10px;border-radius:8px;background:${passed?'#D1FAE5':'#FEE2E2'};color:${passed?'#065F46':'#991B1B'}">
-      <strong>${passed?'✅ PASS':'❌ FAIL'}</strong> — Average: ${avg.toFixed(2)}/5.0 ${passed?'(≥4.0 required)':'(<4.0 required)'}
-    </div>
-  `;
+  document.getElementById('evalResultPreview').innerHTML=`<div style="padding:10px;border-radius:8px;background:${passed?'#D1FAE5':'#FEE2E2'};color:${passed?'#065F46':'#991B1B'}"><strong>${passed?'✅ PASS':'❌ FAIL'}</strong> — Average: ${avg.toFixed(2)}/5.0</div>`;
 }
 
 async function submitEval(){
@@ -1265,35 +1504,22 @@ async function submitEval(){
   const result={scores,avg,passed,notes,date:new Date().toISOString(),evalBy:currentUser.username};
   evalResults[certKey(staffId,role)]=result;
   save('evalResults',evalResults);
-  if(passed){
-    setCertLevel(staffId,role,3);
-    logCert(staffId,role,3,'Service Eval Passed');
-  }
+  if(passed){setCertLevel(staffId,role,3);logCert(staffId,role,3,'Service Eval Passed');}
   closeModal('evalModal');
-  if(passed){
-    launchConfetti();
-    showToast(`🎉 ${staff.find(s=>s.id===staffId)?.first} is now ${role} Certified!`);
-  } else {
-    showToast(`Evaluation submitted — staff needs more practice`);
-  }
+  if(passed){launchConfetti();showToast(`🎉 ${staff.find(s=>s.id===staffId)?.first} is now ${role} Certified!`);}
+  else{showToast('Evaluation submitted — staff needs more practice');}
   renderCertifications();
 }
 
 // ============================================================
-// MY CERTIFICATIONS (STAFF VIEW)
+// MY CERTIFICATIONS (Staff)
 // ============================================================
 function renderMyCertifications(){
-  if(!currentUser||currentUser.role!=='staff'){
-    document.getElementById('myCertContent').innerHTML='<div class="alert alert-warn">Access restricted.</div>';
-    return;
-  }
+  if(!currentUser||currentUser.role!=='staff'){document.getElementById('myCertContent').innerHTML='<div class="alert alert-warn">Access restricted.</div>';return;}
   const s=staff.find(x=>x.id===currentUser.staffId);
   if(!s){document.getElementById('myCertContent').innerHTML='<div class="alert alert-warn">Staff record not found.</div>';return;}
   const assigned=CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=1);
-  if(assigned.length===0){
-    document.getElementById('myCertContent').innerHTML=`<div class="card"><div style="text-align:center;padding:40px;color:var(--muted)">No roles assigned yet. Check with your manager.</div></div>`;
-    return;
-  }
+  if(assigned.length===0){document.getElementById('myCertContent').innerHTML=`<div class="card"><div style="text-align:center;padding:40px;color:var(--muted)">No roles assigned yet. Check with your manager.</div></div>`;return;}
   document.getElementById('myCertContent').innerHTML=assigned.map(role=>{
     const lvl=getCertLevel(s.id,role);
     const qr=quizResults[certKey(s.id,role)];
@@ -1305,11 +1531,9 @@ function renderMyCertifications(){
     const levelLabels=['Not Assigned','In Training','Knowledge Certified','Service Certified','Expert/Trainer'];
     return`<div class="card mt-16" style="border-left:4px solid ${certified?'var(--success)':lvl===2?'var(--brown)':'var(--border)'}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <div style="font-size:18px;font-weight:700;font-family:'Space Grotesk',sans-serif">${PIN_EMOJIS[role]||''} ${role}</div>
-          <span class="badge cert-${lvl}" style="margin-top:6px">${levelLabels[lvl]}</span>
-        </div>
-        ${certified?`<div style="font-size:32px" title="Certified!">🎖</div>`:''}
+        <div><div style="font-size:18px;font-weight:700;font-family:'Space Grotesk',sans-serif">${PIN_EMOJIS[role]||''} ${role}</div>
+        <span class="badge cert-${lvl}" style="margin-top:6px">${levelLabels[lvl]}</span></div>
+        ${certified?`<div style="font-size:32px">🎖</div>`:''}
       </div>
       <div class="progress-wrap" style="margin-top:12px">
         <div class="progress-label"><span>Progress</span><span>Level ${lvl}/4</span></div>
@@ -1327,16 +1551,11 @@ function renderMyCertifications(){
 
 function checkNewCertNotifications(){
   if(currentUser?.role!=='staff'||!currentUser?.staffId)return;
-  const s=staff.find(x=>x.id===currentUser.staffId);
-  if(!s)return;
+  const s=staff.find(x=>x.id===currentUser.staffId);if(!s)return;
   CERT_ROLES.forEach(role=>{
     const er=evalResults[certKey(s.id,role)];
-    if(er&&!er.notified){
-      er.notified=true;
-      save('evalResults',evalResults);
-      if(er.passed){
-        setTimeout(()=>{showToast(`🎉 Congrats! You're now ${role} Certified!`);launchConfetti();},1000);
-      }
+    if(er&&!er.notified){er.notified=true;save('evalResults',evalResults);
+      if(er.passed){setTimeout(()=>{showToast(`🎉 Congrats! You're now ${role} Certified!`);launchConfetti();},1000);}
     }
   });
 }
@@ -1362,33 +1581,21 @@ function renderQuizQuestion(){
   document.getElementById('quizBody').innerHTML=`
     <div class="quiz-progress">Question ${currentQ+1} of ${questions.length} — Need ${passMark}/${questions.length} to pass</div>
     <div class="quiz-question">${q.q}</div>
-    <div id="quizOptions">
-      ${q.opts.map((opt,i)=>`
-        <div class="quiz-option" id="qopt-${i}" onclick="selectQuizOption(${i})">
-          <span style="font-weight:700;margin-right:8px">${['A','B','C','D'][i]}.</span>${opt}
-        </div>
-      `).join('')}
-    </div>
+    <div id="quizOptions">${q.opts.map((opt,i)=>`<div class="quiz-option" id="qopt-${i}" onclick="selectQuizOption(${i})"><span style="font-weight:700;margin-right:8px">${['A','B','C','D'][i]}.</span>${opt}</div>`).join('')}</div>
     <div id="quizFeedback" style="margin-top:12px;display:none"></div>
     <div style="display:flex;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-primary" id="quizNextBtn" onclick="quizNext()" style="display:none">Next →</button>
-    </div>
-  `;
+    </div>`;
   quizState.selectedOpt=null;
 }
 
 function selectQuizOption(idx){
-  if(quizState.selectedOpt!=null)return; // Already answered
+  if(quizState.selectedOpt!=null)return;
   quizState.selectedOpt=idx;
   const q=quizState.questions[quizState.currentQ];
   const correct=idx===q.ans;
   quizState.answers.push({selected:idx,correct});
-  // Style options
-  document.querySelectorAll('.quiz-option').forEach((el,i)=>{
-    if(i===q.ans)el.classList.add('correct');
-    else if(i===idx&&!correct)el.classList.add('wrong');
-  });
-  // Feedback
+  document.querySelectorAll('.quiz-option').forEach((el,i)=>{if(i===q.ans)el.classList.add('correct');else if(i===idx&&!correct)el.classList.add('wrong');});
   const fb=document.getElementById('quizFeedback');
   fb.style.display='block';
   fb.innerHTML=correct?`<div class="alert alert-success">✅ Correct!</div>`:`<div class="alert alert-danger">❌ The correct answer is: <strong>${['A','B','C','D'][q.ans]}. ${q.opts[q.ans]}</strong></div>`;
@@ -1397,12 +1604,8 @@ function selectQuizOption(idx){
 
 function quizNext(){
   quizState.currentQ++;
-  if(quizState.currentQ>=quizState.questions.length){
-    quizState.showingResult=true;
-    finalizeQuiz();
-  } else {
-    renderQuizQuestion();
-  }
+  if(quizState.currentQ>=quizState.questions.length){quizState.showingResult=true;finalizeQuiz();}
+  else{renderQuizQuestion();}
 }
 
 function finalizeQuiz(){
@@ -1413,10 +1616,7 @@ function finalizeQuiz(){
   const result={score,total,passed,date:new Date().toISOString()};
   quizResults[certKey(staffId,role)]=result;
   save('quizResults',quizResults);
-  if(passed){
-    const currentLvl=getCertLevel(staffId,role);
-    if(currentLvl<2){setCertLevel(staffId,role,2);logCert(staffId,role,2,'Quiz Passed');}
-  }
+  if(passed){const currentLvl=getCertLevel(staffId,role);if(currentLvl<2){setCertLevel(staffId,role,2);logCert(staffId,role,2,'Quiz Passed');}}
   renderQuizResult();
 }
 
@@ -1430,14 +1630,13 @@ function renderQuizResult(){
       <div style="font-size:60px;margin-bottom:16px">${passed?'🎉':'😓'}</div>
       <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:${passed?'var(--success)':'var(--danger)'}">${passed?'PASSED!':'NOT YET'}</div>
       <div style="font-size:32px;font-weight:700;margin:12px 0">${score} / ${total}</div>
-      <div style="font-size:14px;color:var(--muted)">${passed?'Knowledge certification unlocked! Awaiting service evaluation.':score+'/${total} — need '+passMark+' to pass. Review and try again.'}</div>
+      <div style="font-size:14px;color:var(--muted)">${passed?'Knowledge certification unlocked!':'Need '+passMark+' to pass. Review and try again.'}</div>
       ${passed?`<div class="alert alert-success" style="margin-top:16px;text-align:left">✅ You are now <strong>Knowledge Certified</strong> for ${role}. Your manager will schedule a service evaluation.</div>`:''}
     </div>
     <div style="display:flex;justify-content:space-between;margin-top:16px">
       ${!passed?`<button class="btn btn-outline" onclick="startQuiz(${staffId},'${role}')">🔄 Try Again</button>`:'<div></div>'}
       <button class="btn btn-primary" onclick="closeModal('quizModal');renderMyCertifications()">Done</button>
-    </div>
-  `;
+    </div>`;
   if(passed)launchConfetti();
 }
 
@@ -1449,7 +1648,6 @@ function renderMyProfile(){
   const s=staff.find(x=>x.id===currentUser.staffId);
   if(!s){document.getElementById('myProfileContent').innerHTML='<div class="alert alert-warn">Staff record not found.</div>';return;}
   const certCount=CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=3).length;
-  const pinsEarned=certCount;
   document.getElementById('myProfileContent').innerHTML=`
     <div class="card">
       <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
@@ -1466,14 +1664,13 @@ function renderMyProfile(){
       </div>
       <div class="sep"></div>
       <div class="grid-4" style="gap:12px">
-        <div class="profile-stat"><div class="val">${pinsEarned}</div><div class="lbl">Pins Earned</div></div>
+        <div class="profile-stat"><div class="val">${certCount}</div><div class="lbl">Pins Earned</div></div>
         <div class="profile-stat"><div class="val">${CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=1).length}</div><div class="lbl">Roles Assigned</div></div>
-        <div class="profile-stat"><div class="val">${FOOD_HANDLER_BADGE[s.foodHandler]?s.foodHandler:'—'}</div><div class="lbl">Food Handler</div></div>
+        <div class="profile-stat"><div class="val">${s.foodHandler||'—'}</div><div class="lbl">Food Handler</div></div>
         <div class="profile-stat"><div class="val">${s.start||'—'}</div><div class="lbl">Start Date</div></div>
       </div>
-      ${pinsEarned>0?`<div class="sep"></div><div class="card-title">🎖 Earned Pins</div><div style="display:flex;gap:12px;flex-wrap:wrap">${CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=3).map(r=>`<div style="text-align:center"><div style="font-size:32px">${PIN_EMOJIS[r]||'🏅'}</div><div style="font-size:11px;font-weight:600">${r}</div></div>`).join('')}</div>`:''}
-    </div>
-  `;
+      ${certCount>0?`<div class="sep"></div><div class="card-title">🎖 Earned Pins</div><div style="display:flex;gap:12px;flex-wrap:wrap">${CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=3).map(r=>`<div style="text-align:center"><div style="font-size:32px">${PIN_EMOJIS[r]||'🏅'}</div><div style="font-size:11px;font-weight:600">${r}</div></div>`).join('')}</div>`:''}
+    </div>`;
 }
 
 // ============================================================
@@ -1491,8 +1688,7 @@ function renderMySchedule(){
       const shifts=schedule[ck]||[];
       const myShift=shifts.find(e=>e.staffId===sid);
       if(myShift){
-        const isW=d>=5;
-        const hrs=SHIFT_HOURS[isW?'weekend':'weekday'][myShift.shiftType]||7;
+        const isW=d>=5;const hrs=SHIFT_HOURS[isW?'weekend':'weekday'][myShift.shiftType]||7;
         rows.push({day:DAYS[d],role,shiftType:myShift.shiftType,hours:hrs});
       }
     });
@@ -1501,14 +1697,11 @@ function renderMySchedule(){
   document.getElementById('myScheduleContent').innerHTML=rows.length?`
     <div class="card">
       <div class="card-title">Week of ${new Date(weekKey).toLocaleDateString('en-US',{month:'long',day:'numeric'})}</div>
-      <table>
-        <thead><tr><th>Day</th><th>Role</th><th>Shift</th><th>Hours</th></tr></thead>
-        <tbody>${rows.map(r=>`<tr><td><strong>${r.day}</strong></td><td><span class="badge ${ROLES_FOH.includes(r.role)?'badge-foh':'badge-boh'}">${r.role}</span></td><td><span class="badge ${r.shiftType==='opening'?'badge-l3':r.shiftType==='closing'?'badge-l1':'badge-l2'}">${r.shiftType}</span></td><td class="font-mono">${r.hours}h</td></tr>`).join('')}</tbody>
-      </table>
+      <table><thead><tr><th>Day</th><th>Role</th><th>Shift</th><th>Hours</th></tr></thead>
+      <tbody>${rows.map(r=>`<tr><td><strong>${r.day}</strong></td><td><span class="badge ${ROLES_FOH.includes(r.role)?'badge-foh':'badge-boh'}">${r.role}</span></td><td><span class="badge badge-l2">${r.shiftType}</span></td><td class="font-mono">${r.hours}h</td></tr>`).join('')}</tbody></table>
       <div class="sep"></div>
       <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600"><span>Total hours this week</span><span class="font-mono">${totalHrs}h</span></div>
-    </div>
-  `:'<div class="card" style="text-align:center;padding:40px;color:var(--muted)">No shifts scheduled this week.<br><span style="font-size:13px">Check with your manager.</span></div>';
+    </div>`:'<div class="card" style="text-align:center;padding:40px;color:var(--muted)">No shifts scheduled this week.<br><span style="font-size:13px">Check with your manager.</span></div>';
 }
 
 // ============================================================
@@ -1521,31 +1714,25 @@ function launchConfetti(){
   for(let i=0;i<60;i++){
     const p=document.createElement('div');
     const color=colors[Math.floor(Math.random()*colors.length)];
-    const size=6+Math.random()*10;
-    const left=Math.random()*100;
-    const delay=Math.random()*0.8;
-    const duration=1.5+Math.random()*1.5;
+    const size=6+Math.random()*10;const left=Math.random()*100;
+    const delay=Math.random()*0.8;const duration=1.5+Math.random()*1.5;
     p.style.cssText=`position:absolute;width:${size}px;height:${size}px;background:${color};left:${left}%;top:-20px;border-radius:${Math.random()>0.5?'50%':'2px'};animation:fall ${duration}s ease-in ${delay}s forwards`;
     c.appendChild(p);
   }
-  document.body.appendChild(c);
-  setTimeout(()=>c.remove(),3500);
+  document.body.appendChild(c);setTimeout(()=>c.remove(),3500);
 }
 
 function showToast(msg){
   const t=document.createElement('div');
   t.style.cssText='position:fixed;bottom:24px;right:24px;background:#1A1410;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:320px;line-height:1.4';
-  t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),3500);
+  t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);
 }
 
 // ============================================================
 // STAFF TABLE
 // ============================================================
 function renderStaffTable(){
-  const tbody=document.getElementById('staffTableBody');
-  if(!tbody)return;
+  const tbody=document.getElementById('staffTableBody');if(!tbody)return;
   const noCard=staff.filter(s=>s.foodHandler==='No card'&&s.status==='active').length;
   const renew=staff.filter(s=>s.foodHandler==='Renew soon'&&s.status==='active').length;
   const alertEl=document.getElementById('staffAlert');
@@ -1637,8 +1824,7 @@ function recalcDashboard(){
   const weekKey=getWeekKey(today);
   const isWeekend=dow>=5;
   const hrs=SHIFT_HOURS[isWeekend?'weekend':'weekday'];
-  let laborCost=0;
-  let staffToday=[];
+  let laborCost=0;let staffToday=[];
   const groupedRoles=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
   groupedRoles.forEach(role=>{
     const ck=weekKey+'_d'+dow+'_'+role;
@@ -1647,8 +1833,7 @@ function recalcDashboard(){
       if(!s||s.type==='salary')return;
       const h=hrs[entry.shiftType]||hrs.full;
       const cost=s.rate*h;
-      laborCost+=cost;
-      staffToday.push({...s,shiftType:entry.shiftType,hours:h,cost});
+      laborCost+=cost;staffToday.push({...s,shiftType:entry.shiftType,hours:h,cost});
     });
   });
   const projSales=parseFloat(document.getElementById('projSales')?.value)||0;
@@ -1688,8 +1873,7 @@ function getWeekKey(date){
 }
 
 function populateWeekSelect(){
-  const sel=document.getElementById('schedWeekOf');
-  if(!sel)return;
+  const sel=document.getElementById('schedWeekOf');if(!sel)return;
   sel.innerHTML='';
   const today=new Date();
   for(let w=-1;w<=4;w++){
@@ -1704,13 +1888,20 @@ function populateWeekSelect(){
   }
 }
 
+function getWeeklyHours(staffId,weekKey){
+  const groupedRoles=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+  let total=0;
+  for(let d=0;d<7;d++){const isW=d>=5;const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];
+    groupedRoles.forEach(role=>{const ck=weekKey+'_d'+d+'_'+role;
+      (schedule[ck]||[]).forEach(e=>{if(e.staffId===staffId)total+=(hrs[e.shiftType]||hrs.full);});});}
+  return total;
+}
+
 let currentShiftCell=null;
 
 function renderSchedule(){
-  const weekKey=document.getElementById('schedWeekOf')?.value;
-  if(!weekKey)return;
-  const grid=document.getElementById('schedGrid');
-  if(!grid)return;
+  const weekKey=document.getElementById('schedWeekOf')?.value;if(!weekKey)return;
+  const grid=document.getElementById('schedGrid');if(!grid)return;
   const groupedRoles=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
   let html='<div></div>';
   DAYS.forEach(d=>{html+=`<div class="sch-header">${d}</div>`;});
@@ -1729,12 +1920,13 @@ function renderSchedule(){
   grid.innerHTML=html;
   const staffHours={};
   staff.filter(s=>s.type!=='salary').forEach(s=>{staffHours[s.id]={name:`${s.first} ${s.last}`,role:s.role,rate:s.rate,hours:[0,0,0,0,0,0,0]};});
-  for(let d=0;d<7;d++){const isW=d>=5;const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];groupedRoles.forEach(role=>{const ck=weekKey+'_d'+d+'_'+role;(schedule[ck]||[]).forEach(e=>{if(staffHours[e.staffId])staffHours[e.staffId].hours[d]+=hrs[e.shiftType]||hrs.full;});});}
+  for(let d=0;d<7;d++){const isW=d>=5;const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];
+    groupedRoles.forEach(role=>{const ck=weekKey+'_d'+d+'_'+role;
+      (schedule[ck]||[]).forEach(e=>{if(staffHours[e.staffId])staffHours[e.staffId].hours[d]+=hrs[e.shiftType]||hrs.full;});});}
   let weekCost=0;const otWarnings=[];
   const rows=Object.values(staffHours).map(sh=>{
     const totalH=sh.hours.reduce((a,b)=>a+b,0);
-    const cost=totalH*sh.rate;
-    weekCost+=cost;
+    const cost=totalH*sh.rate;weekCost+=cost;
     const overWeek=totalH>OT_RULES.maxWeeklyHours;
     const overDay=sh.hours.some(h=>h>OT_RULES.maxShiftHours);
     const daysWorked=sh.hours.filter(h=>h>0).length;
@@ -1746,7 +1938,7 @@ function renderSchedule(){
       <td>${sh.name}${overWeek?'<span style="color:var(--danger);font-size:10px;margin-left:4px">⚠ OT</span>':''}</td>
       <td><span class="badge ${ROLES_FOH.includes(sh.role)?'badge-foh':'badge-boh'}">${sh.role}</span></td>
       ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center;${h>OT_RULES.maxShiftHours?'color:var(--danger);font-weight:700':''}"> ${h>0?h+'h':'—'}</td>`).join('')}
-      <td class="font-mono" style="${overWeek?'color:var(--danger);font-weight:700':''}">${totalH}h</td>
+      <td class="font-mono" style="${overWeek?'color:var(--danger);font-weight:700':''}">  ${totalH}h</td>
       <td class="font-mono">$${cost.toFixed(0)}</td></tr>`;
   });
   const otEl=document.getElementById('schedOTWarnings');
@@ -1756,12 +1948,41 @@ function renderSchedule(){
 }
 
 function openShiftModal(weekKey,dayIdx,role){
-  currentShiftCell={weekKey,dayIdx:parseInt(dayIdx),role};
-  document.getElementById('shiftModalTitle').textContent=DAYS[dayIdx]+' — '+role;
-  const roleStaff=staff.filter(s=>s.type!=='salary'&&s.status==='active');
-  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
+  const di=parseInt(dayIdx);
+  currentShiftCell={weekKey,dayIdx:di,role};
+  const dayName=DAYS[di];
+  document.getElementById('shiftModalTitle').textContent=`${dayName} — ${role}`;
+  const availNoteEl=document.getElementById('shiftAvailNote');
+  availNoteEl.style.display='block';
+  availNoteEl.innerHTML=`<div class="alert" style="background:#F0F4FF;border:1px solid #BFDBFE;color:#1E3A8A;font-size:12px;padding:8px 12px;margin:0">📅 <strong>${dayName}</strong> — Availability badges shown next to each staff name.</div>`;
+  const roleStaff=staff.filter(s=>s.status==='active'&&s.type!=='salary');
+  const cellKey=weekKey+'_d'+di+'_'+role;
   const existing=(schedule[cellKey]||[]).map(e=>e.staffId);
-  document.getElementById('shiftStaffList').innerHTML=`<div class="card-title">Select Staff</div>${roleStaff.map(s=>`<label style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid ${existing.includes(s.id)?'var(--brown)':'var(--border)'}"><input type="checkbox" value="${s.id}" ${existing.includes(s.id)?'checked':''} style="accent-color:var(--brown)"><span style="font-size:13px;font-weight:600">${s.first} ${s.last}</span><span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}" style="margin-left:auto">${s.role}</span><span class="font-mono" style="font-size:11px;color:var(--muted)">$${s.rate.toFixed(2)}/hr</span></label>`).join('')||'<div style="color:var(--muted);font-size:13px;padding:12px">No active staff</div>'}`;
+  const staffWeeklyHrs={};
+  roleStaff.forEach(s=>{staffWeeklyHrs[s.id]=getWeeklyHours(s.id,weekKey);});
+  document.getElementById('shiftStaffList').innerHTML=`
+    <div class="card-title" style="margin-bottom:8px">Select Staff</div>
+    ${roleStaff.map(s=>{
+      const av=getAvailStatus(s.id,di);
+      let avBadge='';
+      if(av==='✗')avBadge=`<span class="avail-badge avail-badge-danger">✗ unavail</span>`;
+      else if(av==='—')avBadge=`<span class="avail-badge avail-badge-warn">— limited</span>`;
+      else if(av==='AM')avBadge=`<span class="avail-badge" style="background:#DBEAFE;color:#1E40AF">AM only</span>`;
+      else if(av==='PM')avBadge=`<span class="avail-badge" style="background:#FEF3C7;color:#92400E">PM only</span>`;
+      else avBadge=`<span class="avail-badge avail-badge-ok">✓ all day</span>`;
+      const weekHrs=staffWeeklyHrs[s.id]||0;
+      const remaining=OT_RULES.maxWeeklyHours-weekHrs;
+      const wouldExceed=(weekHrs+7)>OT_RULES.maxWeeklyHours;
+      const hrsLabel=`<span class="hours-remaining ${wouldExceed?'hours-over':''}">  ${remaining}h left</span>`;
+      return`<label style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid ${existing.includes(s.id)?'var(--brown)':'var(--border)'}">
+        <input type="checkbox" value="${s.id}" ${existing.includes(s.id)?'checked':''} style="accent-color:var(--brown)">
+        <span style="font-size:13px;font-weight:600;flex:1">${s.first} ${s.last}</span>
+        ${avBadge}
+        <span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}" style="font-size:10px">${s.role}</span>
+        ${hrsLabel}
+      </label>`;
+    }).join('')||'<div style="color:var(--muted);font-size:13px;padding:12px">No active staff</div>'}
+  `;
   const existing0=schedule[cellKey];
   if(existing0&&existing0[0])document.getElementById('shiftType').value=existing0[0].shiftType||'full';
   openModal('shiftModal');
@@ -1796,8 +2017,7 @@ function clearWeekSchedule(){
 // ============================================================
 function renderSkillMatrix(){
   const activeStaff=staff.filter(s=>s.status==='active');
-  const tbody=document.getElementById('skillBody');
-  if(!tbody)return;
+  const tbody=document.getElementById('skillBody');if(!tbody)return;
   tbody.innerHTML=activeStaff.map(s=>{
     const sk=skills[s.id]||{};
     let pinsEarned=0;
@@ -1836,8 +2056,7 @@ const OPT_DEFAULTS={Server:3,Barista:2,Runner:2,Busser:2,'Line Cook':3,Expo:1,'O
 let optCounts=load('optCounts',{...OPT_DEFAULTS});
 
 function renderOptimizer(){
-  const container=document.getElementById('optimizerRoles');
-  if(!container)return;
+  const container=document.getElementById('optimizerRoles');if(!container)return;
   container.innerHTML=OPT_ROLES.map(r=>`<div class="optimizer-row"><div><div class="opt-role">${r.role} <span class="badge ${r.type==='FOH'?'badge-foh':r.type==='BOH'?'badge-boh':'badge-consultant'}">${r.type}</span></div><div class="opt-cost">$${r.rate.toFixed(2)}/hr</div></div><div class="opt-count"><button onclick="adjOpt('${r.role}',-1)">−</button><div class="opt-num" id="opt-cnt-${r.role.replace(/ /g,'-')}">${optCounts[r.role]||0}</div><button onclick="adjOpt('${r.role}',1)">+</button><div class="opt-cost" id="opt-cost-${r.role.replace(/ /g,'-')}">$0</div></div></div>`).join('');
   runOptimizer();
 }
@@ -1852,13 +2071,10 @@ function runOptimizer(){
   const budget=sales*(target/100);
   let totalCost=0;
   OPT_ROLES.forEach(r=>{
-    const cnt=optCounts[r.role]||0;
-    const cost=cnt*r.rate*hrs;
-    totalCost+=cost;
+    const cnt=optCounts[r.role]||0;const cost=cnt*r.rate*hrs;totalCost+=cost;
     const cntEl=document.getElementById('opt-cnt-'+r.role.replace(/ /g,'-'));
     const costEl=document.getElementById('opt-cost-'+r.role.replace(/ /g,'-'));
-    if(cntEl)cntEl.textContent=cnt;
-    if(costEl)costEl.textContent='$'+cost.toFixed(0);
+    if(cntEl)cntEl.textContent=cnt;if(costEl)costEl.textContent='$'+cost.toFixed(0);
   });
   const pct=sales>0?(totalCost/sales)*100:0;
   const variance=budget-totalCost;
@@ -1883,13 +2099,156 @@ function autoOptimize(){
   let cost=OPT_ROLES.reduce((a,r)=>a+((counts[r.role]||0)*r.rate*hrs),0);
   const priority=['Server','Line Cook','Barista','Runner','Busser','Expo','Ops Consultant'];
   let iter=0;
-  while(cost<budget*0.92&&iter<30){let added=false;for(const role of priority){const r=OPT_ROLES.find(x=>x.role===role);const tryCost=cost+r.rate*hrs;if(tryCost<=budget){counts[role]=(counts[role]||0)+1;cost=tryCost;added=true;break;}}if(!added)break;iter++;}
+  while(cost<budget*0.92&&iter<30){
+    let added=false;
+    for(const role of priority){const r=OPT_ROLES.find(x=>x.role===role);const tryCost=cost+r.rate*hrs;if(tryCost<=budget){counts[role]=(counts[role]||0)+1;cost=tryCost;added=true;break;}}
+    if(!added)break;iter++;
+  }
   optCounts={...counts};save('optCounts',optCounts);
   const rec=document.getElementById('opt-recommendation');
   const recBody=document.getElementById('opt-rec-body');
   if(rec)rec.style.display='block';
   if(recBody)recBody.innerHTML=`<div style="font-size:13px;margin-bottom:12px">Optimized crew for <strong>$${sales.toLocaleString()}</strong> sales at <strong>${target}%</strong> labor target (${daytype}):</div>${OPT_ROLES.map(r=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${counts[r.role]||0}× ${r.role}</span><span class="font-mono">$${((counts[r.role]||0)*r.rate*hrs).toFixed(0)}</span></div>`).join('')}<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;font-weight:700"><span>Total hourly labor</span><span class="font-mono">$${cost.toFixed(0)} (${(cost/sales*100).toFixed(1)}%)</span></div>`;
   renderOptimizer();
+}
+
+// ============================================================
+// FLOOR MAP
+// ============================================================
+function populateFloorDateSelect(){
+  const sel=document.getElementById('floorDateSelect');if(!sel)return;
+  sel.innerHTML='';
+  const today=new Date();
+  for(let d=-1;d<=6;d++){
+    const dt=new Date(today);dt.setDate(dt.getDate()+d);
+    const key=dt.toISOString().split('T')[0];
+    const label=dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    const opt=document.createElement('option');
+    opt.value=key;opt.textContent=label;
+    if(d===0)opt.selected=true;
+    sel.appendChild(opt);
+  }
+}
+
+function getFloorDateKey(){
+  return document.getElementById('floorDateSelect')?.value||new Date().toISOString().split('T')[0];
+}
+
+function getTodayScheduledStaff(dateKey){
+  const dt=new Date(dateKey+'T12:00:00');
+  const dow=dt.getDay()===0?6:dt.getDay()-1;
+  const weekKey=getWeekKey(dt);
+  const groupedRoles=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+  const staffIds=new Set();
+  groupedRoles.forEach(role=>{const ck=weekKey+'_d'+dow+'_'+role;(schedule[ck]||[]).forEach(e=>staffIds.add(e.staffId));});
+  return staff.filter(s=>staffIds.has(s.id)&&s.type!=='salary');
+}
+
+function renderFloorMap(){
+  const dateKey=getFloorDateKey();
+  const scheduledStaff=getTodayScheduledStaff(dateKey);
+  const fa=floorAssignments[dateKey]||{};
+  const assignedIds=new Set();
+  FLOOR_ZONES.forEach(z=>{(fa[z]||[]).forEach(id=>assignedIds.add(id));});
+  const fohStaff=scheduledStaff.filter(s=>s.dept==='FOH');
+  const bohStaff=scheduledStaff.filter(s=>s.dept!=='FOH');
+  document.getElementById('floorChipsFOH').innerHTML=fohStaff.length?fohStaff.map(s=>chipHTML(s,assignedIds.has(s.id))).join(''):'<div class="no-schedule-msg">No FOH scheduled</div>';
+  document.getElementById('floorChipsBOH').innerHTML=bohStaff.length?bohStaff.map(s=>chipHTML(s,assignedIds.has(s.id))).join(''):'<div class="no-schedule-msg">No BOH scheduled</div>';
+  FLOOR_ZONES.forEach(zone=>{
+    const el=document.getElementById('zone-chips-'+zone);if(!el)return;
+    const zoneStaffIds=fa[zone]||[];
+    el.innerHTML=zoneStaffIds.map(id=>{
+      const s=staff.find(x=>x.id===id);if(!s)return'';
+      const cls=s.dept==='FOH'?'foh-chip':'boh-chip';
+      return`<div class="staff-chip ${cls}" onclick="unassignFromZone('${zone}',${id})" title="Click to unassign">${s.nick||s.first}</div>`;
+    }).join('');
+    if(!zoneStaffIds.length)el.innerHTML='<div style="font-size:11px;color:var(--muted);opacity:0.6">drop here</div>';
+  });
+}
+
+function chipHTML(s,assigned){
+  const cls=s.dept==='FOH'?'foh-chip':'boh-chip';
+  if(assigned)return`<div class="staff-chip ${cls} chip-assigned" title="Already assigned">${s.nick||s.first}</div>`;
+  return`<div class="staff-chip ${cls}" draggable="true" data-staff-id="${s.id}" ondragstart="dragStart(event,${s.id})" title="Drag to assign">${s.nick||s.first}</div>`;
+}
+
+let dragStaffId=null;
+
+function dragStart(event,staffId){
+  dragStaffId=staffId;
+  event.dataTransfer.effectAllowed='move';
+  event.dataTransfer.setData('text/plain',String(staffId));
+}
+
+function dropToZone(event,zone){
+  event.preventDefault();
+  const zoneEl=document.getElementById('zone-'+zone);
+  if(zoneEl)zoneEl.classList.remove('drag-over');
+  const id=parseInt(event.dataTransfer.getData('text/plain'))||dragStaffId;
+  if(!id)return;
+  const dateKey=getFloorDateKey();
+  if(!floorAssignments[dateKey])floorAssignments[dateKey]={};
+  if(!floorAssignments[dateKey][zone])floorAssignments[dateKey][zone]=[];
+  FLOOR_ZONES.forEach(z=>{floorAssignments[dateKey][z]=(floorAssignments[dateKey][z]||[]).filter(x=>x!==id);});
+  if(!floorAssignments[dateKey][zone].includes(id))floorAssignments[dateKey][zone].push(id);
+  save('floorAssignments',floorAssignments);
+  renderFloorMap();
+}
+
+function unassignFromZone(zone,staffId){
+  const dateKey=getFloorDateKey();
+  if(!floorAssignments[dateKey])return;
+  floorAssignments[dateKey][zone]=(floorAssignments[dateKey][zone]||[]).filter(x=>x!==staffId);
+  save('floorAssignments',floorAssignments);renderFloorMap();
+}
+
+function clearFloorAssignments(){
+  if(!confirm('Clear all floor assignments for this date?'))return;
+  const dateKey=getFloorDateKey();
+  delete floorAssignments[dateKey];
+  save('floorAssignments',floorAssignments);renderFloorMap();
+}
+
+// ============================================================
+// AVAILABILITY
+// ============================================================
+function renderAvailability(){
+  const tbody=document.getElementById('availBody');if(!tbody)return;
+  const fohStaff=staff.filter(s=>s.dept==='FOH'&&s.status==='active'&&s.type!=='salary');
+  const bohStaff=staff.filter(s=>s.dept==='BOH'&&s.status==='active'&&s.type!=='salary');
+  const events=[
+    {label:'🎉 F&F Dinner — Jun 5',cols:[null,null,null,null,'F&F',null,null]},
+    {label:'🟢 Soft Open — Jun 6–7',cols:[null,null,null,null,null,'SOFT','SOFT']},
+    {label:'📸 Media Day — Jun 11',cols:[null,null,null,'MEDIA',null,null,null]},
+    {label:'🎊 Grand Opening — Jun 13',cols:[null,null,null,null,null,'OPEN',null]},
+  ];
+  let html='';
+  events.forEach(ev=>{
+    html+=`<tr class="avail-event-row"><td style="font-size:11px;font-weight:600;color:#4C1D95">${ev.label}</td>`;
+    ev.cols.forEach(c=>{html+=`<td>${c?`<span style="font-size:10px;font-weight:700;color:#5B21B6">${c}</span>`:''}</td>`;});
+    html+='</tr>';
+  });
+  function staffRows(list,groupLabel,filterKey){
+    if(currentAvailFilter!=='all'&&currentAvailFilter!==filterKey)return'';
+    let r=`<tr class="avail-group-header"><td colspan="8">${groupLabel}</td></tr>`;
+    list.forEach(s=>{
+      const av=AVAILABILITY[s.id]||['ALL','ALL','ALL','ALL','ALL','ALL','ALL'];
+      r+=`<tr><td><strong>${s.first} ${s.last}</strong><br><span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
+        ${av.map(v=>`<td style="text-align:center"><span class="avail-cell ${availClass(v)}">${availLabel(v)}</span></td>`).join('')}
+      </tr>`;
+    });
+    return r;
+  }
+  html+=staffRows(fohStaff,'👥 Front of House (FOH)','foh');
+  html+=staffRows(bohStaff,'🍳 Back of House (BOH)','boh');
+  tbody.innerHTML=html;
+}
+
+function filterAvail(filter,btn){
+  currentAvailFilter=filter;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderAvailability();
 }
 
 // ============================================================
@@ -1904,9 +2263,7 @@ document.addEventListener('click',e=>{if(e.target.classList.contains('modal-over
 // ============================================================
 window.addEventListener('DOMContentLoaded',async()=>{
   await ensureAdminUser();
-  if(checkSession()){
-    showApp();
-  }
+  if(checkSession()){showApp();}
 });
 
 </script>
