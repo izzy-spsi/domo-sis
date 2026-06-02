@@ -1529,36 +1529,386 @@ function launchConfetti(){
     c.appendChild(p);
   }
   document.body.appendChild(c);
-  setTimeout(()=>c.remove(),100+60*60);
+  setTimeout(()=>c.remove(),3500);
+}
+
+function showToast(msg){
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;right:24px;background:#1A1410;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:320px;line-height:1.4';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3500);
 }
 
 // ============================================================
-// BOOTSTRAP — called on page load
+// STAFF TABLE
 // ============================================================
-document.addEventListener('DOMContentLoaded', async function(){
-  await ensureAdminUser();
-  // Set today's date in topbar
-  const now = new Date();
-  const topDate = document.getElementById('topDate');
-  if(topDate) topDate.textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-  // Auto-check if already logged in
-  const sessionRaw = localStorage.getItem('sis_session');
-  if(sessionRaw){
-    try{
-      const sess = JSON.parse(sessionRaw);
-      if(sess && sess.expiry && Date.now() < sess.expiry){
-        currentUser = sess.user;
-        document.getElementById('loginScreen').style.display='none';
-        document.getElementById('app').style.display='block';
-        renderAll();
-        return;
-      }
-    }catch(e){}
+function renderStaffTable(){
+  const tbody=document.getElementById('staffTableBody');
+  if(!tbody)return;
+  const noCard=staff.filter(s=>s.foodHandler==='No card'&&s.status==='active').length;
+  const renew=staff.filter(s=>s.foodHandler==='Renew soon'&&s.status==='active').length;
+  const alertEl=document.getElementById('staffAlert');
+  if(alertEl){
+    let alerts=[];
+    if(noCard>0)alerts.push(`🚨 ${noCard} staff with no food handler card`);
+    if(renew>0)alerts.push(`⚠️ ${renew} staff need to renew soon`);
+    alertEl.innerHTML=alerts.length?alerts.map(a=>`<div class="alert ${a.startsWith('🚨')?'alert-danger':'alert-warn'}" style="margin-bottom:6px">${a}</div>`).join(''):'';
   }
-  // Show login screen
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('app').style.display='none';
+  tbody.innerHTML=staff.map(s=>{
+    const deptBadge=s.dept==='FOH'?'badge-foh':s.dept==='BOH'?'badge-boh':'badge-mgmt';
+    const rateStr=s.type==='salary'?'$'+s.rate.toLocaleString()+'/yr':'$'+s.rate.toFixed(2)+'/hr';
+    const fhBadge=FOOD_HANDLER_BADGE[s.foodHandler||'—']||FOOD_HANDLER_BADGE['—'];
+    return`<tr>
+      <td><strong>${s.first} ${s.last}</strong>${s.nick&&s.nick!==s.first?`<br><span style="font-size:11px;color:var(--muted)">Goes by: ${s.nick}</span>`:''}</td>
+      <td><span class="badge ${deptBadge}">${s.dept||'—'}</span> <span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
+      <td class="font-mono" style="font-size:11px">${s.phone||'—'}</td>
+      <td style="font-size:11px">${s.email||'—'}</td>
+      <td class="font-mono">${rateStr}</td>
+      <td>${fhBadge}</td>
+      <td><span class="badge ${s.status==='active'?'badge-l3':s.status==='training'?'badge-l1':'badge-l0'}">${s.status}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="editStaff(${s.id})">Edit</button>
+          <button class="btn btn-sm" style="background:#FEE2E2;color:#991B1B;margin-left:4px" onclick="removeStaff(${s.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+  const foh=staff.filter(s=>s.dept==='FOH'&&s.status==='active').length;
+  const boh=staff.filter(s=>s.dept==='BOH'&&s.status==='active').length;
+  if(document.getElementById('dir-total'))document.getElementById('dir-total').textContent=staff.filter(s=>s.status==='active').length;
+  if(document.getElementById('dir-foh'))document.getElementById('dir-foh').textContent=foh;
+  if(document.getElementById('dir-boh'))document.getElementById('dir-boh').textContent=boh;
+}
+
+function openAddStaff(prefill=null){
+  document.getElementById('staffModalTitle').textContent=prefill?'Edit Staff Member':'Add Staff Member';
+  document.getElementById('sf-first').value=prefill?.first||'';
+  document.getElementById('sf-last').value=prefill?.last||'';
+  document.getElementById('sf-nick').value=prefill?.nick||'';
+  document.getElementById('sf-phone').value=prefill?.phone||'';
+  document.getElementById('sf-email').value=prefill?.email||'';
+  document.getElementById('sf-dept').value=prefill?.dept||'FOH';
+  document.getElementById('sf-role').value=prefill?.role||'Server';
+  document.getElementById('sf-type').value=prefill?.type||'hourly';
+  document.getElementById('sf-rate').value=prefill?.rate||DEFAULT_RATES['Server'];
+  document.getElementById('sf-start').value=prefill?.start||'';
+  document.getElementById('sf-status').value=prefill?.status||'active';
+  document.getElementById('sf-foodhandler').value=prefill?.foodHandler||'Active';
+  document.getElementById('addStaffModal')._editId=prefill?.id||null;
+  openModal('addStaffModal');
+}
+
+function editStaff(id){openAddStaff(staff.find(s=>s.id===id));}
+
+function saveStaff(){
+  const editId=document.getElementById('addStaffModal')._editId;
+  const entry={
+    id:editId||nextId++,
+    first:document.getElementById('sf-first').value.trim(),
+    last:document.getElementById('sf-last').value.trim(),
+    nick:document.getElementById('sf-nick').value.trim(),
+    phone:document.getElementById('sf-phone').value.trim(),
+    email:document.getElementById('sf-email').value.trim(),
+    dept:document.getElementById('sf-dept').value,
+    role:document.getElementById('sf-role').value,
+    type:document.getElementById('sf-type').value,
+    rate:parseFloat(document.getElementById('sf-rate').value)||0,
+    start:document.getElementById('sf-start').value,
+    status:document.getElementById('sf-status').value,
+    foodHandler:document.getElementById('sf-foodhandler').value
+  };
+  if(!entry.first){alert('Name required');return;}
+  if(editId)staff=staff.map(s=>s.id===editId?entry:s);
+  else staff.push(entry);
+  save('staff',staff);save('nextId',nextId);
+  closeModal('addStaffModal');renderStaffTable();recalcDashboard();
+}
+
+function removeStaff(id){
+  if(!confirm('Remove this staff member?'))return;
+  staff=staff.filter(s=>s.id!==id);
+  save('staff',staff);renderStaffTable();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function recalcDashboard(){
+  const today=new Date();
+  const dow=today.getDay()===0?6:today.getDay()-1;
+  const weekKey=getWeekKey(today);
+  const isWeekend=dow>=5;
+  const hrs=SHIFT_HOURS[isWeekend?'weekend':'weekday'];
+  let laborCost=0;
+  let staffToday=[];
+  const groupedRoles=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+  groupedRoles.forEach(role=>{
+    const ck=weekKey+'_d'+dow+'_'+role;
+    (schedule[ck]||[]).forEach(entry=>{
+      const s=staff.find(x=>x.id===entry.staffId);
+      if(!s||s.type==='salary')return;
+      const h=hrs[entry.shiftType]||hrs.full;
+      const cost=s.rate*h;
+      laborCost+=cost;
+      staffToday.push({...s,shiftType:entry.shiftType,hours:h,cost});
+    });
+  });
+  const projSales=parseFloat(document.getElementById('projSales')?.value)||0;
+  const laborPct=projSales>0?(laborCost/projSales)*100:0;
+  const salesFor30=laborCost>0?(laborCost/0.30):0;
+  if(document.getElementById('dash-staff-today'))document.getElementById('dash-staff-today').textContent=staffToday.length;
+  if(document.getElementById('dash-labor-cost'))document.getElementById('dash-labor-cost').textContent='$'+laborCost.toFixed(0);
+  const pctEl=document.getElementById('dash-labor-pct');
+  if(pctEl){pctEl.textContent=laborPct.toFixed(1)+'%';pctEl.className='kpi-val '+(laborPct<=30?'green':laborPct<=35?'warn':'red');}
+  if(document.getElementById('dash-sales-needed'))document.getElementById('dash-sales-needed').textContent='$'+salesFor30.toLocaleString('en-US',{maximumFractionDigits:0});
+  if(document.getElementById('dash-labor-target'))document.getElementById('dash-labor-target').textContent=laborPct<=30?'✅ On target':laborPct<=35?'⚠️ Watch closely':'🚨 Over target';
+  const fillEl=document.getElementById('prog-fill');
+  if(fillEl){const fill=Math.min(100,(laborPct/50)*100);fillEl.style.width=fill+'%';fillEl.style.background=laborPct<=30?'var(--success)':laborPct<=35?'var(--warn)':'var(--danger)';}
+  if(document.getElementById('prog-pct-label'))document.getElementById('prog-pct-label').textContent=laborPct.toFixed(1)+'%';
+  const alertEl=document.getElementById('laborAlert');
+  if(alertEl){
+    if(laborPct>35)alertEl.innerHTML=`<div class="alert alert-danger">🚨 Labor at ${laborPct.toFixed(1)}% — $${(laborCost-projSales*0.30).toFixed(0)} over budget.</div>`;
+    else if(laborPct>30)alertEl.innerHTML=`<div class="alert alert-warn">⚠️ Labor at ${laborPct.toFixed(1)}% — slightly over 30% target.</div>`;
+    else if(projSales>0)alertEl.innerHTML=`<div class="alert alert-success">✅ Labor at ${laborPct.toFixed(1)}% — within 30% target. $${(projSales*0.30-laborCost).toFixed(0)} headroom.</div>`;
+    else alertEl.innerHTML='';
+  }
+  if(document.getElementById('todayBody'))document.getElementById('todayBody').innerHTML=staffToday.map(s=>`<tr><td>${s.first} ${s.last}</td><td><span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}">${s.role}</span></td><td><span class="badge badge-l2">${s.shiftType}</span></td><td class="font-mono">${s.hours.toFixed(1)}h</td><td class="font-mono">$${s.cost.toFixed(2)}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No shifts scheduled today</td></tr>';
+  let weekTotal=0;
+  for(let d=0;d<7;d++){const dk=weekKey+'_d'+d;const isW=d>=5;const wh=SHIFT_HOURS[isW?'weekend':'weekday'];
+    [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'].forEach(role=>{(schedule[dk+'_'+role]||[]).forEach(e=>{const s=staff.find(x=>x.id===e.staffId);if(!s||s.type==='salary')return;weekTotal+=s.rate*(wh[e.shiftType]||wh.full);});});}
+  if(document.getElementById('weekSummary'))document.getElementById('weekSummary').innerHTML=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Total hourly labor this week</span><span class="font-mono font-bold">$${weekTotal.toFixed(0)}</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Head Chef (salary, weekly)</span><span class="font-mono">$1,771</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>GM (salary, weekly)</span><span class="font-mono">$1,919</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:700"><span>Total est. weekly labor</span><span class="font-mono">$${(weekTotal+1771+1919).toFixed(0)}</span></div>`;
+}
+
+// ============================================================
+// SCHEDULE
+// ============================================================
+function getWeekKey(date){
+  const d=new Date(date);
+  const day=d.getDay()===0?6:d.getDay()-1;
+  d.setDate(d.getDate()-day);
+  return d.toISOString().split('T')[0];
+}
+
+function populateWeekSelect(){
+  const sel=document.getElementById('schedWeekOf');
+  if(!sel)return;
+  sel.innerHTML='';
+  const today=new Date();
+  for(let w=-1;w<=4;w++){
+    const d=new Date(today);
+    d.setDate(d.getDate()-((d.getDay()===0?6:d.getDay()-1))+w*7);
+    const key=d.toISOString().split('T')[0];
+    const label='Week of '+d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const opt=document.createElement('option');
+    opt.value=key;opt.textContent=label;
+    if(w===0)opt.selected=true;
+    sel.appendChild(opt);
+  }
+}
+
+let currentShiftCell=null;
+
+function renderSchedule(){
+  const weekKey=document.getElementById('schedWeekOf')?.value;
+  if(!weekKey)return;
+  const grid=document.getElementById('schedGrid');
+  if(!grid)return;
+  const groupedRoles=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+  let html='<div></div>';
+  DAYS.forEach(d=>{html+=`<div class="sch-header">${d}</div>`;});
+  groupedRoles.forEach(role=>{
+    const typeBadge=ROLES_FOH.includes(role)?'badge-foh':ROLES_BOH.includes(role)?'badge-boh':'badge-consultant';
+    html+=`<div class="sch-role"><span class="badge ${typeBadge}" style="font-size:10px">${role}</span></div>`;
+    DAYS.forEach((d,di)=>{
+      const cellKey=weekKey+'_d'+di+'_'+role;
+      const cellShifts=schedule[cellKey]||[];
+      const filled=cellShifts.length>0;
+      html+=`<div class="sch-cell ${filled?'filled':''}" onclick="openShiftModal('${weekKey}','${di}','${role}')">`;
+      cellShifts.forEach(e=>{const s=staff.find(x=>x.id===e.staffId);if(s)html+=`<div class="shift-chip ${e.shiftType==='closing'?'closing':e.shiftType==='opening'?'opening':''}">${s.first}<br><span style="font-size:8px;opacity:0.8">${e.shiftType.charAt(0).toUpperCase()}</span></div>`;});
+      html+='</div>';
+    });
+  });
+  grid.innerHTML=html;
+  const staffHours={};
+  staff.filter(s=>s.type!=='salary').forEach(s=>{staffHours[s.id]={name:`${s.first} ${s.last}`,role:s.role,rate:s.rate,hours:[0,0,0,0,0,0,0]};});
+  for(let d=0;d<7;d++){const isW=d>=5;const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];groupedRoles.forEach(role=>{const ck=weekKey+'_d'+d+'_'+role;(schedule[ck]||[]).forEach(e=>{if(staffHours[e.staffId])staffHours[e.staffId].hours[d]+=hrs[e.shiftType]||hrs.full;});});}
+  let weekCost=0;const otWarnings=[];
+  const rows=Object.values(staffHours).map(sh=>{
+    const totalH=sh.hours.reduce((a,b)=>a+b,0);
+    const cost=totalH*sh.rate;
+    weekCost+=cost;
+    const overWeek=totalH>OT_RULES.maxWeeklyHours;
+    const overDay=sh.hours.some(h=>h>OT_RULES.maxShiftHours);
+    const daysWorked=sh.hours.filter(h=>h>0).length;
+    const overDays=daysWorked>OT_RULES.maxConsecutiveDays;
+    if(overWeek)otWarnings.push(`🚨 ${sh.name}: ${totalH}h this week (max 40h)`);
+    if(overDay)otWarnings.push(`⚠️ ${sh.name}: shift over 7h on at least one day`);
+    if(overDays)otWarnings.push(`⚠️ ${sh.name}: ${daysWorked} days this week (max 6)`);
+    return`<tr style="${overWeek||overDay?'background:#FEF2F2':''}">
+      <td>${sh.name}${overWeek?'<span style="color:var(--danger);font-size:10px;margin-left:4px">⚠ OT</span>':''}</td>
+      <td><span class="badge ${ROLES_FOH.includes(sh.role)?'badge-foh':'badge-boh'}">${sh.role}</span></td>
+      ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center;${h>OT_RULES.maxShiftHours?'color:var(--danger);font-weight:700':''}"> ${h>0?h+'h':'—'}</td>`).join('')}
+      <td class="font-mono" style="${overWeek?'color:var(--danger);font-weight:700':''}">${totalH}h</td>
+      <td class="font-mono">$${cost.toFixed(0)}</td></tr>`;
+  });
+  const otEl=document.getElementById('schedOTWarnings');
+  if(otEl)otEl.innerHTML=otWarnings.length?otWarnings.map(w=>`<div class="alert ${w.startsWith('🚨')?'alert-danger':'alert-warn'}" style="margin-bottom:4px;padding:8px 12px;font-size:12px">${w}</div>`).join(''):'<div class="alert alert-success" style="padding:8px 12px;font-size:12px">✅ No OT violations this week</div>';
+  if(document.getElementById('schedSummaryBody'))document.getElementById('schedSummaryBody').innerHTML=rows.join('')||'<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px">No shifts scheduled this week</td></tr>';
+  if(document.getElementById('sch-week-cost'))document.getElementById('sch-week-cost').textContent='$'+weekCost.toFixed(0);
+}
+
+function openShiftModal(weekKey,dayIdx,role){
+  currentShiftCell={weekKey,dayIdx:parseInt(dayIdx),role};
+  document.getElementById('shiftModalTitle').textContent=DAYS[dayIdx]+' — '+role;
+  const roleStaff=staff.filter(s=>s.type!=='salary'&&s.status==='active');
+  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
+  const existing=(schedule[cellKey]||[]).map(e=>e.staffId);
+  document.getElementById('shiftStaffList').innerHTML=`<div class="card-title">Select Staff</div>${roleStaff.map(s=>`<label style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid ${existing.includes(s.id)?'var(--brown)':'var(--border)'}"><input type="checkbox" value="${s.id}" ${existing.includes(s.id)?'checked':''} style="accent-color:var(--brown)"><span style="font-size:13px;font-weight:600">${s.first} ${s.last}</span><span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}" style="margin-left:auto">${s.role}</span><span class="font-mono" style="font-size:11px;color:var(--muted)">$${s.rate.toFixed(2)}/hr</span></label>`).join('')||'<div style="color:var(--muted);font-size:13px;padding:12px">No active staff</div>'}`;
+  const existing0=schedule[cellKey];
+  if(existing0&&existing0[0])document.getElementById('shiftType').value=existing0[0].shiftType||'full';
+  openModal('shiftModal');
+}
+
+function saveShiftCell(){
+  if(!currentShiftCell)return;
+  const {weekKey,dayIdx,role}=currentShiftCell;
+  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
+  const checked=[...document.querySelectorAll('#shiftStaffList input[type=checkbox]:checked')].map(c=>parseInt(c.value));
+  const shiftType=document.getElementById('shiftType').value;
+  schedule[cellKey]=checked.map(id=>({staffId:id,shiftType}));
+  save('schedule',schedule);closeModal('shiftModal');renderSchedule();recalcDashboard();
+}
+
+function clearShiftCell(){
+  if(!currentShiftCell)return;
+  const {weekKey,dayIdx,role}=currentShiftCell;
+  delete schedule[weekKey+'_d'+dayIdx+'_'+role];
+  save('schedule',schedule);closeModal('shiftModal');renderSchedule();
+}
+
+function clearWeekSchedule(){
+  if(!confirm('Clear all shifts for this week?'))return;
+  const weekKey=document.getElementById('schedWeekOf').value;
+  Object.keys(schedule).filter(k=>k.startsWith(weekKey)).forEach(k=>delete schedule[k]);
+  save('schedule',schedule);renderSchedule();
+}
+
+// ============================================================
+// SKILL MATRIX
+// ============================================================
+function renderSkillMatrix(){
+  const activeStaff=staff.filter(s=>s.status==='active');
+  const tbody=document.getElementById('skillBody');
+  if(!tbody)return;
+  tbody.innerHTML=activeStaff.map(s=>{
+    const sk=skills[s.id]||{};
+    let pinsEarned=0;
+    const cells=SKILL_ROLES.map(r=>{
+      const lvl=sk[r]||0;
+      if(lvl===3)pinsEarned++;
+      return`<td style="text-align:center"><button class="skill-dot skill-${lvl}" onclick="cycleSkill(${s.id},'${r}')" title="Click to advance">${lvl===0?'—':lvl===1?'T':lvl===2?'C':'★'}</button></td>`;
+    });
+    const readinessPct=Math.round((SKILL_ROLES.reduce((a,r)=>(a+(sk[r]||0)),0)/(SKILL_ROLES.length*3))*100);
+    return`<tr><td><strong>${s.first} ${s.last}</strong><br><span style="font-size:11px;color:var(--muted)">${s.role}</span></td>${cells.join('')}<td class="pin-cell"><span style="font-size:14px;font-weight:700;color:var(--brown)">${pinsEarned}</span><span style="font-size:11px;color:var(--muted)"> / ${SKILL_ROLES.length}</span></td><td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${readinessPct}%;background:${readinessPct>=80?'var(--success)':readinessPct>=50?'var(--warn)':'var(--danger)'}"></div></div><span class="font-mono" style="font-size:11px">${readinessPct}%</span></div></td></tr>`;
+  }).join('')||'<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px">No active staff yet</td></tr>';
+  const pinGrid=document.getElementById('pinGrid');
+  if(pinGrid)pinGrid.innerHTML=SKILL_ROLES.map(r=>{
+    const earnedCount=activeStaff.filter(s=>(skills[s.id]||{})[r]===3).length;
+    const names=activeStaff.filter(s=>(skills[s.id]||{})[r]===3).map(s=>s.first).join(', ');
+    return`<div class="card" style="text-align:center;padding:16px"><div style="font-size:28px;margin-bottom:8px">${PIN_EMOJIS[r]}</div><div style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">${r}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${earnedCount} earned</div>${names?`<div style="font-size:10px;color:var(--brown);margin-top:4px">${names}</div>`:''}<div style="margin-top:8px"><span class="badge ${earnedCount>0?'badge-l3':'badge-l0'}" style="font-size:10px">${earnedCount>0?'🎖 Active':'Locked'}</span></div></div>`;
+  }).join('');
+}
+
+function cycleSkill(staffId,role){
+  if(!skills[staffId])skills[staffId]={};
+  skills[staffId][role]=((skills[staffId][role]||0)+1)%4;
+  save('skills',skills);renderSkillMatrix();
+}
+
+// ============================================================
+// OPTIMIZER
+// ============================================================
+const OPT_ROLES=[
+  {role:'Server',type:'FOH',rate:16.90},{role:'Barista',type:'FOH',rate:16.90},
+  {role:'Runner',type:'FOH',rate:16.90},{role:'Busser',type:'FOH',rate:16.90},
+  {role:'Line Cook',type:'BOH',rate:18.90},{role:'Expo',type:'BOH',rate:18.90},
+  {role:'Ops Consultant',type:'Mgmt',rate:35.00},
+];
+const OPT_DEFAULTS={Server:3,Barista:2,Runner:2,Busser:2,'Line Cook':3,Expo:1,'Ops Consultant':1};
+let optCounts=load('optCounts',{...OPT_DEFAULTS});
+
+function renderOptimizer(){
+  const container=document.getElementById('optimizerRoles');
+  if(!container)return;
+  container.innerHTML=OPT_ROLES.map(r=>`<div class="optimizer-row"><div><div class="opt-role">${r.role} <span class="badge ${r.type==='FOH'?'badge-foh':r.type==='BOH'?'badge-boh':'badge-consultant'}">${r.type}</span></div><div class="opt-cost">$${r.rate.toFixed(2)}/hr</div></div><div class="opt-count"><button onclick="adjOpt('${r.role}',-1)">−</button><div class="opt-num" id="opt-cnt-${r.role.replace(/ /g,'-')}">${optCounts[r.role]||0}</div><button onclick="adjOpt('${r.role}',1)">+</button><div class="opt-cost" id="opt-cost-${r.role.replace(/ /g,'-')}">$0</div></div></div>`).join('');
+  runOptimizer();
+}
+
+function adjOpt(role,delta){optCounts[role]=Math.max(0,(optCounts[role]||0)+delta);save('optCounts',optCounts);runOptimizer();}
+
+function runOptimizer(){
+  const sales=parseFloat(document.getElementById('opt-sales')?.value)||0;
+  const target=parseFloat(document.getElementById('opt-target')?.value)||30;
+  const daytype=document.getElementById('opt-daytype')?.value||'weekday';
+  const hrs=SHIFT_HOURS[daytype].full;
+  const budget=sales*(target/100);
+  let totalCost=0;
+  OPT_ROLES.forEach(r=>{
+    const cnt=optCounts[r.role]||0;
+    const cost=cnt*r.rate*hrs;
+    totalCost+=cost;
+    const cntEl=document.getElementById('opt-cnt-'+r.role.replace(/ /g,'-'));
+    const costEl=document.getElementById('opt-cost-'+r.role.replace(/ /g,'-'));
+    if(cntEl)cntEl.textContent=cnt;
+    if(costEl)costEl.textContent='$'+cost.toFixed(0);
+  });
+  const pct=sales>0?(totalCost/sales)*100:0;
+  const variance=budget-totalCost;
+  if(document.getElementById('opt-budget'))document.getElementById('opt-budget').textContent='$'+budget.toFixed(0);
+  if(document.getElementById('opt-current-cost'))document.getElementById('opt-current-cost').textContent='$'+totalCost.toFixed(0);
+  if(document.getElementById('opt-variance')){const vEl=document.getElementById('opt-variance');vEl.textContent=(variance>=0?'+':'')+`$${variance.toFixed(0)}`;vEl.className='font-mono font-bold '+(variance>=0?'green':'red');}
+  if(document.getElementById('opt-actual-pct')){const pEl=document.getElementById('opt-actual-pct');pEl.textContent=pct.toFixed(1)+'%';pEl.className='font-mono font-bold '+(pct<=target?'green':pct<=target+5?'warn':'red');}
+  const fill=Math.min(100,(pct/(target*2))*100);
+  const fillEl=document.getElementById('opt-prog-fill');
+  if(fillEl){fillEl.style.width=fill+'%';fillEl.style.background=pct<=target?'var(--success)':pct<=target+5?'var(--warn)':'var(--danger)';}
+  if(document.getElementById('opt-prog-label'))document.getElementById('opt-prog-label').textContent=pct.toFixed(1)+'% / '+target+'% target';
+}
+
+function autoOptimize(){
+  const sales=parseFloat(document.getElementById('opt-sales').value)||0;
+  const target=parseFloat(document.getElementById('opt-target').value)||30;
+  const daytype=document.getElementById('opt-daytype').value;
+  const hrs=SHIFT_HOURS[daytype].full;
+  const budget=sales*(target/100);
+  const mins={Server:2,Barista:1,Runner:1,Busser:1,'Line Cook':2,Expo:1,'Ops Consultant':0};
+  let counts={...mins};
+  let cost=OPT_ROLES.reduce((a,r)=>a+((counts[r.role]||0)*r.rate*hrs),0);
+  const priority=['Server','Line Cook','Barista','Runner','Busser','Expo','Ops Consultant'];
+  let iter=0;
+  while(cost<budget*0.92&&iter<30){let added=false;for(const role of priority){const r=OPT_ROLES.find(x=>x.role===role);const tryCost=cost+r.rate*hrs;if(tryCost<=budget){counts[role]=(counts[role]||0)+1;cost=tryCost;added=true;break;}}if(!added)break;iter++;}
+  optCounts={...counts};save('optCounts',optCounts);
+  const rec=document.getElementById('opt-recommendation');
+  const recBody=document.getElementById('opt-rec-body');
+  if(rec)rec.style.display='block';
+  if(recBody)recBody.innerHTML=`<div style="font-size:13px;margin-bottom:12px">Optimized crew for <strong>$${sales.toLocaleString()}</strong> sales at <strong>${target}%</strong> labor target (${daytype}):</div>${OPT_ROLES.map(r=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${counts[r.role]||0}× ${r.role}</span><span class="font-mono">$${((counts[r.role]||0)*r.rate*hrs).toFixed(0)}</span></div>`).join('')}<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;font-weight:700"><span>Total hourly labor</span><span class="font-mono">$${cost.toFixed(0)} (${(cost/sales*100).toFixed(1)}%)</span></div>`;
+  renderOptimizer();
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('open');});
+
+// ============================================================
+// BOOT
+// ============================================================
+window.addEventListener('DOMContentLoaded',async()=>{
+  await ensureAdminUser();
+  if(checkSession()){
+    showApp();
+  }
 });
+
 </script>
 </body>
 </html>
