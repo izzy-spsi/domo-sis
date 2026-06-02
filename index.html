@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domo Cafe — Staff Intelligence System</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brown:#8B4513;--red:#CC2222;--bg:#F7F5F2;--card:#FFFFFF;--border:#E8E4DE;
+  --text:#1A1410;--muted:#7A6F65;--success:#16A34A;--warn:#D97706;--danger:#DC2626;
+  --accent:#8B4513;--tag-bg:#FEF3C7;--tag-text:#92400E;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif}
+
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:48px 40px;width:360px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.login-logo{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--brown);margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:32px}
+.login-box input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;margin-bottom:12px;outline:none;transition:border 0.2s}
+.login-box input:focus{border-color:var(--brown)}
+.login-btn{width:100%;padding:13px;background:var(--brown);color:#fff;border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:opacity 0.2s}
+.login-btn:hover{opacity:0.88}
+.login-err{color:var(--danger);font-size:13px;margin-top:8px;display:none}
+
+/* APP */
+#app{display:none;min-height:100vh}
+.topbar{background:var(--brown);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px}
+.topbar-right{display:flex;align-items:center;gap:16px;font-size:13px;opacity:0.85}
+.topbar-right span{cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.25)}
+.topbar-right span:hover{background:rgba(255,255,255,0.15)}
+
+/* NAV TABS */
+.nav-tabs{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:4px;overflow-x:auto}
+.tab-btn{padding:14px 18px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s}
+.tab-btn.active{color:var(--brown);border-bottom-color:var(--brown)}
+.tab-btn:hover:not(.active){color:var(--text)}
+
+/* CONTENT */
+.tab-content{display:none;padding:24px;max-width:1100px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px}
+@media(max-width:600px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+@media(max-width:800px){.grid-3,.grid-4{grid-template-columns:1fr 1fr}}
+
+/* KPI */
+.kpi{text-align:center;padding:20px}
+.kpi-val{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:var(--text)}
+.kpi-label{font-size:12px;color:var(--muted);margin-top:4px}
+.kpi-sub{font-size:11px;margin-top:2px;font-family:'JetBrains Mono',monospace}
+.green{color:var(--success)}
+.red{color:var(--danger)}
+.warn{color:var(--warn)}
+
+/* PROGRESS BAR */
+.progress-wrap{margin-top:12px}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:var(--muted)}
+.progress-bar{height:8px;background:#E8E4DE;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;transition:width 0.4s}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-foh{background:#DBEAFE;color:#1E40AF}
+.badge-boh{background:#FEE2E2;color:#991B1B}
+.badge-mgmt{background:#D1FAE5;color:#065F46}
+.badge-consultant{background:#EDE9FE;color:#5B21B6}
+.badge-l0{background:#F3F4F6;color:#6B7280}
+.badge-l1{background:#FEF3C7;color:#92400E}
+.badge-l2{background:#DBEAFE;color:#1E40AF}
+.badge-l3{background:#D1FAE5;color:#065F46}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid #F0EDE8}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAF8}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s}
+.btn-primary{background:var(--brown);color:#fff}
+.btn-primary:hover{opacity:0.88}
+.btn-outline{background:transparent;color:var(--brown);border:1px solid var(--brown)}
+.btn-outline:hover{background:var(--brown);color:#fff}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px}
+.form-group input,.form-group select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border 0.2s;background:var(--bg)}
+.form-group input:focus,.form-group select:focus{border-color:var(--brown)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:16px;padding:28px;width:520px;max-width:94vw;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-header h3{font-family:'Space Grotesk',sans-serif;font-size:17px}
+.modal-close{cursor:pointer;font-size:20px;color:var(--muted);line-height:1;padding:4px 8px;border-radius:6px}
+.modal-close:hover{background:var(--bg)}
+
+/* SCHEDULE GRID */
+.schedule-grid{display:grid;grid-template-columns:120px repeat(7,1fr);gap:2px;margin-top:16px}
+.sch-header{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;color:var(--muted);text-align:center;padding:6px 4px;text-transform:uppercase}
+.sch-role{font-size:12px;font-weight:600;padding:6px 8px;display:flex;align-items:center}
+.sch-cell{background:var(--bg);border-radius:6px;padding:4px;min-height:60px;cursor:pointer;transition:background 0.15s;border:1px solid var(--border)}
+.sch-cell:hover{background:#F0EDE8}
+.sch-cell.filled{background:#FEF3C7;border-color:#F59E0B}
+.sch-cell.filled:hover{background:#FDE68A}
+.shift-chip{background:var(--brown);color:#fff;border-radius:4px;padding:3px 6px;font-size:10px;font-weight:600;margin:1px;display:inline-block}
+.shift-chip.closing{background:var(--red)}
+.shift-chip.opening{background:#16A34A}
+
+/* SKILL MATRIX */
+.skill-matrix{overflow-x:auto}
+.skill-matrix table{min-width:700px}
+.skill-dot{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;cursor:pointer;transition:transform 0.15s;border:none}
+.skill-dot:hover{transform:scale(1.15)}
+.skill-0{background:#F3F4F6;color:#9CA3AF}
+.skill-1{background:#FEF3C7;color:#D97706}
+.skill-2{background:#BFDBFE;color:#1E40AF}
+.skill-3{background:#A7F3D0;color:#065F46}
+.pin-cell{text-align:center}
+.pin-icon{font-size:18px;opacity:0.3}
+.pin-icon.earned{opacity:1}
+
+/* OPTIMIZER */
+.optimizer-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.optimizer-row:last-child{border-bottom:none}
+.opt-role{font-size:13px;font-weight:600}
+.opt-count{display:flex;align-items:center;gap:8px}
+.opt-count button{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.opt-count button:hover{background:var(--brown);color:#fff;border-color:var(--brown)}
+.opt-num{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;min-width:24px;text-align:center}
+.opt-cost{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-header h2{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700}
+
+/* ALERT BANNER */
+.alert{padding:12px 16px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:16px}
+.alert-success{background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7}
+.alert-warn{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
+.alert-danger{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA}
+
+.sep{height:1px;background:var(--border);margin:20px 0}
+.mt-16{margin-top:16px}
+.mt-8{margin-top:8px}
+.flex{display:flex;align-items:center}
+.gap-8{gap:8px}
+.gap-12{gap:12px}
+.text-sm{font-size:13px}
+.text-xs{font-size:11px;color:var(--muted)}
+.font-mono{font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">⚙️ Domo Cafe</div>
+    <div class="login-sub">Staff Intelligence System</div>
+    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Enter</button>
+    <div class="login-err" id="loginErr">Incorrect password</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-title">⚙️ Domo Cafe — Staff Intelligence System</div>
+    <div class="topbar-right">
+      <span id="topDate"></span>
+      <span onclick="doLogout()">Sign Out</span>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('dashboard')">📊 Dashboard</button>
+    <button class="tab-btn" onclick="showTab('staff')">👥 Staff Directory</button>
+    <button class="tab-btn" onclick="showTab('schedule')">📅 Schedule Builder</button>
+    <button class="tab-btn" onclick="showTab('skills')">🎯 Skill Matrix</button>
+    <button class="tab-btn" onclick="showTab('optimizer')">⚡ Labor Optimizer</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard" class="tab-content active">
+    <div class="section-header">
+      <h2>Today's Operations</h2>
+      <span class="text-sm" style="color:var(--muted)" id="todayLabel"></span>
+    </div>
+    <div id="laborAlert"></div>
+    <div class="grid-4">
+      <div class="card kpi">
+        <div class="kpi-val" id="dash-staff-today">—</div>
+        <div class="kpi-label">Staff Scheduled Today</div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-val" id="dash-labor-cost">—</div>
+        <div class="kpi-label">Est. Labor Cost Today</div>
+        <div class="kpi-sub" style="color:var(--muted)">Hourly staff only</div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-val" id="dash-labor-pct">—</div>
+        <div class="kpi-label">Labor % (vs target)</div>
+        <div class="kpi-sub" id="dash-labor-target">Target ≤30%</div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-val" id="dash-sales-needed">—</div>
+        <div class="kpi-label">Sales Needed for 30%</div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="grid-2 mt-16">
+      <div class="card">
+        <div class="card-title">Today's Projected Sales</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <input type="number" id="projSales" value="9500" min="0" step="100"
+            style="padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;width:160px;outline:none"
+            oninput="recalcDashboard()">
+          <span style="font-size:13px;color:var(--muted)">projected daily sales</span>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Labor %</span><span id="prog-pct-label">—</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%;background:var(--success)"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Weekly Labor Summary</div>
+        <div id="weekSummary" style="font-size:13px;color:var(--muted)">Loading...</div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="card mt-16">
+      <div class="card-title">Staff Scheduled Today</div>
+      <table id="todayTable">
+        <thead><tr><th>Name</th><th>Role</th><th>Shift</th><th>Hours</th><th>Est. Cost</th></tr></thead>
+        <tbody id="todayBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STAFF DIRECTORY -->
+  <div id="tab-staff" class="tab-content">
+    <div class="section-header">
+      <h2>Staff Directory</h2>
+      <button class="btn btn-primary" onclick="openAddStaff()">+ Add Staff</button>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Role</th><th>Type</th><th>Rate</th><th>Start Date</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="staffTableBody"></tbody>
+      </table>
+    </div>
+    <div class="sep"></div>
+    <div class="grid-3">
+      <div class="card kpi">
+        <div class="kpi-val" id="dir-total">—</div>
+        <div class="kpi-label">Total Staff</div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-val" id="dir-foh">—</div>
+        <div class="kpi-label">FOH</div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-val" id="dir-boh">—</div>
+        <div class="kpi-label">BOH</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE BUILDER -->
+  <div id="tab-schedule" class="tab-content">
+    <div class="section-header">
+      <h2>Weekly Schedule Builder</h2>
+      <div style="display:flex;gap:8px">
+        <select id="schedWeekOf" onchange="renderSchedule()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:var(--bg)"></select>
+        <button class="btn btn-outline btn-sm" onclick="clearWeekSchedule()">Clear Week</button>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Week Labor Cost</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700" id="sch-week-cost">$0</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Hourly staff + ops consultant</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Salaried Staff (always on)</div>
+        <div style="font-size:13px;color:var(--muted)">Head Chef: <strong>$1,771/wk</strong> &nbsp;|&nbsp; GM: <strong>$1,919/wk</strong></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Not included in hourly calc — fixed cost</div>
+      </div>
+    </div>
+    <div class="card mt-16">
+      <div class="card-title">Click a cell to assign a shift</div>
+      <div class="schedule-grid" id="schedGrid"></div>
+    </div>
+    <div class="card mt-16">
+      <div class="card-title">This Week's Shifts</div>
+      <table><thead><tr><th>Staff</th><th>Role</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th><th>Total Hrs</th><th>Est. Pay</th></tr></thead>
+      <tbody id="schedSummaryBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- SKILL MATRIX -->
+  <div id="tab-skills" class="tab-content">
+    <div class="section-header">
+      <h2>Skill Matrix & Pin Tracker</h2>
+      <div style="font-size:12px;color:var(--muted);display:flex;gap:16px">
+        <span><span class="skill-dot skill-0" style="display:inline-flex;width:16px;height:16px;font-size:8px">0</span> Not Trained</span>
+        <span><span class="skill-dot skill-1" style="display:inline-flex;width:16px;height:16px;font-size:8px">1</span> In Training</span>
+        <span><span class="skill-dot skill-2" style="display:inline-flex;width:16px;height:16px;font-size:8px">2</span> Certified</span>
+        <span><span class="skill-dot skill-3" style="display:inline-flex;width:16px;height:16px;font-size:8px">3</span> Expert ★</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="skill-matrix">
+        <table id="skillTable">
+          <thead>
+            <tr>
+              <th>Staff</th>
+              <th>🍽 Server</th>
+              <th>☕ Barista</th>
+              <th>🏃 Runner</th>
+              <th>🧹 Busser</th>
+              <th>🔥 Line Cook</th>
+              <th>📋 Expo</th>
+              <th>👨‍🍳 Head Chef</th>
+              <th>🎖 Pins Earned</th>
+              <th>Readiness</th>
+            </tr>
+          </thead>
+          <tbody id="skillBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div class="card">
+      <div class="card-title">🎖 Domo Cafe Crew Pin Series</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-top:8px" id="pinGrid"></div>
+    </div>
+  </div>
+
+  <!-- LABOR OPTIMIZER -->
+  <div id="tab-optimizer" class="tab-content">
+    <div class="section-header">
+      <h2>Labor Optimizer</h2>
+      <span class="text-sm" style="color:var(--muted)">Find optimal staffing for any sales target</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Sales Projection</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="form-group">
+            <label>Projected Daily Sales ($)</label>
+            <input type="number" id="opt-sales" value="9500" step="100" oninput="runOptimizer()">
+          </div>
+          <div class="form-group">
+            <label>Labor Target (%)</label>
+            <input type="number" id="opt-target" value="30" step="1" min="15" max="50" oninput="runOptimizer()">
+          </div>
+          <div class="form-group">
+            <label>Day Type</label>
+            <select id="opt-daytype" onchange="runOptimizer()">
+              <option value="weekday">Weekday (M–F, 9hr window)</option>
+              <option value="weekend">Weekend (Sat–Sun, 10hr window)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Budget Summary</div>
+        <div class="kpi" style="padding:8px">
+          <div class="kpi-val" id="opt-budget">—</div>
+          <div class="kpi-label">Max Labor Budget</div>
+        </div>
+        <div class="sep" style="margin:12px 0"></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
+          <span style="color:var(--muted)">Current staffing cost</span>
+          <span class="font-mono" id="opt-current-cost">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
+          <span style="color:var(--muted)">Variance</span>
+          <span class="font-mono font-bold" id="opt-variance">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <span style="color:var(--muted)">Actual labor %</span>
+          <span class="font-mono font-bold" id="opt-actual-pct">—</span>
+        </div>
+        <div class="progress-wrap" style="margin-top:16px">
+          <div class="progress-label"><span>Labor %</span><span id="opt-prog-label">—</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="opt-prog-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-16">
+      <div class="card-title">Staff Crew Builder</div>
+      <div id="optimizerRoles"></div>
+      <div class="sep"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:13px;font-weight:600">Salaried staff (always on)</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Head Chef $1,771/wk · GM $1,919/wk</div>
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm" onclick="autoOptimize()">⚡ Auto-Optimize</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-16" id="opt-recommendation" style="display:none">
+      <div class="card-title">Recommendation</div>
+      <div id="opt-rec-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD STAFF MODAL -->
+<div class="modal-overlay" id="addStaffModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="staffModalTitle">Add Staff Member</h3>
+      <span class="modal-close" onclick="closeModal('addStaffModal')">✕</span>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" id="sf-first" placeholder="First">
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" id="sf-last" placeholder="Last">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Primary Role</label>
+        <select id="sf-role">
+          <option value="Server">Server (FOH)</option>
+          <option value="Barista">Barista (FOH)</option>
+          <option value="Runner">Runner (FOH)</option>
+          <option value="Busser">Busser (FOH)</option>
+          <option value="Line Cook">Line Cook (BOH)</option>
+          <option value="Expo">Expo (BOH)</option>
+          <option value="Head Chef">Head Chef (BOH)</option>
+          <option value="GM">General Manager</option>
+          <option value="Ops Consultant">Ops Consultant</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Employment Type</label>
+        <select id="sf-type">
+          <option value="hourly">Hourly</option>
+          <option value="salary">Salary</option>
+          <option value="contract">Contract</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Hourly Rate / Salary (Annual)</label>
+        <input type="number" id="sf-rate" placeholder="e.g. 18.90" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" id="sf-start">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:16px">
+      <label>Status</label>
+      <select id="sf-status">
+        <option value="active">Active</option>
+        <option value="training">In Training</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('addStaffModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStaff()">Save Staff</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHIFT MODAL -->
+<div class="modal-overlay" id="shiftModal">
+  <div class="modal" style="width:400px">
+    <div class="modal-header">
+      <h3 id="shiftModalTitle">Assign Shift</h3>
+      <span class="modal-close" onclick="closeModal('shiftModal')">✕</span>
+    </div>
+    <div id="shiftStaffList"></div>
+    <div class="sep"></div>
+    <div class="form-group" style="margin-bottom:16px">
+      <label>Shift Type</label>
+      <select id="shiftType">
+        <option value="opening">Opening (arrive 1hr early)</option>
+        <option value="full" selected>Full Shift</option>
+        <option value="closing">Closing (stay 1.5hr after close)</option>
+        <option value="split">Split Shift</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('shiftModal')">Cancel</button>
+      <button class="btn btn-danger btn-sm" onclick="clearShiftCell()">Clear</button>
+      <button class="btn btn-primary" onclick="saveShiftCell()">Assign</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const APP_PW = 'Domo@2026';
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const ROLES_FOH = ['Server','Barista','Runner','Busser'];
+const ROLES_BOH = ['Line Cook','Expo'];
+const ROLES_MGMT = ['Head Chef','GM'];
+const ALL_ROLES = [...ROLES_FOH,...ROLES_BOH,'Head Chef','GM','Ops Consultant'];
+const SKILL_ROLES = ['Server','Barista','Runner','Busser','Line Cook','Expo','Head Chef'];
+const PIN_EMOJIS = {Server:'🍽',Barista:'☕',Runner:'🏃',Busser:'🧹','Line Cook':'🔥',Expo:'📋','Head Chef':'👨‍🍳'};
+
+const DEFAULT_RATES = {
+  'Server':16.90,'Barista':16.90,'Runner':16.90,'Busser':16.90,
+  'Line Cook':18.90,'Expo':18.90,'Head Chef':92100,'GM':99800,'Ops Consultant':35
+};
+
+// Shift hours
+const SHIFT_HOURS = {
+  weekday:{opening:9+1,full:9,closing:9+1.5,split:6},
+  weekend:{opening:10+1,full:10,closing:10+1.5,split:6}
+};
+
+function dayType(d){return(d>=5)?'weekend':'weekday'}
+
+function load(k,def){try{return JSON.parse(localStorage.getItem('sis_'+k))||def}catch(e){return def}}
+function save(k,v){localStorage.setItem('sis_'+k,JSON.stringify(v))}
+
+let staff = load('staff',[
+  {id:1,first:'Hailey',last:'Salamanca',role:'GM',type:'salary',rate:99800,start:'2026-06-01',status:'active'},
+  {id:2,first:'Chef',last:'TBD',role:'Head Chef',type:'salary',rate:92100,start:'2026-06-01',status:'active'},
+]);
+let schedule = load('schedule',{});
+let skills = load('skills',{});
+let nextId = load('nextId',3);
+
+// ==================== LOGIN ====================
+function doLogin(){
+  const pw = document.getElementById('pwInput').value;
+  if(pw===APP_PW){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    initApp();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+  }
+}
+function doLogout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('pwInput').value='';
+}
+
+// ==================== APP INIT ====================
+function initApp(){
+  const now = new Date();
+  document.getElementById('topDate').textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  document.getElementById('todayLabel').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  populateWeekSelect();
+  renderAll();
+}
+
+function renderAll(){
+  renderStaffTable();
+  renderDashboard();
+  renderSchedule();
+  renderSkillMatrix();
+  renderOptimizer();
+}
+
+// ==================== TABS ====================
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  if(id==='dashboard')recalcDashboard();
+  if(id==='optimizer')runOptimizer();
+}
+
+// ==================== STAFF ====================
+function renderStaffTable(){
+  const tbody = document.getElementById('staffTableBody');
+  const activeStaff = staff.filter(s=>s.status!=='inactive');
+  tbody.innerHTML = staff.map(s=>{
+    const typeBadge = s.type==='salary'?'badge-mgmt':s.type==='contract'?'badge-consultant':'badge-foh';
+    const roleType = ROLES_FOH.includes(s.role)?'badge-foh':ROLES_BOH.includes(s.role)?'badge-boh':'badge-mgmt';
+    const rateStr = s.type==='salary'?'$'+s.rate.toLocaleString()+'/yr':'$'+s.rate.toFixed(2)+'/hr';
+    return `<tr>
+      <td><strong>${s.first} ${s.last}</strong></td>
+      <td><span class="badge ${roleType}">${s.role}</span></td>
+      <td><span class="badge ${typeBadge}">${s.type}</span></td>
+      <td class="font-mono">${rateStr}</td>
+      <td>${s.start||'—'}</td>
+      <td><span class="badge ${s.status==='active'?'badge-l3':s.status==='training'?'badge-l1':'badge-l0'}">${s.status}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="editStaff(${s.id})">Edit</button>
+          <button class="btn btn-sm" style="background:#FEE2E2;color:#991B1B;margin-left:4px" onclick="removeStaff(${s.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+  const foh = staff.filter(s=>ROLES_FOH.includes(s.role)&&s.status==='active').length;
+  const boh = staff.filter(s=>ROLES_BOH.includes(s.role)&&s.status==='active').length;
+  document.getElementById('dir-total').textContent = staff.filter(s=>s.status==='active').length;
+  document.getElementById('dir-foh').textContent = foh;
+  document.getElementById('dir-boh').textContent = boh;
+}
+
+function openAddStaff(prefill=null){
+  document.getElementById('staffModalTitle').textContent = prefill?'Edit Staff Member':'Add Staff Member';
+  document.getElementById('sf-first').value = prefill?.first||'';
+  document.getElementById('sf-last').value = prefill?.last||'';
+  document.getElementById('sf-role').value = prefill?.role||'Server';
+  document.getElementById('sf-type').value = prefill?.type||'hourly';
+  document.getElementById('sf-rate').value = prefill?.rate||DEFAULT_RATES['Server'];
+  document.getElementById('sf-start').value = prefill?.start||'';
+  document.getElementById('sf-status').value = prefill?.status||'active';
+  document.getElementById('addStaffModal')._editId = prefill?.id||null;
+  openModal('addStaffModal');
+}
+
+function editStaff(id){
+  openAddStaff(staff.find(s=>s.id===id));
+}
+
+function saveStaff(){
+  const editId = document.getElementById('addStaffModal')._editId;
+  const entry = {
+    id: editId||nextId++,
+    first: document.getElementById('sf-first').value.trim(),
+    last: document.getElementById('sf-last').value.trim(),
+    role: document.getElementById('sf-role').value,
+    type: document.getElementById('sf-type').value,
+    rate: parseFloat(document.getElementById('sf-rate').value)||0,
+    start: document.getElementById('sf-start').value,
+    status: document.getElementById('sf-status').value
+  };
+  if(!entry.first){alert('Name required');return}
+  if(editId) staff = staff.map(s=>s.id===editId?entry:s);
+  else staff.push(entry);
+  save('staff',staff);
+  save('nextId',nextId);
+  closeModal('addStaffModal');
+  renderAll();
+}
+
+function removeStaff(id){
+  if(!confirm('Remove this staff member?'))return;
+  staff = staff.filter(s=>s.id!==id);
+  save('staff',staff);
+  renderAll();
+}
+
+// ==================== DASHBOARD ====================
+function recalcDashboard(){
+  const today = new Date();
+  const dow = today.getDay()===0?6:today.getDay()-1; // 0=Mon...6=Sun
+  const weekKey = getWeekKey(today);
+  const todayKey = weekKey+'_d'+dow;
+  const dayShifts = schedule[todayKey]||[];
+  const isWeekend = dow>=5;
+
+  // Hours per shift type
+  const hrs = SHIFT_HOURS[isWeekend?'weekend':'weekday'];
+  let laborCost = 0;
+  let staffToday = [];
+
+  dayShifts.forEach(entry=>{
+    const s = staff.find(x=>x.id===entry.staffId);
+    if(!s||s.type==='salary')return;
+    const h = hrs[entry.shiftType]||hrs.full;
+    const cost = s.type==='contract'?s.rate*h:s.rate*h;
+    laborCost += cost;
+    staffToday.push({...s, shiftType:entry.shiftType, hours:h, cost});
+  });
+
+  const projSales = parseFloat(document.getElementById('projSales').value)||0;
+  const laborPct = projSales>0?(laborCost/projSales)*100:0;
+  const salesFor30 = laborCost>0?(laborCost/0.30):0;
+
+  document.getElementById('dash-staff-today').textContent = dayShifts.length;
+  document.getElementById('dash-labor-cost').textContent = '$'+laborCost.toFixed(0);
+  document.getElementById('dash-labor-pct').textContent = laborPct.toFixed(1)+'%';
+
+  const pctEl = document.getElementById('dash-labor-pct');
+  pctEl.className = 'kpi-val '+(laborPct<=30?'green':laborPct<=35?'warn':'red');
+
+  document.getElementById('dash-sales-needed').textContent = '$'+salesFor30.toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('dash-labor-target').textContent = laborPct<=30?'✅ On target':laborPct<=35?'⚠️ Watch closely':'🚨 Over target';
+
+  // Progress bar
+  const fill = Math.min(100,(laborPct/50)*100);
+  const fillEl = document.getElementById('prog-fill');
+  fillEl.style.width = fill+'%';
+  fillEl.style.background = laborPct<=30?'var(--success)':laborPct<=35?'var(--warn)':'var(--danger)';
+  document.getElementById('prog-pct-label').textContent = laborPct.toFixed(1)+'%';
+
+  // Alert banner
+  const alertEl = document.getElementById('laborAlert');
+  if(laborPct>35) alertEl.innerHTML = `<div class="alert alert-danger">🚨 Labor at ${laborPct.toFixed(1)}% — $${(laborCost-projSales*0.30).toFixed(0)} over budget. Consider reducing crew by 1–2 staff.</div>`;
+  else if(laborPct>30) alertEl.innerHTML = `<div class="alert alert-warn">⚠️ Labor at ${laborPct.toFixed(1)}% — slightly over 30% target. Monitor closely.</div>`;
+  else if(projSales>0) alertEl.innerHTML = `<div class="alert alert-success">✅ Labor at ${laborPct.toFixed(1)}% — within 30% target. $${(projSales*0.30-laborCost).toFixed(0)} headroom.</div>`;
+  else alertEl.innerHTML='';
+
+  // Today's staff table
+  document.getElementById('todayBody').innerHTML = staffToday.map(s=>`
+    <tr><td>${s.first} ${s.last}</td>
+    <td><span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}">${s.role}</span></td>
+    <td><span class="badge ${s.shiftType==='opening'?'badge-l3':s.shiftType==='closing'?'badge-l1':'badge-l2'}">${s.shiftType}</span></td>
+    <td class="font-mono">${s.hours.toFixed(1)}h</td>
+    <td class="font-mono">$${s.cost.toFixed(2)}</td></tr>
+  `).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No shifts scheduled today</td></tr>';
+
+  // Week summary
+  let weekTotal = 0;
+  for(let d=0;d<7;d++){
+    const dk = weekKey+'_d'+d;
+    const shifts = schedule[dk]||[];
+    shifts.forEach(e=>{
+      const s = staff.find(x=>x.id===e.staffId);
+      if(!s||s.type==='salary')return;
+      const isW = d>=5;
+      const h = SHIFT_HOURS[isW?'weekend':'weekday'][e.shiftType]||9;
+      weekTotal += s.rate*h;
+    });
+  }
+  document.getElementById('weekSummary').innerHTML = `
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Total hourly labor this week</span><span class="font-mono font-bold">$${weekTotal.toFixed(0)}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Head Chef (salary, weekly)</span><span class="font-mono">$1,771</span></div>
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>GM (salary, weekly)</span><span class="font-mono">$1,919</span></div>
+    <div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:700"><span>Total est. weekly labor</span><span class="font-mono">$${(weekTotal+1771+1919).toFixed(0)}</span></div>
+  `;
+}
+
+// ==================== SCHEDULE ====================
+function getWeekKey(date){
+  const d = new Date(date);
+  const day = d.getDay()===0?6:d.getDay()-1;
+  d.setDate(d.getDate()-day);
+  return d.toISOString().split('T')[0];
+}
+
+function populateWeekSelect(){
+  const sel = document.getElementById('schedWeekOf');
+  sel.innerHTML='';
+  const today = new Date();
+  for(let w=-1;w<=4;w++){
+    const d = new Date(today);
+    d.setDate(d.getDate()-((d.getDay()===0?6:d.getDay()-1))+w*7);
+    const key = d.toISOString().split('T')[0];
+    const label = 'Week of '+d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const opt = document.createElement('option');
+    opt.value=key; opt.textContent=label;
+    if(w===0)opt.selected=true;
+    sel.appendChild(opt);
+  }
+}
+
+let currentShiftCell = null;
+
+function renderSchedule(){
+  const weekKey = document.getElementById('schedWeekOf').value;
+  const grid = document.getElementById('schedGrid');
+  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
+
+  let html = '<div></div>';
+  DAYS.forEach(d=>{ html+=`<div class="sch-header">${d}</div>`; });
+
+  groupedRoles.forEach(role=>{
+    const typeBadge = ROLES_FOH.includes(role)?'badge-foh':ROLES_BOH.includes(role)?'badge-boh':'badge-consultant';
+    html+=`<div class="sch-role"><span class="badge ${typeBadge}" style="font-size:10px">${role}</span></div>`;
+    DAYS.forEach((d,di)=>{
+      const cellKey = weekKey+'_d'+di+'_'+role;
+      const cellShifts = schedule[cellKey]||[];
+      const filled = cellShifts.length>0;
+      html+=`<div class="sch-cell ${filled?'filled':''}" onclick="openShiftModal('${weekKey}','${di}','${role}')">`;
+      cellShifts.forEach(e=>{
+        const s = staff.find(x=>x.id===e.staffId);
+        if(s) html+=`<div class="shift-chip ${e.shiftType==='closing'?'closing':e.shiftType==='opening'?'opening':''}">${s.first}<br><span style="font-size:8px;opacity:0.8">${e.shiftType.charAt(0).toUpperCase()}</span></div>`;
+      });
+      html+='</div>';
+    });
+  });
+
+  grid.innerHTML=html;
+
+  // Summary
+  const staffHours = {};
+  staff.filter(s=>s.type!=='salary').forEach(s=>{
+    staffHours[s.id]={name:`${s.first} ${s.last}`,role:s.role,rate:s.rate,hours:[0,0,0,0,0,0,0]};
+  });
+
+  for(let d=0;d<7;d++){
+    const isW=d>=5;
+    const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];
+    groupedRoles.forEach(role=>{
+      const ck=weekKey+'_d'+d+'_'+role;
+      (schedule[ck]||[]).forEach(e=>{
+        if(staffHours[e.staffId]) staffHours[e.staffId].hours[d]+=hrs[e.shiftType]||hrs.full;
+      });
+    });
+  }
+
+  let weekCost=0;
+  const rows = Object.values(staffHours).map(sh=>{
+    const totalH=sh.hours.reduce((a,b)=>a+b,0);
+    const cost=totalH*sh.rate;
+    weekCost+=cost;
+    return `<tr><td>${sh.name}</td><td><span class="badge ${ROLES_FOH.includes(sh.role)?'badge-foh':'badge-boh'}">${sh.role}</span></td>
+      ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center">${h>0?h+'h':'—'}</td>`).join('')}
+      <td class="font-mono">${totalH}h</td>
+      <td class="font-mono">$${cost.toFixed(0)}</td></tr>`;
+  });
+  document.getElementById('schedSummaryBody').innerHTML=rows.join('')||'<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px">No shifts scheduled this week</td></tr>';
+  document.getElementById('sch-week-cost').textContent='$'+weekCost.toFixed(0);
+}
+
+function openShiftModal(weekKey,dayIdx,role){
+  currentShiftCell = {weekKey,dayIdx:parseInt(dayIdx),role};
+  const dayName=DAYS[dayIdx];
+  document.getElementById('shiftModalTitle').textContent=`${dayName} — ${role}`;
+  const roleStaff = staff.filter(s=>(s.role===role||s.status==='active')&&s.type!=='salary'&&s.status==='active');
+  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
+  const existing=(schedule[cellKey]||[]).map(e=>e.staffId);
+  document.getElementById('shiftStaffList').innerHTML=`
+    <div class="card-title">Select Staff</div>
+    ${roleStaff.map(s=>`
+      <label style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid ${existing.includes(s.id)?'var(--brown)':'var(--border)'}">
+        <input type="checkbox" value="${s.id}" ${existing.includes(s.id)?'checked':''} style="accent-color:var(--brown)">
+        <span style="font-size:13px;font-weight:600">${s.first} ${s.last}</span>
+        <span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}" style="margin-left:auto">${s.role}</span>
+        <span class="font-mono" style="font-size:11px;color:var(--muted)">$${s.rate.toFixed(2)}/hr</span>
+      </label>
+    `).join('')||'<div style="color:var(--muted);font-size:13px;padding:12px">No active staff for this role</div>'}
+  `;
+  const existing0=schedule[cellKey];
+  if(existing0&&existing0[0]) document.getElementById('shiftType').value=existing0[0].shiftType||'full';
+  openModal('shiftModal');
+}
+
+function saveShiftCell(){
+  if(!currentShiftCell)return;
+  const {weekKey,dayIdx,role}=currentShiftCell;
+  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
+  const checked=[...document.querySelectorAll('#shiftStaffList input[type=checkbox]:checked')].map(c=>parseInt(c.value));
+  const shiftType=document.getElementById('shiftType').value;
+  schedule[cellKey]=checked.map(id=>({staffId:id,shiftType}));
+  save('schedule',schedule);
+  closeModal('shiftModal');
+  renderSchedule();
+  recalcDashboard();
+}
+
+function clearShiftCell(){
+  if(!currentShiftCell)return;
+  const {weekKey,dayIdx,role}=currentShiftCell;
+  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
+  delete schedule[cellKey];
+  save('schedule',schedule);
+  closeModal('shiftModal');
+  renderSchedule();
+}
+
+function clearWeekSchedule(){
+  if(!confirm('Clear all shifts for this week?'))return;
+  const weekKey=document.getElementById('schedWeekOf').value;
+  Object.keys(schedule).filter(k=>k.startsWith(weekKey)).forEach(k=>delete schedule[k]);
+  save('schedule',schedule);
+  renderSchedule();
+}
+
+// ==================== SKILL MATRIX ====================
+function renderSkillMatrix(){
+  const activeStaff = staff.filter(s=>s.status==='active'&&s.type!=='salary'||s.role==='Head Chef');
+  const tbody = document.getElementById('skillBody');
+  tbody.innerHTML = activeStaff.map(s=>{
+    const sk = skills[s.id]||{};
+    let pinsEarned = 0;
+    const cells = SKILL_ROLES.map(r=>{
+      const lvl = sk[r]||0;
+      if(lvl===3) pinsEarned++;
+      return `<td style="text-align:center"><button class="skill-dot skill-${lvl}" onclick="cycleSkill(${s.id},'${r}')" title="Click to advance">${lvl===0?'—':lvl===1?'T':lvl===2?'C':'★'}</button></td>`;
+    });
+    const readinessPct = Math.round((SKILL_ROLES.reduce((a,r)=>(a+(sk[r]||0)),0)/(SKILL_ROLES.length*3))*100);
+    return `<tr>
+      <td><strong>${s.first} ${s.last}</strong><br><span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
+      ${cells.join('')}
+      <td class="pin-cell"><span style="font-size:14px;font-weight:700;color:var(--brown)">${pinsEarned}</span><span style="font-size:11px;color:var(--muted)"> / ${SKILL_ROLES.length}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${readinessPct}%;background:${readinessPct>=80?'var(--success)':readinessPct>=50?'var(--warn)':'var(--danger)'}"></div></div>
+          <span class="font-mono" style="font-size:11px">${readinessPct}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px">No active staff yet</td></tr>';
+
+  // Pin grid
+  const pinGrid = document.getElementById('pinGrid');
+  pinGrid.innerHTML = SKILL_ROLES.map(r=>{
+    const earnedCount = activeStaff.filter(s=>(skills[s.id]||{})[r]===3).length;
+    const names = activeStaff.filter(s=>(skills[s.id]||{})[r]===3).map(s=>s.first).join(', ');
+    return `<div class="card" style="text-align:center;padding:16px">
+      <div style="font-size:28px;margin-bottom:8px">${PIN_EMOJIS[r]}</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">${r}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${earnedCount} earned</div>
+      ${names?`<div style="font-size:10px;color:var(--brown);margin-top:4px">${names}</div>`:''}
+      <div style="margin-top:8px"><span class="badge ${earnedCount>0?'badge-l3':'badge-l0'}" style="font-size:10px">${earnedCount>0?'🎖 Active':'Locked'}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function cycleSkill(staffId,role){
+  if(!skills[staffId])skills[staffId]={};
+  const current=skills[staffId][role]||0;
+  skills[staffId][role]=(current+1)%4;
+  save('skills',skills);
+  renderSkillMatrix();
+}
+
+// ==================== OPTIMIZER ====================
+const OPT_ROLES = [
+  {role:'Server',type:'FOH',rate:16.90},
+  {role:'Barista',type:'FOH',rate:16.90},
+  {role:'Runner',type:'FOH',rate:16.90},
+  {role:'Busser',type:'FOH',rate:16.90},
+  {role:'Line Cook',type:'BOH',rate:18.90},
+  {role:'Expo',type:'BOH',rate:18.90},
+  {role:'Ops Consultant',type:'Mgmt',rate:35.00},
+];
+const OPT_DEFAULTS = {Server:3,Barista:2,Runner:2,Busser:2,'Line Cook':3,Expo:1,'Ops Consultant':1};
+let optCounts = load('optCounts',{...OPT_DEFAULTS});
+
+function renderOptimizer(){
+  const container=document.getElementById('optimizerRoles');
+  container.innerHTML=OPT_ROLES.map(r=>`
+    <div class="optimizer-row">
+      <div>
+        <div class="opt-role">${r.role} <span class="badge ${r.type==='FOH'?'badge-foh':r.type==='BOH'?'badge-boh':'badge-consultant'}">${r.type}</span></div>
+        <div class="opt-cost">$${r.rate.toFixed(2)}/hr</div>
+      </div>
+      <div class="opt-count">
+        <button onclick="adjOpt('${r.role}',-1)">−</button>
+        <div class="opt-num" id="opt-cnt-${r.role.replace(/ /g,'-')}">${optCounts[r.role]||0}</div>
+        <button onclick="adjOpt('${r.role}',1)">+</button>
+        <div class="opt-cost" id="opt-cost-${r.role.replace(/ /g,'-')}">$0</div>
+      </div>
+    </div>
+  `).join('');
+  runOptimizer();
+}
+
+function adjOpt(role,delta){
+  optCounts[role]=Math.max(0,(optCounts[role]||0)+delta);
+  save('optCounts',optCounts);
+  runOptimizer();
+}
+
+function runOptimizer(){
+  const sales=parseFloat(document.getElementById('opt-sales')?.value)||0;
+  const target=parseFloat(document.getElementById('opt-target')?.value)||30;
+  const daytype=document.getElementById('opt-daytype')?.value||'weekday';
+  const hrs=SHIFT_HOURS[daytype].full;
+  const budget=sales*(target/100);
+
+  let totalCost=0;
+  OPT_ROLES.forEach(r=>{
+    const cnt=optCounts[r.role]||0;
+    const cost=cnt*r.rate*hrs;
+    totalCost+=cost;
+    const cntEl=document.getElementById('opt-cnt-'+r.role.replace(/ /g,'-'));
+    const costEl=document.getElementById('opt-cost-'+r.role.replace(/ /g,'-'));
+    if(cntEl)cntEl.textContent=cnt;
+    if(costEl)costEl.textContent='$'+cost.toFixed(0);
+  });
+
+  const pct=sales>0?(totalCost/sales)*100:0;
+  const variance=budget-totalCost;
+
+  if(document.getElementById('opt-budget'))document.getElementById('opt-budget').textContent='$'+budget.toFixed(0);
+  if(document.getElementById('opt-current-cost'))document.getElementById('opt-current-cost').textContent='$'+totalCost.toFixed(0);
+  if(document.getElementById('opt-variance')){
+    const vEl=document.getElementById('opt-variance');
+    vEl.textContent=(variance>=0?'+':'')+`$${variance.toFixed(0)}`;
+    vEl.className='font-mono font-bold '+(variance>=0?'green':'red');
+  }
+  if(document.getElementById('opt-actual-pct')){
+    const pEl=document.getElementById('opt-actual-pct');
+    pEl.textContent=pct.toFixed(1)+'%';
+    pEl.className='font-mono font-bold '+(pct<=target?'green':pct<=target+5?'warn':'red');
+  }
+  const fill=Math.min(100,(pct/(target*2))*100);
+  const fillEl=document.getElementById('opt-prog-fill');
+  if(fillEl){
+    fillEl.style.width=fill+'%';
+    fillEl.style.background=pct<=target?'var(--success)':pct<=target+5?'var(--warn)':'var(--danger)';
+  }
+  if(document.getElementById('opt-prog-label'))document.getElementById('opt-prog-label').textContent=pct.toFixed(1)+'% / '+target+'% target';
+}
+
+function autoOptimize(){
+  const sales=parseFloat(document.getElementById('opt-sales').value)||0;
+  const target=parseFloat(document.getElementById('opt-target').value)||30;
+  const daytype=document.getElementById('opt-daytype').value;
+  const hrs=SHIFT_HOURS[daytype].full;
+  const budget=sales*(target/100);
+
+  // Start from minimums and add until budget is filled
+  const mins={Server:2,Barista:1,Runner:1,Busser:1,'Line Cook':2,Expo:1,'Ops Consultant':0};
+  let counts={...mins};
+  let cost=OPT_ROLES.reduce((a,r)=>a+((counts[r.role]||0)*r.rate*hrs),0);
+
+  // Priority order to add staff
+  const priority=['Server','Line Cook','Barista','Runner','Busser','Expo','Ops Consultant'];
+  let iter=0;
+  while(cost<budget*0.92&&iter<30){
+    let added=false;
+    for(const role of priority){
+      const r=OPT_ROLES.find(x=>x.role===role);
+      const tryCost=cost+r.rate*hrs;
+      if(tryCost<=budget){
+        counts[role]=(counts[role]||0)+1;
+        cost=tryCost;
+        added=true;
+        break;
+      }
+    }
+    if(!added)break;
+    iter++;
+  }
+
+  optCounts={...counts};
+  save('optCounts',optCounts);
+
+  const rec=document.getElementById('opt-recommendation');
+  const recBody=document.getElementById('opt-rec-body');
+  rec.style.display='block';
+  recBody.innerHTML=`
+    <div style="font-size:13px;margin-bottom:12px">Optimized crew for <strong>$${sales.toLocaleString()}</strong> sales at <strong>${target}%</strong> labor target (${daytype}):</div>
+    ${OPT_ROLES.map(r=>`
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span>${counts[r.role]||0}× ${r.role}</span>
+        <span class="font-mono">$${((counts[r.role]||0)*r.rate*hrs).toFixed(0)}</span>
+      </div>
+    `).join('')}
+    <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;font-weight:700">
+      <span>Total hourly labor</span>
+      <span class="font-mono">$${cost.toFixed(0)} (${(cost/sales*100).toFixed(1)}%)</span>
+    </div>
+  `;
+  renderOptimizer();
+}
+
+// ==================== MODAL ====================
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('open')});
+</script>
+</body>
+</html>
