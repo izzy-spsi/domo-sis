@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Domo Cafe — Staff Intelligence System v2.0</title>
+<title>Domo Cafe — Staff Intelligence System</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -16,13 +16,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 
 /* LOGIN */
-#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
-.login-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:48px 40px;width:360px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+#loginScreen,#pwChangeScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:48px 40px;width:380px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
 .login-logo{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--brown);margin-bottom:4px}
 .login-sub{font-size:13px;color:var(--muted);margin-bottom:32px}
 .login-box input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;margin-bottom:12px;outline:none;transition:border 0.2s}
 .login-box input:focus{border-color:var(--brown)}
-.login-btn{width:100%;padding:13px;background:var(--brown);color:#fff;border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:opacity 0.2s}
+.login-btn{width:100%;padding:13px;background:var(--brown);color:#fff;border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:opacity 0.2s;margin-top:4px}
 .login-btn:hover{opacity:0.88}
 .login-err{color:var(--danger);font-size:13px;margin-top:8px;display:none}
 
@@ -31,8 +31,9 @@ h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .topbar{background:var(--brown);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .topbar-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px}
 .topbar-right{display:flex;align-items:center;gap:16px;font-size:13px;opacity:0.85}
-.topbar-right span{cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.25)}
-.topbar-right span:hover{background:rgba(255,255,255,0.15)}
+.topbar-user{background:rgba(255,255,255,0.15);border-radius:8px;padding:4px 12px;font-size:12px}
+.topbar-right span.btn-link{cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.25)}
+.topbar-right span.btn-link:hover{background:rgba(255,255,255,0.15)}
 
 /* NAV TABS */
 .nav-tabs{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:4px;overflow-x:auto}
@@ -41,7 +42,7 @@ h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .tab-btn:hover:not(.active){color:var(--text)}
 
 /* CONTENT */
-.tab-content{display:none;padding:24px;max-width:1200px;margin:0 auto}
+.tab-content{display:none;padding:24px;max-width:1100px;margin:0 auto}
 .tab-content.active{display:block}
 
 /* CARDS */
@@ -78,6 +79,10 @@ h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .badge-l1{background:#FEF3C7;color:#92400E}
 .badge-l2{background:#DBEAFE;color:#1E40AF}
 .badge-l3{background:#D1FAE5;color:#065F46}
+.badge-l4{background:#EDE9FE;color:#5B21B6}
+.badge-admin{background:#FEE2E2;color:#991B1B}
+.badge-manager{background:#FEF3C7;color:#92400E}
+.badge-staff{background:#F3F4F6;color:#374151}
 
 /* TABLES */
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -100,8 +105,9 @@ tr:hover td{background:#FAFAF8}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .form-group{display:flex;flex-direction:column;gap:4px}
 .form-group label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px}
-.form-group input,.form-group select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border 0.2s;background:var(--bg)}
-.form-group input:focus,.form-group select:focus{border-color:var(--brown)}
+.form-group input,.form-group select,.form-group textarea{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border 0.2s;background:var(--bg)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--brown)}
+.form-group textarea{resize:vertical;min-height:80px}
 
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center}
@@ -137,6 +143,14 @@ tr:hover td{background:#FAFAF8}
 .pin-icon{font-size:18px;opacity:0.3}
 .pin-icon.earned{opacity:1}
 
+/* CERT LEVEL DOTS */
+.cert-dot{display:inline-block;width:32px;height:32px;border-radius:8px;text-align:center;line-height:32px;font-size:12px;font-weight:700;cursor:default}
+.cert-0{background:#F3F4F6;color:#9CA3AF}
+.cert-1{background:#FEF3C7;color:#D97706}
+.cert-2{background:#BFDBFE;color:#1E40AF}
+.cert-3{background:#A7F3D0;color:#065F46}
+.cert-4{background:#EDE9FE;color:#5B21B6}
+
 /* OPTIMIZER */
 .optimizer-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
 .optimizer-row:last-child{border-bottom:none}
@@ -156,6 +170,7 @@ tr:hover td{background:#FAFAF8}
 .alert-success{background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7}
 .alert-warn{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
 .alert-danger{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA}
+.alert-info{background:#EDE9FE;color:#4C1D95;border:1px solid #C4B5FD}
 
 .sep{height:1px;background:var(--border);margin:20px 0}
 .mt-16{margin-top:16px}
@@ -167,73 +182,41 @@ tr:hover td{background:#FAFAF8}
 .text-xs{font-size:11px;color:var(--muted)}
 .font-mono{font-family:'JetBrains Mono',monospace}
 
-/* ======= FLOOR MAP STYLES ======= */
-.floor-layout{display:flex;gap:16px;align-items:flex-start}
-.floor-chips-sidebar{width:180px;flex-shrink:0}
-.floor-chips-sidebar .card-title{margin-bottom:8px}
-.staff-chip{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:700;cursor:grab;margin-bottom:6px;user-select:none;transition:all 0.2s;border:2px solid rgba(0,0,0,0.1)}
-.staff-chip.foh-chip{background:#8B4513;color:#fff}
-.staff-chip.boh-chip{background:#2D2D2D;color:#fff}
-.staff-chip.mgmt-chip{background:#065F46;color:#fff}
-.staff-chip:active{cursor:grabbing;transform:scale(0.96)}
-.staff-chip.chip-assigned{opacity:0.35;cursor:default}
-.chip-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);flex-shrink:0}
+/* QUIZ STYLES */
+.quiz-question{font-size:16px;font-weight:600;line-height:1.5;margin-bottom:20px;font-family:'Space Grotesk',sans-serif}
+.quiz-option{padding:12px 16px;border:2px solid var(--border);border-radius:10px;margin-bottom:10px;cursor:pointer;font-size:14px;transition:all 0.15s}
+.quiz-option:hover{border-color:var(--brown);background:#FEF3C7}
+.quiz-option.selected{border-color:var(--brown);background:#FEF3C7}
+.quiz-option.correct{border-color:var(--success);background:#D1FAE5}
+.quiz-option.wrong{border-color:var(--danger);background:#FEE2E2}
+.quiz-progress{font-size:12px;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace}
 
-.floor-map-wrap{flex:1}
-.cafe-floor-plan{position:relative;background:var(--card);border:2px solid var(--border);border-radius:12px;overflow:hidden}
-.cafe-floor-svg{width:100%;height:auto;display:block}
+/* CERT GRID */
+.cert-grid{overflow-x:auto}
+.cert-grid table{min-width:800px}
+.cert-grid th,.cert-grid td{text-align:center;padding:8px}
+.cert-grid td:first-child{text-align:left}
 
-.floor-zone-panel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
-.floor-zone{background:var(--bg);border:2px dashed var(--border);border-radius:10px;padding:10px;min-height:72px;transition:all 0.2s}
-.floor-zone.drag-over{background:#FEF3C7;border-color:var(--brown);border-style:solid}
-.floor-zone-label{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px}
-.floor-zone-chips{display:flex;flex-wrap:wrap;gap:4px;min-height:28px}
-.floor-zone .staff-chip{margin-bottom:0;font-size:10px;padding:4px 8px;cursor:pointer}
-.floor-zone .staff-chip:hover{opacity:0.8}
+/* EVAL STARS */
+.star-rating{display:flex;gap:4px}
+.star{font-size:22px;cursor:pointer;transition:opacity 0.15s;opacity:0.3}
+.star.active{opacity:1}
+.star:hover{opacity:0.7}
 
-.zone-a{border-color:#8B4513;background:#FFF8F3}
-.zone-b{border-color:#1E40AF;background:#F0F4FF}
-.zone-c{border-color:#065F46;background:#F0FDF4}
-.zone-2tops{border-color:#7C3AED;background:#F5F3FF}
-.zone-bar{border-color:#D97706;background:#FFFBEB}
-.zone-expo{border-color:#DC2626;background:#FFF5F5}
-.zone-kitchen{border-color:#374151;background:#F9FAFB}
+/* CONFETTI */
+@keyframes fall{from{transform:translateY(-20px) rotate(0deg);opacity:1}to{transform:translateY(100vh) rotate(360deg);opacity:0}}
+@keyframes sway{0%,100%{transform:translateX(0)}50%{transform:translateX(20px)}}
 
-.floor-clear-btn{margin-top:10px}
-.no-schedule-msg{color:var(--muted);font-size:12px;text-align:center;padding:16px}
+/* PROFILE CARD */
+.profile-stat{text-align:center;padding:16px;background:var(--bg);border-radius:10px}
+.profile-stat .val{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--brown)}
+.profile-stat .lbl{font-size:11px;color:var(--muted);margin-top:4px}
 
-/* ======= AVAILABILITY STYLES ======= */
-.avail-wrap{overflow-x:auto}
-.avail-table{min-width:700px;border-collapse:collapse}
-.avail-table th{padding:10px 8px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);text-align:center;position:sticky;top:0;background:white;z-index:5}
-.avail-table th:first-child{text-align:left}
-.avail-table td{padding:8px;border-bottom:1px solid #F0EDE8;vertical-align:middle}
-.avail-table tr:hover td{background:#FAFAF8}
-.avail-cell{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;text-align:center;min-width:44px}
-.avail-ALL{background:#D1FAE5;color:#065F46}
-.avail-AM{background:#DBEAFE;color:#1E40AF}
-.avail-PM{background:#FEF3C7;color:#92400E}
-.avail-dash{background:#F3F4F6;color:#9CA3AF}
-.avail-x{background:#FEE2E2;color:#991B1B}
-.avail-group-header td{background:#F7F5F2;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;padding:6px 8px}
-.avail-event-row td{background:#FEF3C7;font-size:11px;color:#92400E;font-weight:600;text-align:center;padding:6px 8px}
-.avail-event-row td:first-child{text-align:left}
-.avail-filter-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
-.filter-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif}
-.filter-btn.active{background:var(--brown);color:#fff;border-color:var(--brown)}
-.filter-btn:hover:not(.active){border-color:var(--brown);color:var(--brown)}
-.avail-legend{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:11px}
-.avail-legend span{display:flex;align-items:center;gap:4px}
-.legend-dot{width:24px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+/* READINESS GRID */
+.readiness-cell{display:flex;flex-direction:column;align-items:center;gap:4px}
 
-/* ======= SCHEDULE UPGRADE STYLES ======= */
-.avail-badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:600}
-.avail-badge-warn{background:#FEF3C7;color:#92400E}
-.avail-badge-danger{background:#FEE2E2;color:#991B1B}
-.avail-badge-ok{background:#D1FAE5;color:#065F46}
-.hours-remaining{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-left:auto;padding-right:4px}
-.hours-over{color:var(--danger);font-weight:700}
-
+/* CRED LIST */
+.cred-row{font-family:'JetBrains Mono',monospace;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
 </style>
 </head>
 <body>
@@ -242,10 +225,23 @@ tr:hover td{background:#FAFAF8}
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">⚙️ Domo Cafe</div>
-    <div class="login-sub">Staff Intelligence System</div>
-    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">Enter</button>
-    <div class="login-err" id="loginErr">Incorrect password</div>
+    <div class="login-sub">Staff Intelligence System v2.0</div>
+    <input type="text" id="loginUsername" placeholder="Username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="loginErr">Invalid username or password</div>
+  </div>
+</div>
+
+<!-- PASSWORD CHANGE -->
+<div id="pwChangeScreen" style="display:none">
+  <div class="login-box">
+    <div class="login-logo">🔐 Set New Password</div>
+    <div class="login-sub" style="margin-bottom:24px">First login — please set a new password</div>
+    <input type="password" id="newPw1" placeholder="New password (min 8 chars)">
+    <input type="password" id="newPw2" placeholder="Confirm new password" onkeydown="if(event.key==='Enter')submitPwChange()">
+    <button class="login-btn" onclick="submitPwChange()">Set Password & Sign In</button>
+    <div class="login-err" id="pwChangeErr">Passwords do not match</div>
   </div>
 </div>
 
@@ -255,46 +251,25 @@ tr:hover td{background:#FAFAF8}
     <div class="topbar-title">⚙️ Domo Cafe — Staff Intelligence System <span style="font-size:10px;opacity:0.6;font-family:'JetBrains Mono',monospace;margin-left:8px">v2.0</span></div>
     <div class="topbar-right">
       <span id="topDate"></span>
-      <span onclick="doLogout()">Sign Out</span>
+      <span class="topbar-user" id="topUserBadge"></span>
+      <span class="btn-link" onclick="doLogout()">Sign Out</span>
     </div>
   </div>
 
-  <div class="nav-tabs">
-    <button class="tab-btn active" onclick="showTab('dashboard',this)">📊 Dashboard</button>
-    <button class="tab-btn" onclick="showTab('staff',this)">👥 Staff Directory</button>
-    <button class="tab-btn" onclick="showTab('schedule',this)">📅 Schedule Builder</button>
-    <button class="tab-btn" onclick="showTab('skills',this)">🎯 Skill Matrix</button>
-    <button class="tab-btn" onclick="showTab('optimizer',this)">⚡ Labor Optimizer</button>
-    <button class="tab-btn" onclick="showTab('floormap',this)">🗺️ Floor Map</button>
-    <button class="tab-btn" onclick="showTab('availability',this)">📋 Availability</button>
-  </div>
+  <div class="nav-tabs" id="navTabs"></div>
 
   <!-- DASHBOARD -->
-  <div id="tab-dashboard" class="tab-content active">
+  <div id="tab-dashboard" class="tab-content">
     <div class="section-header">
       <h2>Today's Operations</h2>
       <span class="text-sm" style="color:var(--muted)" id="todayLabel"></span>
     </div>
     <div id="laborAlert"></div>
     <div class="grid-4">
-      <div class="card kpi">
-        <div class="kpi-val" id="dash-staff-today">—</div>
-        <div class="kpi-label">Staff Scheduled Today</div>
-      </div>
-      <div class="card kpi">
-        <div class="kpi-val" id="dash-labor-cost">—</div>
-        <div class="kpi-label">Est. Labor Cost Today</div>
-        <div class="kpi-sub" style="color:var(--muted)">Hourly staff only</div>
-      </div>
-      <div class="card kpi">
-        <div class="kpi-val" id="dash-labor-pct">—</div>
-        <div class="kpi-label">Labor % (vs target)</div>
-        <div class="kpi-sub" id="dash-labor-target">Target ≤30%</div>
-      </div>
-      <div class="card kpi">
-        <div class="kpi-val" id="dash-sales-needed">—</div>
-        <div class="kpi-label">Sales Needed for 30%</div>
-      </div>
+      <div class="card kpi"><div class="kpi-val" id="dash-staff-today">—</div><div class="kpi-label">Staff Scheduled Today</div></div>
+      <div class="card kpi"><div class="kpi-val" id="dash-labor-cost">—</div><div class="kpi-label">Est. Labor Cost Today</div><div class="kpi-sub" style="color:var(--muted)">Hourly staff only</div></div>
+      <div class="card kpi"><div class="kpi-val" id="dash-labor-pct">—</div><div class="kpi-label">Labor % (vs target)</div><div class="kpi-sub" id="dash-labor-target">Target ≤30%</div></div>
+      <div class="card kpi"><div class="kpi-val" id="dash-sales-needed">—</div><div class="kpi-label">Sales Needed for 30%</div></div>
     </div>
     <div class="sep"></div>
     <div class="grid-2 mt-16">
@@ -311,10 +286,7 @@ tr:hover td{background:#FAFAF8}
           <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%;background:var(--success)"></div></div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-title">Weekly Labor Summary</div>
-        <div id="weekSummary" style="font-size:13px;color:var(--muted)">Loading...</div>
-      </div>
+      <div class="card"><div class="card-title">Weekly Labor Summary</div><div id="weekSummary" style="font-size:13px;color:var(--muted)">Loading...</div></div>
     </div>
     <div class="sep"></div>
     <div class="card mt-16">
@@ -334,12 +306,8 @@ tr:hover td{background:#FAFAF8}
     </div>
     <div id="staffAlert"></div>
     <div class="card" style="overflow-x:auto">
-      <table>
-        <thead>
-          <tr><th>Name</th><th>Dept / Role</th><th>Phone</th><th>Email</th><th>Rate</th><th>Food Handler</th><th>Status</th><th>Actions</th></tr>
-        </thead>
-        <tbody id="staffTableBody"></tbody>
-      </table>
+      <table><thead><tr><th>Name</th><th>Dept / Role</th><th>Phone</th><th>Email</th><th>Rate</th><th>Food Handler</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="staffTableBody"></tbody></table>
     </div>
     <div class="sep"></div>
     <div class="grid-3">
@@ -362,21 +330,10 @@ tr:hover td{background:#FAFAF8}
       </div>
     </div>
     <div class="grid-2">
-      <div class="card">
-        <div class="card-title">Week Labor Cost</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700" id="sch-week-cost">$0</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">Hourly staff + ops consultant</div>
-      </div>
-      <div class="card">
-        <div class="card-title">Salaried Staff (always on)</div>
-        <div style="font-size:13px;color:var(--muted)">Head Chef: <strong>$1,771/wk</strong> &nbsp;|&nbsp; GM: <strong>$1,919/wk</strong></div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">Not included in hourly calc — fixed cost</div>
-      </div>
+      <div class="card"><div class="card-title">Week Labor Cost</div><div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700" id="sch-week-cost">$0</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Hourly staff + ops consultant</div></div>
+      <div class="card"><div class="card-title">Salaried Staff (always on)</div><div style="font-size:13px;color:var(--muted)">Head Chef: <strong>$1,771/wk</strong> &nbsp;|&nbsp; GM: <strong>$1,919/wk</strong></div><div style="font-size:12px;color:var(--muted);margin-top:6px">Not included in hourly calc — fixed cost</div></div>
     </div>
-    <div class="card mt-16">
-      <div class="card-title">Click a cell to assign a shift</div>
-      <div class="schedule-grid" id="schedGrid"></div>
-    </div>
+    <div class="card mt-16"><div class="card-title">Click a cell to assign a shift</div><div class="schedule-grid" id="schedGrid"></div></div>
     <div id="schedOTWarnings" class="mt-16"></div>
     <div class="card mt-16">
       <div class="card-title">This Week's Shifts</div>
@@ -396,84 +353,31 @@ tr:hover td{background:#FAFAF8}
         <span><span class="skill-dot skill-3" style="display:inline-flex;width:16px;height:16px;font-size:8px">3</span> Expert ★</span>
       </div>
     </div>
-    <div class="card">
-      <div class="skill-matrix">
-        <table id="skillTable">
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th>🍽 Server</th>
-              <th>☕ Barista</th>
-              <th>🏃 Runner</th>
-              <th>🧹 Busser</th>
-              <th>🔥 Line Cook</th>
-              <th>📋 Expo</th>
-              <th>👨‍🍳 Head Chef</th>
-              <th>🎖 Pins Earned</th>
-              <th>Readiness</th>
-            </tr>
-          </thead>
-          <tbody id="skillBody"></tbody>
-        </table>
-      </div>
-    </div>
+    <div class="card"><div class="skill-matrix"><table id="skillTable"><thead><tr><th>Staff</th><th>🍽 Server</th><th>☕ Barista</th><th>🏃 Runner</th><th>🧹 Busser</th><th>🔥 Line Cook</th><th>📋 Expo</th><th>👨‍🍳 Head Chef</th><th>🎖 Pins Earned</th><th>Readiness</th></tr></thead><tbody id="skillBody"></tbody></table></div></div>
     <div class="sep"></div>
-    <div class="card">
-      <div class="card-title">🎖 Domo Cafe Crew Pin Series</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-top:8px" id="pinGrid"></div>
-    </div>
+    <div class="card"><div class="card-title">🎖 Domo Cafe Crew Pin Series</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-top:8px" id="pinGrid"></div></div>
   </div>
 
   <!-- LABOR OPTIMIZER -->
   <div id="tab-optimizer" class="tab-content">
-    <div class="section-header">
-      <h2>Labor Optimizer</h2>
-      <span class="text-sm" style="color:var(--muted)">Find optimal staffing for any sales target</span>
-    </div>
+    <div class="section-header"><h2>Labor Optimizer</h2><span class="text-sm" style="color:var(--muted)">Find optimal staffing for any sales target</span></div>
     <div class="grid-2">
       <div class="card">
         <div class="card-title">Sales Projection</div>
         <div style="display:flex;flex-direction:column;gap:12px">
-          <div class="form-group">
-            <label>Projected Daily Sales ($)</label>
-            <input type="number" id="opt-sales" value="9500" step="100" oninput="runOptimizer()">
-          </div>
-          <div class="form-group">
-            <label>Labor Target (%)</label>
-            <input type="number" id="opt-target" value="30" step="1" min="15" max="50" oninput="runOptimizer()">
-          </div>
-          <div class="form-group">
-            <label>Day Type</label>
-            <select id="opt-daytype" onchange="runOptimizer()">
-              <option value="weekday">Weekday (M–F, 9hr window)</option>
-              <option value="weekend">Weekend (Sat–Sun, 10hr window)</option>
-            </select>
-          </div>
+          <div class="form-group"><label>Projected Daily Sales ($)</label><input type="number" id="opt-sales" value="9500" step="100" oninput="runOptimizer()"></div>
+          <div class="form-group"><label>Labor Target (%)</label><input type="number" id="opt-target" value="30" step="1" min="15" max="50" oninput="runOptimizer()"></div>
+          <div class="form-group"><label>Day Type</label><select id="opt-daytype" onchange="runOptimizer()"><option value="weekday">Weekday (M–F, 9hr window)</option><option value="weekend">Weekend (Sat–Sun, 10hr window)</option></select></div>
         </div>
       </div>
       <div class="card">
         <div class="card-title">Budget Summary</div>
-        <div class="kpi" style="padding:8px">
-          <div class="kpi-val" id="opt-budget">—</div>
-          <div class="kpi-label">Max Labor Budget</div>
-        </div>
+        <div class="kpi" style="padding:8px"><div class="kpi-val" id="opt-budget">—</div><div class="kpi-label">Max Labor Budget</div></div>
         <div class="sep" style="margin:12px 0"></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
-          <span style="color:var(--muted)">Current staffing cost</span>
-          <span class="font-mono" id="opt-current-cost">—</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
-          <span style="color:var(--muted)">Variance</span>
-          <span class="font-mono font-bold" id="opt-variance">—</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:13px">
-          <span style="color:var(--muted)">Actual labor %</span>
-          <span class="font-mono font-bold" id="opt-actual-pct">—</span>
-        </div>
-        <div class="progress-wrap" style="margin-top:16px">
-          <div class="progress-label"><span>Labor %</span><span id="opt-prog-label">—</span></div>
-          <div class="progress-bar"><div class="progress-fill" id="opt-prog-fill" style="width:0%"></div></div>
-        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--muted)">Current staffing cost</span><span class="font-mono" id="opt-current-cost">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><span style="color:var(--muted)">Variance</span><span class="font-mono font-bold" id="opt-variance">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Actual labor %</span><span class="font-mono font-bold" id="opt-actual-pct">—</span></div>
+        <div class="progress-wrap" style="margin-top:16px"><div class="progress-label"><span>Labor %</span><span id="opt-prog-label">—</span></div><div class="progress-bar"><div class="progress-fill" id="opt-prog-fill" style="width:0%"></div></div></div>
       </div>
     </div>
     <div class="card mt-16">
@@ -481,371 +385,114 @@ tr:hover td{background:#FAFAF8}
       <div id="optimizerRoles"></div>
       <div class="sep"></div>
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:13px;font-weight:600">Salaried staff (always on)</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Head Chef $1,771/wk · GM $1,919/wk</div>
-        </div>
-        <div>
-          <button class="btn btn-primary btn-sm" onclick="autoOptimize()">⚡ Auto-Optimize</button>
-        </div>
+        <div><div style="font-size:13px;font-weight:600">Salaried staff (always on)</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Head Chef $1,771/wk · GM $1,919/wk</div></div>
+        <button class="btn btn-primary btn-sm" onclick="autoOptimize()">⚡ Auto-Optimize</button>
       </div>
     </div>
-    <div class="card mt-16" id="opt-recommendation" style="display:none">
-      <div class="card-title">Recommendation</div>
-      <div id="opt-rec-body"></div>
+    <div class="card mt-16" id="opt-recommendation" style="display:none"><div class="card-title">Recommendation</div><div id="opt-rec-body"></div></div>
+  </div>
+
+  <!-- USERS TAB (Admin only) -->
+  <div id="tab-users" class="tab-content">
+    <div class="section-header">
+      <h2>User Management</h2>
+      <button class="btn btn-primary" onclick="initAllStaff()">⚡ Initialize All Staff</button>
+    </div>
+    <div id="usersAlert"></div>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Name</th><th>Username</th><th>Role Level</th><th>Last Login</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="usersTableBody"></tbody>
+      </table>
     </div>
   </div>
 
-  <!-- FLOOR MAP TAB -->
-  <div id="tab-floormap" class="tab-content">
+  <!-- CERTIFICATIONS TAB (Admin + Manager) -->
+  <div id="tab-certifications" class="tab-content">
     <div class="section-header">
-      <h2>🗺️ Floor Map</h2>
+      <h2>Certifications</h2>
       <div style="display:flex;gap:8px;align-items:center">
-        <select id="floorDateSelect" onchange="renderFloorMap()" style="padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:var(--bg)"></select>
-        <button class="btn btn-outline btn-sm" onclick="clearFloorAssignments()">Clear Floor</button>
+        <select id="certFilter" onchange="renderCertifications()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none;background:var(--bg)">
+          <option value="all">All Staff</option>
+          <option value="FOH">FOH Only</option>
+          <option value="BOH">BOH Only</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="openEvalModal()">+ Service Evaluation</button>
       </div>
     </div>
-    <div class="alert alert-warn" style="font-size:12px;padding:10px 14px;margin-bottom:16px">
-      <strong>How to assign:</strong> Drag staff chips from the sidebar → drop onto a section or station. Click an assigned chip to unassign.
+    <!-- Legend -->
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;font-size:12px">
+      <span><span class="cert-dot cert-0" style="width:20px;height:20px;line-height:20px;font-size:9px">0</span> Not Assigned</span>
+      <span><span class="cert-dot cert-1" style="width:20px;height:20px;line-height:20px;font-size:9px">1</span> In Training</span>
+      <span><span class="cert-dot cert-2" style="width:20px;height:20px;line-height:20px;font-size:9px">2</span> Knowledge Cert.</span>
+      <span><span class="cert-dot cert-3" style="width:20px;height:20px;line-height:20px;font-size:9px">3</span> Service Cert.</span>
+      <span><span class="cert-dot cert-4" style="width:20px;height:20px;line-height:20px;font-size:9px">4</span> Expert/Trainer</span>
     </div>
-    <div class="floor-layout">
-      <!-- Sidebar chips -->
-      <div class="floor-chips-sidebar card" style="padding:14px">
-        <div class="card-title">Scheduled Today</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:10px">FOH</div>
-        <div id="floorChipsFOH"></div>
-        <div style="font-size:11px;color:var(--muted);margin:10px 0 6px">BOH</div>
-        <div id="floorChipsBOH"></div>
+    <div class="card cert-grid" style="overflow-x:auto;padding:12px">
+      <table id="certReadinessTable">
+        <thead><tr id="certReadinessHeader"></tr></thead>
+        <tbody id="certReadinessBody"></tbody>
+      </table>
+    </div>
+    <div class="grid-2 mt-16">
+      <div class="card">
+        <div class="card-title">🕐 Ready for Evaluation</div>
+        <div id="readyForEval"></div>
       </div>
-
-      <!-- Floor plan -->
-      <div class="floor-map-wrap">
-        <!-- SVG Floor Plan Visual -->
-        <div class="cafe-floor-plan">
-          <svg class="cafe-floor-svg" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
-            <!-- BOH Background -->
-            <rect x="0" y="0" width="272" height="520" fill="#1E1E2E" rx="0"/>
-
-            <!-- BOH Room borders -->
-            <rect x="4" y="4" width="122" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
-            <text x="65" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle" font-weight="bold">📋</text>
-            <text x="65" y="64" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Office</text>
-
-            <rect x="130" y="4" width="66" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
-            <text x="163" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">📦</text>
-            <text x="163" y="64" fill="#8888BB" font-size="9" font-family="sans-serif" text-anchor="middle">Storage 1</text>
-
-            <rect x="200" y="4" width="66" height="112" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
-            <text x="233" y="50" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">📦</text>
-            <text x="233" y="64" fill="#8888BB" font-size="9" font-family="sans-serif" text-anchor="middle">Storage 2</text>
-
-            <rect x="4" y="120" width="130" height="120" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
-            <text x="69" y="172" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">❄️</text>
-            <text x="69" y="186" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Walk-in</text>
-
-            <rect x="138" y="120" width="128" height="120" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
-            <text x="202" y="172" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">🔪</text>
-            <text x="202" y="186" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Prep</text>
-
-            <rect x="4" y="244" width="130" height="110" fill="#252540" rx="4" stroke="#3A3A5C" stroke-width="1.5"/>
-            <text x="69" y="292" fill="#8888BB" font-size="11" font-family="sans-serif" text-anchor="middle">🚿</text>
-            <text x="69" y="306" fill="#8888BB" font-size="10" font-family="sans-serif" text-anchor="middle">Wash</text>
-
-            <!-- Kitchen Line (BOH cooking zone, near counter) -->
-            <rect x="4" y="358" width="264" height="158" fill="#1A2A1A" rx="4" stroke="#2D4A2D" stroke-width="2"/>
-            <text x="132" y="418" fill="#4A8A4A" font-size="13" font-family="sans-serif" text-anchor="middle" font-weight="bold">🔥 Kitchen Line</text>
-            <text x="132" y="436" fill="#4A8A4A" font-size="10" font-family="sans-serif" text-anchor="middle">BOH Cooking Zone</text>
-
-            <!-- Cooking (adjacent to counter) -->
-            <rect x="138" y="244" width="128" height="110" fill="#252040" rx="4" stroke="#4A3A5C" stroke-width="1.5"/>
-            <text x="202" y="292" fill="#9A88BB" font-size="11" font-family="sans-serif" text-anchor="middle">🍳</text>
-            <text x="202" y="306" fill="#9A88BB" font-size="10" font-family="sans-serif" text-anchor="middle">Cooking</text>
-
-            <!-- BOH label -->
-            <text x="136" y="18" fill="#6666AA" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">BOH</text>
-
-            <!-- Counter Bar (vertical separator) -->
-            <rect x="272" y="0" width="36" height="520" fill="#8B4513"/>
-            <text x="290" y="260" fill="#FFEEDD" font-size="10" font-family="sans-serif" text-anchor="middle" transform="rotate(-90 290 260)" font-weight="bold" letter-spacing="2">COUNTER BAR</text>
-
-            <!-- Service Windows (cutouts in counter) -->
-            <rect x="272" y="140" width="36" height="52" fill="#D4A070" rx="2"/>
-            <text x="290" y="163" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">EXPO</text>
-            <text x="290" y="174" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle">WIN 1</text>
-
-            <rect x="272" y="300" width="36" height="52" fill="#D4A070" rx="2"/>
-            <text x="290" y="323" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">PASS</text>
-            <text x="290" y="334" fill="#3A1A05" font-size="8" font-family="sans-serif" text-anchor="middle">WIN 2</text>
-
-            <!-- FOH Dining Room Background (curved right wall) -->
-            <path d="M 308,0 L 840,0 Q 900,0 900,60 L 900,460 Q 900,520 840,520 L 308,520 Z" fill="#FFFDF5"/>
-
-            <!-- Entry arch at top center of curve -->
-            <rect x="540" y="0" width="64" height="8" fill="#FFFDF5"/>
-            <path d="M 540,8 Q 572,30 604,8" fill="none" stroke="#8B4513" stroke-width="2" stroke-dasharray="4,2"/>
-            <text x="572" y="22" fill="#8B4513" font-size="9" font-family="sans-serif" text-anchor="middle" font-weight="bold">⬆ ENTRY</text>
-
-            <!-- Secondary entry (right wall) -->
-            <rect x="892" y="240" width="8" height="60" fill="#FFFDF5"/>
-            <text x="875" y="275" fill="#8B4513" font-size="9" font-family="sans-serif" text-anchor="end">EXIT →</text>
-
-            <!-- FOH dining room outline -->
-            <path d="M 308,0 L 840,0 Q 900,0 900,60 L 900,240 M 900,300 L 900,460 Q 900,520 840,520 L 308,520" fill="none" stroke="#D4C4B0" stroke-width="2"/>
-
-            <!-- Section A highlight (T1-T4) -->
-            <rect x="315" y="46" width="155" height="212" fill="none" stroke="#8B4513" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
-            <text x="392" y="62" fill="#8B4513" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION A</text>
-
-            <!-- Section B highlight (T5-T9) -->
-            <rect x="480" y="36" width="168" height="272" fill="none" stroke="#1E40AF" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
-            <text x="564" y="52" fill="#1E40AF" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION B</text>
-
-            <!-- Section C highlight (T10-T12) -->
-            <rect x="658" y="46" width="210" height="172" fill="none" stroke="#065F46" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
-            <text x="763" y="62" fill="#065F46" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">SECTION C</text>
-
-            <!-- 2-tops highlight -->
-            <rect x="315" y="320" width="230" height="75" fill="none" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="6,3" rx="6"/>
-            <text x="430" y="336" fill="#7C3AED" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">2-TOPS</text>
-
-            <!-- Bar station highlight (FOH side of counter) -->
-            <rect x="308" y="62" width="36" height="72" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4,2" rx="4"/>
-            <text x="326" y="92" fill="#D97706" font-size="8" font-family="sans-serif" text-anchor="middle" font-weight="bold">BAR</text>
-
-            <!-- 4-TOP TABLES: T1-T4 (Section A) -->
-            <!-- T1 -->
-            <rect x="323" y="70" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
-            <text x="346" y="97" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T1</text>
-            <!-- T2 -->
-            <rect x="407" y="70" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
-            <text x="430" y="97" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T2</text>
-            <!-- T3 -->
-            <rect x="323" y="170" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
-            <text x="346" y="197" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T3</text>
-            <!-- T4 -->
-            <rect x="407" y="170" width="46" height="46" fill="#E8DCC8" stroke="#8B4513" stroke-width="1.5" rx="4"/>
-            <text x="430" y="197" fill="#5A2D0C" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T4</text>
-
-            <!-- 4-TOP TABLES: T5-T9 (Section B) -->
-            <!-- T5 -->
-            <rect x="490" y="60" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
-            <text x="513" y="87" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T5</text>
-            <!-- T6 -->
-            <rect x="590" y="60" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
-            <text x="613" y="87" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T6</text>
-            <!-- T7 -->
-            <rect x="490" y="160" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
-            <text x="513" y="187" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T7</text>
-            <!-- T8 -->
-            <rect x="590" y="160" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
-            <text x="613" y="187" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T8</text>
-            <!-- T9 -->
-            <rect x="540" y="262" width="46" height="46" fill="#E8E8F8" stroke="#1E40AF" stroke-width="1.5" rx="4"/>
-            <text x="563" y="289" fill="#1E3A8A" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T9</text>
-
-            <!-- 4-TOP TABLES: T10-T12 (Section C) -->
-            <!-- T10 -->
-            <rect x="668" y="70" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
-            <text x="691" y="97" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T10</text>
-            <!-- T11 -->
-            <rect x="766" y="70" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
-            <text x="789" y="97" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T11</text>
-            <!-- T12 -->
-            <rect x="716" y="178" width="46" height="46" fill="#E8F8EE" stroke="#065F46" stroke-width="1.5" rx="4"/>
-            <text x="739" y="205" fill="#064E3B" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T12</text>
-
-            <!-- 2-TOP TABLES: T13-T15 -->
-            <!-- T13 -->
-            <rect x="325" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
-            <text x="345" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T13</text>
-            <!-- T14 -->
-            <rect x="405" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
-            <text x="425" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T14</text>
-            <!-- T15 -->
-            <rect x="485" y="342" width="40" height="30" fill="#F3F0FF" stroke="#7C3AED" stroke-width="1.5" rx="4"/>
-            <text x="505" y="361" fill="#5B21B6" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">T15</text>
-
-            <!-- Seating count label -->
-            <text x="870" y="490" fill="#B0A090" font-size="9" font-family="sans-serif" text-anchor="middle">54 seats total</text>
-          </svg>
-        </div>
-
-        <!-- Zone Assignment Panel -->
-        <div style="margin-top:12px">
-          <div class="card-title" style="margin-bottom:10px;font-size:12px">🖱️ STAFF ASSIGNMENTS — drag chips below or click to unassign</div>
-          <div class="floor-zone-panel">
-            <div class="floor-zone zone-a" id="zone-section-a" data-zone="section-a"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="dropToZone(event,'section-a')">
-              <div class="floor-zone-label">📍 Section A — T1–T4</div>
-              <div class="floor-zone-chips" id="zone-chips-section-a"></div>
-            </div>
-            <div class="floor-zone zone-b" id="zone-section-b" data-zone="section-b"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="dropToZone(event,'section-b')">
-              <div class="floor-zone-label">📍 Section B — T5–T9</div>
-              <div class="floor-zone-chips" id="zone-chips-section-b"></div>
-            </div>
-            <div class="floor-zone zone-c" id="zone-section-c" data-zone="section-c"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="dropToZone(event,'section-c')">
-              <div class="floor-zone-label">📍 Section C — T10–T12</div>
-              <div class="floor-zone-chips" id="zone-chips-section-c"></div>
-            </div>
-            <div class="floor-zone zone-2tops" id="zone-2tops" data-zone="2tops"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="dropToZone(event,'2tops')">
-              <div class="floor-zone-label">🪑 2-Top Tables T13–T15</div>
-              <div class="floor-zone-chips" id="zone-chips-2tops"></div>
-            </div>
-            <div class="floor-zone zone-bar" id="zone-bar" data-zone="bar"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="dropToZone(event,'bar')">
-              <div class="floor-zone-label">☕ Bar Station</div>
-              <div class="floor-zone-chips" id="zone-chips-bar"></div>
-            </div>
-            <div class="floor-zone zone-expo" id="zone-expo" data-zone="expo"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="dropToZone(event,'expo')">
-              <div class="floor-zone-label">📋 Expo Window</div>
-              <div class="floor-zone-chips" id="zone-chips-expo"></div>
-            </div>
-          </div>
-          <div style="margin-top:10px">
-            <div class="floor-zone zone-kitchen" id="zone-kitchen" data-zone="kitchen"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="dropToZone(event,'kitchen')">
-              <div class="floor-zone-label">🔥 Kitchen Line — BOH Cooking Zone</div>
-              <div class="floor-zone-chips" id="zone-chips-kitchen" style="min-height:40px"></div>
-            </div>
-          </div>
-        </div>
+      <div class="card">
+        <div class="card-title">🏆 Recent Certifications</div>
+        <div id="recentCerts"></div>
       </div>
     </div>
   </div>
 
-  <!-- AVAILABILITY TAB -->
-  <div id="tab-availability" class="tab-content">
-    <div class="section-header">
-      <h2>📋 Staff Availability</h2>
-      <div style="font-size:12px;color:var(--muted)">Weekly availability + pre-opening events</div>
-    </div>
-
-    <!-- Legend + Filter -->
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-      <div class="avail-filter-bar">
-        <button class="filter-btn active" onclick="filterAvail('all',this)">Show All</button>
-        <button class="filter-btn" onclick="filterAvail('foh',this)">FOH Only</button>
-        <button class="filter-btn" onclick="filterAvail('boh',this)">BOH Only</button>
-      </div>
-      <div class="avail-legend">
-        <span><span class="legend-dot avail-ALL">ALL</span> Available all day</span>
-        <span><span class="legend-dot avail-AM">AM</span> Morning only</span>
-        <span><span class="legend-dot avail-PM">PM</span> Evening only</span>
-        <span><span class="legend-dot avail-dash">—</span> Limited/ask</span>
-        <span><span class="legend-dot avail-x">✗</span> Not available</span>
-      </div>
-    </div>
-
-    <!-- Pre-opening events banner -->
-    <div class="alert" style="background:#EDE9FE;color:#4C1D95;border:1px solid #C4B5FD;margin-bottom:16px;font-size:13px;padding:12px 16px">
-      📅 <strong>Pre-opening schedule:</strong>
-      &nbsp;F&amp;F Dinner: <strong>Jun 5 (Fri)</strong>
-      &nbsp;·&nbsp; Soft Open: <strong>Jun 6–7 (Sat–Sun)</strong>
-      &nbsp;·&nbsp; Media Day: <strong>Jun 11 (Thu)</strong>
-      &nbsp;·&nbsp; Grand Opening: <strong>Jun 13 (Sat)</strong>
-    </div>
-
-    <div class="card">
-      <div class="avail-wrap">
-        <table class="avail-table" id="availTable">
-          <thead>
-            <tr>
-              <th style="min-width:160px;text-align:left">Staff</th>
-              <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
-            </tr>
-          </thead>
-          <tbody id="availBody"></tbody>
-        </table>
-      </div>
-    </div>
+  <!-- MY PROFILE (Staff only) -->
+  <div id="tab-myprofile" class="tab-content">
+    <div class="section-header"><h2>My Profile</h2></div>
+    <div id="myProfileContent"></div>
   </div>
 
-</div><!-- end #app -->
+  <!-- MY SCHEDULE (Staff only) -->
+  <div id="tab-myschedule" class="tab-content">
+    <div class="section-header"><h2>My Schedule</h2><span class="text-sm" style="color:var(--muted)">This week's shifts</span></div>
+    <div id="myScheduleContent"></div>
+  </div>
+
+  <!-- MY CERTIFICATIONS (Staff only) -->
+  <div id="tab-mycertifications" class="tab-content">
+    <div class="section-header"><h2>My Certifications</h2></div>
+    <div id="myCertContent"></div>
+  </div>
+
+</div><!-- /app -->
 
 <!-- ADD STAFF MODAL -->
 <div class="modal-overlay" id="addStaffModal">
   <div class="modal">
-    <div class="modal-header">
-      <h3 id="staffModalTitle">Add Staff Member</h3>
-      <span class="modal-close" onclick="closeModal('addStaffModal')">✕</span>
-    </div>
+    <div class="modal-header"><h3 id="staffModalTitle">Add Staff Member</h3><span class="modal-close" onclick="closeModal('addStaffModal')">✕</span></div>
     <div class="form-row">
       <div class="form-group"><label>First Name</label><input type="text" id="sf-first" placeholder="First"></div>
       <div class="form-group"><label>Last Name</label><input type="text" id="sf-last" placeholder="Last"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Preferred / Goes By</label><input type="text" id="sf-nick" placeholder="Nickname"></div>
-      <div class="form-group"><label>Department</label>
-        <select id="sf-dept">
-          <option value="FOH">FOH (Front of House)</option>
-          <option value="BOH">BOH (Back of House)</option>
-          <option value="MGMT">Management</option>
-        </select>
-      </div>
+      <div class="form-group"><label>Department</label><select id="sf-dept"><option value="FOH">FOH (Front of House)</option><option value="BOH">BOH (Back of House)</option><option value="MGMT">Management</option></select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Phone</label><input type="text" id="sf-phone" placeholder="714-000-0000"></div>
       <div class="form-group"><label>Email</label><input type="email" id="sf-email" placeholder="email@gmail.com"></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Primary Role</label>
-        <select id="sf-role">
-          <option value="Server">Server (FOH)</option>
-          <option value="Barista">Barista (FOH)</option>
-          <option value="Runner">Runner (FOH)</option>
-          <option value="Busser">Busser (FOH)</option>
-          <option value="Line Cook">Line Cook (BOH)</option>
-          <option value="Expo">Expo (BOH)</option>
-          <option value="Head Chef">Head Chef (BOH)</option>
-          <option value="GM">General Manager</option>
-          <option value="Ops Consultant">Ops Consultant</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Employment Type</label>
-        <select id="sf-type">
-          <option value="hourly">Hourly</option>
-          <option value="salary">Salary</option>
-          <option value="contract">Contract</option>
-        </select>
-      </div>
+      <div class="form-group"><label>Primary Role</label><select id="sf-role"><option value="Server">Server (FOH)</option><option value="Barista">Barista (FOH)</option><option value="Runner">Runner (FOH)</option><option value="Busser">Busser (FOH)</option><option value="Line Cook">Line Cook (BOH)</option><option value="Expo">Expo (BOH)</option><option value="Head Chef">Head Chef (BOH)</option><option value="GM">General Manager</option><option value="Ops Consultant">Ops Consultant</option></select></div>
+      <div class="form-group"><label>Employment Type</label><select id="sf-type"><option value="hourly">Hourly</option><option value="salary">Salary</option><option value="contract">Contract</option></select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Hourly Rate / Salary (Annual)</label><input type="number" id="sf-rate" placeholder="e.g. 18.90" step="0.01"></div>
       <div class="form-group"><label>Start Date</label><input type="date" id="sf-start"></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Food Handler Status</label>
-        <select id="sf-foodhandler">
-          <option value="Active">✅ Active</option>
-          <option value="No card">🚨 No Card</option>
-          <option value="Renew soon">⚠️ Renew Soon</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Status</label>
-        <select id="sf-status">
-          <option value="active">Active</option>
-          <option value="training">In Training</option>
-          <option value="inactive">Inactive</option>
-        </select>
-      </div>
+      <div class="form-group"><label>Food Handler Status</label><select id="sf-foodhandler"><option value="Active">✅ Active</option><option value="No card">🚨 No Card</option><option value="Renew soon">⚠️ Renew Soon</option></select></div>
+      <div class="form-group"><label>Status</label><select id="sf-status"><option value="active">Active</option><option value="training">In Training</option><option value="inactive">Inactive</option></select></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btn-outline" onclick="closeModal('addStaffModal')">Cancel</button>
@@ -856,23 +503,11 @@ tr:hover td{background:#FAFAF8}
 
 <!-- SHIFT MODAL -->
 <div class="modal-overlay" id="shiftModal">
-  <div class="modal" style="width:500px">
-    <div class="modal-header">
-      <h3 id="shiftModalTitle">Assign Shift</h3>
-      <span class="modal-close" onclick="closeModal('shiftModal')">✕</span>
-    </div>
-    <div id="shiftAvailNote" style="display:none;margin-bottom:12px"></div>
+  <div class="modal" style="width:400px">
+    <div class="modal-header"><h3 id="shiftModalTitle">Assign Shift</h3><span class="modal-close" onclick="closeModal('shiftModal')">✕</span></div>
     <div id="shiftStaffList"></div>
     <div class="sep"></div>
-    <div class="form-group" style="margin-bottom:16px">
-      <label>Shift Type</label>
-      <select id="shiftType">
-        <option value="opening">Opening (arrive 1hr early)</option>
-        <option value="full" selected>Full Shift</option>
-        <option value="closing">Closing (stay 1.5hr after close)</option>
-        <option value="split">Split Shift</option>
-      </select>
-    </div>
+    <div class="form-group" style="margin-bottom:16px"><label>Shift Type</label><select id="shiftType"><option value="opening">Opening (arrive 1hr early)</option><option value="full" selected>Full Shift</option><option value="closing">Closing (stay 1.5hr after close)</option><option value="split">Split Shift</option></select></div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btn-outline" onclick="closeModal('shiftModal')">Cancel</button>
       <button class="btn btn-danger btn-sm" onclick="clearShiftCell()">Clear</button>
@@ -881,109 +516,195 @@ tr:hover td{background:#FAFAF8}
   </div>
 </div>
 
+<!-- QUIZ MODAL -->
+<div class="modal-overlay" id="quizModal">
+  <div class="modal" style="width:560px">
+    <div class="modal-header">
+      <h3 id="quizModalTitle">Knowledge Quiz</h3>
+      <span class="modal-close" onclick="closeModal('quizModal')">✕</span>
+    </div>
+    <div id="quizBody"></div>
+  </div>
+</div>
+
+<!-- EVAL MODAL -->
+<div class="modal-overlay" id="evalModal">
+  <div class="modal" style="width:580px">
+    <div class="modal-header">
+      <h3>Service Evaluation</h3>
+      <span class="modal-close" onclick="closeModal('evalModal')">✕</span>
+    </div>
+    <div id="evalBody"></div>
+  </div>
+</div>
+
+<!-- RESET PW MODAL -->
+<div class="modal-overlay" id="resetPwModal">
+  <div class="modal" style="width:380px">
+    <div class="modal-header"><h3>Reset Password</h3><span class="modal-close" onclick="closeModal('resetPwModal')">✕</span></div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Reset password for: <strong id="resetPwName"></strong></p>
+    <div class="form-group" style="margin-bottom:16px"><label>New Password</label><input type="password" id="resetPwInput" placeholder="Enter new password"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('resetPwModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitResetPw()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- CRED LIST MODAL -->
+<div class="modal-overlay" id="credListModal">
+  <div class="modal" style="width:600px">
+    <div class="modal-header">
+      <h3>Staff Credentials — PRINT & DISTRIBUTE</h3>
+      <span class="modal-close" onclick="closeModal('credListModal')">✕</span>
+    </div>
+    <div class="alert alert-warn" style="font-size:12px;margin-bottom:12px">⚠️ Share securely — contains login credentials. Have staff change passwords on first login.</div>
+    <div id="credListBody" style="max-height:400px;overflow-y:auto"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-outline" onclick="closeModal('credListModal')">Close</button>
+      <button class="btn btn-primary" onclick="window.print()">🖨 Print</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT USER ROLE MODAL -->
+<div class="modal-overlay" id="editUserModal">
+  <div class="modal" style="width:380px">
+    <div class="modal-header"><h3>Edit User</h3><span class="modal-close" onclick="closeModal('editUserModal')">✕</span></div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Editing: <strong id="editUserName"></strong></p>
+    <div class="form-group" style="margin-bottom:16px">
+      <label>Role Level</label>
+      <select id="editUserRole">
+        <option value="admin">Admin</option>
+        <option value="manager">Manager</option>
+        <option value="staff">Staff</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('editUserModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitEditUserRole()">Save</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ==================== CONSTANTS ====================
-const APP_PW = 'Domo@2026';
+// ============================================================
+// CONSTANTS & DATA
+// ============================================================
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const ROLES_FOH = ['Server','Barista','Runner','Busser'];
 const ROLES_BOH = ['Line Cook','Expo'];
 const ROLES_MGMT = ['Head Chef','GM'];
 const ALL_ROLES = [...ROLES_FOH,...ROLES_BOH,'Head Chef','GM','Ops Consultant'];
 const SKILL_ROLES = ['Server','Barista','Runner','Busser','Line Cook','Expo','Head Chef'];
+const CERT_ROLES = ['Server','Barista','Runner','Busser','Line Cook','Expo','Head Chef'];
 const PIN_EMOJIS = {Server:'🍽',Barista:'☕',Runner:'🏃',Busser:'🧹','Line Cook':'🔥',Expo:'📋','Head Chef':'👨‍🍳'};
-
-const DEFAULT_RATES = {
-  'Server':16.90,'Barista':16.90,'Runner':16.90,'Busser':16.90,
-  'Line Cook':18.90,'Expo':18.90,'Head Chef':92100,'GM':99800,'Ops Consultant':35
-};
-
+const DEFAULT_RATES = {'Server':16.90,'Barista':16.90,'Runner':16.90,'Busser':16.90,'Line Cook':18.90,'Expo':18.90,'Head Chef':92100,'GM':99800,'Ops Consultant':35};
 const FOOD_HANDLER_BADGE = {
   'Active':'<span class="badge" style="background:#D1FAE5;color:#065F46">✅ Active</span>',
   'No card':'<span class="badge" style="background:#FEE2E2;color:#991B1B">🚨 No Card</span>',
   'Renew soon':'<span class="badge" style="background:#FEF3C7;color:#92400E">⚠️ Renew</span>',
   '—':'<span class="badge badge-l0">—</span>'
 };
+const OT_RULES = {maxShiftHours:7,maxWeeklyHours:40,maxConsecutiveDays:6};
+const SHIFT_HOURS = {weekday:{opening:7,full:7,closing:7,split:5},weekend:{opening:7,full:7,closing:7,split:5}};
 
-const OT_RULES = {
-  maxShiftHours: 7,
-  maxWeeklyHours: 40,
-  maxConsecutiveDays: 6,
+// -------- QUIZ DATA --------
+const QUIZZES = {
+  'Server':{passMark:8,questions:[
+    {q:'Standard greeting when guest is seated?',opts:['What can I get you?','Welcome to Domo Cafe! I\'ll be your server today.','Hi, you ready to order?','Can I start you with drinks?'],ans:1},
+    {q:'How many minutes before checking back after food delivery?',opts:['1-2 min','5-10 min','Right away','Only if flagged'],ans:0},
+    {q:'Guest has a food allergy — first step?',opts:['Check menu yourself','Tell chef immediately','Alert manager AND kitchen, confirm with guest','Suggest something else'],ans:2},
+    {q:'How do you handle a guest complaint about food?',opts:['Apologize, offer to replace immediately','Explain it\'s correct','Get manager first','Ask guest to wait'],ans:0},
+    {q:'Table turn time target?',opts:['45 min','1 hour','1 hour 15 min','2 hours'],ans:2},
+    {q:'Item is 86\'d mid-shift — what do you do?',opts:['Tell guests it\'s unavailable','Alert all servers immediately via expo','Wait until asked','Remove from menu yourself'],ans:1},
+    {q:'Tip pool policy?',opts:['Keep all your tips','Pool split by hours worked','Split evenly','Server keeps 80%, shares 20%'],ans:1},
+    {q:'Guest wants photo with Domo character?',opts:['Allow it anywhere','Politely explain photos are for designated areas only','Say no','Get manager'],ans:1},
+    {q:'Phone policy during service?',opts:['Silent OK','No phones on floor','Allowed for orders','Manager decides'],ans:1},
+    {q:'Guest asks about a menu item you don\'t know?',opts:['Make something up','Say you\'ll find out and come back','Redirect to another item','Get manager'],ans:1}
+  ]},
+  'Barista':{passMark:8,questions:[
+    {q:'Espresso + steamed milk + foam = ?',opts:['Americano','Cappuccino','Latte','Macchiato'],ans:1},
+    {q:'Correct steamed milk temperature?',opts:['100°F','130°F','150°F','180°F'],ans:2},
+    {q:'Dairy allergy order — first step?',opts:['Use same equipment','Switch to plant milk and sanitize equipment','Ask manager','Tell guest not available'],ans:1},
+    {q:'Ice machine is low during rush — do you?',opts:['Ignore','Alert manager immediately','Use less ice','Skip iced drinks'],ans:1},
+    {q:'Steam wand cleaning frequency?',opts:['End of day','After every use','Hourly','Weekly'],ans:1},
+    {q:'Layered drink — correct build order?',opts:['Ice, liquid, foam','Foam, liquid, ice','Liquid, ice, foam','Depends on drink'],ans:0},
+    {q:'Cold brew shelf life after opening?',opts:['24 hours','3 days','1 week','2 weeks'],ans:1},
+    {q:'Guest orders drink with no sugar — you?',opts:['Use regular syrup but less','Use sugar-free syrup or omit','Say not possible','Charge extra'],ans:1},
+    {q:'How do you calibrate espresso grind?',opts:['Guess','Pull shot, check time (25-30 sec) and taste','Use preset','Ask chef'],ans:1},
+    {q:'Bar at end of shift — you?',opts:['Wipe down surfaces','Deep clean all equipment, sanitize, restock','Leave for opener','Quick rinse'],ans:1}
+  ]},
+  'Runner':{passMark:7,questions:[
+    {q:'Before running food — confirm?',opts:['Table number only','Table number, seat position, dish name','Just dish name','Ask expo'],ans:1},
+    {q:'Delivering food — you say?',opts:['Nothing','Here\'s your food','Announce each dish and ask if they need anything','Set down and leave'],ans:2},
+    {q:'Dish looks incorrect at expo window — you?',opts:['Run it anyway','Alert expo immediately','Fix it yourself','Ask server'],ans:1},
+    {q:'Max time food sits at expo window?',opts:['10 min','5 min','2 min','As long as needed'],ans:2},
+    {q:'Multiple plates ready — priority?',opts:['Lightest plates first','Oldest ticket first','Closest table','Ask expo'],ans:1},
+    {q:'Guest flags you for help — you?',opts:['Ignore, not your table','Acknowledge and get their server','Help with anything','Only help with water'],ans:1},
+    {q:'You drop a plate — you?',opts:['Pick it up quietly','Alert manager, clear area, document incident','Replace and say nothing','Ask guest to wait'],ans:1},
+    {q:'Phone policy during service?',opts:['Silent OK','No phones on floor','Allowed if quiet','Emergency only'],ans:1}
+  ]},
+  'Busser':{passMark:7,questions:[
+    {q:'Table reset time after guests leave?',opts:['10 min','15 min','3-5 min','When you can'],ans:2},
+    {q:'Correct clearing order?',opts:['Random','Glasses first, then plates, then linens','Plates first, glasses, then linens','Server decides'],ans:1},
+    {q:'Safe glassware handling?',opts:['Stack them','Handle by rim','Handle by base/stem only','Always use tray'],ans:2},
+    {q:'Spill in dining room — you?',opts:['Ignore','Clean immediately, place wet floor sign','Tell server','Wait for manager'],ans:1},
+    {q:'Table is reset — you tell server by?',opts:['Telling them directly','Thumbs up from across room','Updating floor chart or telling server directly','Nothing — they\'ll see'],ans:2},
+    {q:'Between turns always restock?',opts:['Nothing','Salt/pepper, napkins, condiments, water','Just napkins','Ask server'],ans:1},
+    {q:'Guest leftovers — food safety rule?',opts:['Pack without asking','Only pack if guest requests','Never pack','Pack all leftovers'],ans:1},
+    {q:'Guest asks you a menu question?',opts:['Guess','Say you\'ll get their server','Say I don\'t know','Make up answer'],ans:1}
+  ]},
+  'Line Cook':{passMark:8,questions:[
+    {q:'Min internal temp for cooked chicken?',opts:['145°F','155°F','165°F','175°F'],ans:2},
+    {q:'Glove change frequency?',opts:['Every hour','After raw protein, contamination, or task change','End of shift','When torn'],ans:1},
+    {q:'FIFO means?',opts:['Fast items first','First In First Out','Fresh items first','Full inventory first out'],ans:1},
+    {q:'Ticket too long in window — you?',opts:['Ignore it','Alert expo immediately','Remake from scratch','Ask chef'],ans:1},
+    {q:'Run out of item mid-service?',opts:['Substitute silently','Alert expo and chef immediately to 86 it','Wait to tell someone','Tell manager after service'],ans:1},
+    {q:'Cross-contamination prevention?',opts:['Wash hands once','Separate cutting boards by protein/vegetable, change gloves, sanitize','Cook everything well done','Ask chef'],ans:1},
+    {q:'Correct hand washing time?',opts:['5 seconds','10 seconds','20 seconds with soap','Quick rinse'],ans:2},
+    {q:'Walk-in cooler correct temp?',opts:['32°F','38-41°F','45°F','50°F'],ans:1},
+    {q:'Dish comes back from the floor?',opts:['Re-plate and resend','Discard, make fresh, alert chef','Add to staff meal','Reheat and resend'],ans:1},
+    {q:'How to communicate an 86 to FOH?',opts:['Post on board','Alert expo immediately who tells all servers','Tell one server','Wait for shift end'],ans:1}
+  ]},
+  'Expo':{passMark:7,questions:[
+    {q:'Expo\'s primary role?',opts:['Cook food','Quality control and communication bridge between FOH and BOH','Take orders','Run food'],ans:1},
+    {q:'Before sending food out — check?',opts:['Temperature only','Ticket accuracy, presentation, completeness of order','Just that plate looks nice','Ask chef'],ans:1},
+    {q:'Plate presentation is incorrect — you?',opts:['Send anyway','Return to cook immediately','Fix it yourself','Ask server'],ans:1},
+    {q:'Priority for multiple tables ready?',opts:['Lightest food','Oldest ticket first','Biggest table','Server preference'],ans:1},
+    {q:'Runner not available — you?',opts:['Leave food in window','Run it yourself or alert available runner','Tell chef to slow down','Wait'],ans:1},
+    {q:'Allergy ticket — you?',opts:['Standard treatment','Mark ticket clearly, verify with cook, use allergy plate','Tell server to handle it','Ask manager'],ans:1},
+    {q:'Signal food is ready for servers?',opts:['Yell across kitchen','Ring bell or use agreed signal, place in window','Text them','Nothing — they\'ll see'],ans:1},
+    {q:'Simultaneous rush — you prioritize by?',opts:['Your preference','Ticket time, allergy orders first','Table size','Distance from kitchen'],ans:1}
+  ]},
+  'Head Chef':{passMark:10,questions:[
+    {q:'Food cost target %?',opts:['15%','20%','25%','30%'],ans:1},
+    {q:'Health inspection critical violation example?',opts:['Messy office','Improper food temps, cross-contamination','Old equipment','Dirty windows'],ans:1},
+    {q:'How do you handle an underperforming cook during service?',opts:['Fire them','Brief redirection now, formal conversation after service','Ignore it','Move them off line'],ans:1},
+    {q:'Mise en place means?',opts:['Cleaning up','Everything in its place — all prep done before service','The menu of the day','Staff lineup'],ans:1},
+    {q:'Labor cost target?',opts:['20%','25%','30%','35%'],ans:2},
+    {q:'Menu item consistently coming back — you?',opts:['Keep sending it','Pull, investigate, fix recipe or technique, re-test','Blame servers','Remove from menu'],ans:1},
+    {q:'New cook\'s first week — management approach?',opts:['Throw them in deep end','Buddy system with experienced cook, close observation','Leave them alone','Only BOH tasks'],ans:1},
+    {q:'What temp ranges keep kitchen food safe?',opts:['40°F or below for cold, 165°F+ for hot','Whatever it comes out at','Estimate by feel','Chef\'s judgment'],ans:0},
+    {q:'Ordering par levels are for?',opts:['Looking professional','Maintaining consistent stock to prevent 86\'s and waste','Health inspection','Accounting only'],ans:1},
+    {q:'Staff meal policy decision — you?',opts:['No staff meals allowed','Reasonable staff meal from available items, documented','Anything goes','No policy needed'],ans:1},
+    {q:'Fire someone vs. coach — decision framework?',opts:['Fire fast','Document issues, coach twice with specifics, then escalate','Ignore it','Transfer them'],ans:1},
+    {q:'Guest allergy complaint after eating — you?',opts:['Apologize and move on','Document immediately, notify manager, offer medical help, preserve dish for investigation','Deny responsibility','Blame the server'],ans:1}
+  ]}
 };
 
-const SHIFT_HOURS = {
-  weekday:{opening:7,full:7,closing:7,split:5},
-  weekend:{opening:7,full:7,closing:7,split:5}
+// -------- EVAL CRITERIA --------
+const EVAL_CRITERIA = {
+  'Server':['Guest greeting','Menu knowledge','Order accuracy','Table timing','Handling challenges','Toast proficiency','Overall hospitality'],
+  'Barista':['Drink accuracy','Speed','Bar cleanliness','Guest interaction','Equipment handling','Drink consistency'],
+  'Runner':['Delivery accuracy','Expo communication','Speed','Guest interaction','Composure under pressure'],
+  'Busser':['Reset speed','Reset quality','Server communication','Floor awareness','Guest service moments'],
+  'Line Cook':['Mise en place','Ticket speed','Consistency','Kitchen communication','Cleanliness'],
+  'Expo':['Ticket accuracy','Plate presentation','FOH/BOH communication','Rush management','Problem solving'],
+  'Head Chef':['Kitchen leadership','Food quality consistency','Team development','Cost awareness','Health/safety standards','Service recovery']
 };
 
-function dayType(d){return(d>=5)?'weekend':'weekday'}
-
-// ==================== AVAILABILITY DATA ====================
-// Index 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
-// Values: 'ALL' | 'AM' | 'PM' | '—' | '✗'
-const AVAILABILITY = {
-  // FOH
-  3:  ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Nickolaus Gonzales
-  4:  ['ALL','ALL','ALL','AM','AM','AM','PM'],      // Gabriel Heater
-  5:  ['ALL','ALL','AM','ALL','ALL','PM','AM'],     // Hope Allan
-  6:  ['AM','AM','—','AM','AM','—','—'],            // Chantel Reyes
-  7:  ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Sophia Lomeli
-  8:  ['—','AM','AM','AM','—','AM','AM'],           // Catherine Tran
-  9:  ['—','PM','—','—','AM','—','AM'],             // Jillian Penera
-  10: ['AM','AM','AM','AM','AM','AM','PM'],         // Alana Aguilar
-  11: ['PM','PM','PM','PM','PM','PM','PM'],         // Sierra Sharpless
-  12: ['AM','AM','AM','AM','AM','AM','—'],          // Alice Hahn
-  13: ['AM','AM','AM','AM','AM','AM','—'],          // Dalia Sanchez
-  14: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Jaelynn Lane
-  15: ['PM','PM','PM','PM','AM','AM','AM'],         // Stephanie Delgado
-  16: ['PM','AM','PM','—','PM','PM','AM'],          // Lauren Nguyen
-  17: ['PM','PM','PM','—','AM','ALL','—'],          // Jada Delgado
-  18: ['AM','AM','AM','AM','AM','AM','AM'],         // Laura Renteria
-  19: ['ALL','PM','ALL','ALL','ALL','AM','AM'],     // Kiana Meno
-  20: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Sarah Ramirez
-  21: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Yash Patel
-  22: ['AM','AM','AM','AM','AM','ALL','ALL'],       // Daniel Flores
-  23: ['AM','AM','AM','—','—','—','AM'],            // Isabella Rodriguez
-  // BOH
-  24: ['PM','PM','PM','PM','PM','ALL','ALL'],       // James Clark
-  25: ['—','—','PM','—','—','AM','AM'],             // Bryce Machado
-  26: ['✗','✗','✗','✗','✗','ALL','AM'],            // Eduardo Santos
-  27: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Jessica Gomez
-  28: ['AM','AM','AM','AM','AM','AM','AM'],         // Ashley Lazcano
-  29: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Rebekah Snyder
-  30: ['—','AM','AM','—','ALL','ALL','ALL'],        // Jubilee Xieu
-  31: ['AM','—','—','—','AM','AM','AM'],            // Janet Delgado
-  32: ['ALL','ALL','ALL','ALL','ALL','AM','AM'],    // Josue Irineo
-  33: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Isaac Cho
-  34: ['AM','AM','AM','AM','AM','AM','AM'],         // Jesus Alarcon
-  35: ['PM','PM','PM','PM','PM','AM','AM'],         // Viviana Sanchez
-  36: ['ALL','ALL','ALL','ALL','ALL','ALL','ALL'],  // Graciela Arias
-  37: ['PM','PM','PM','PM','PM','PM','PM'],         // Gian Gabriel Guillermo
-  38: ['PM','PM','PM','—','ALL','—','PM'],          // Miguel Salas
-};
-
-function getAvailStatus(staffId, dayIdx) {
-  const av = AVAILABILITY[staffId];
-  if (!av) return 'ALL';
-  return av[dayIdx] || 'ALL';
-}
-
-function availClass(val) {
-  if (val === 'ALL') return 'avail-ALL';
-  if (val === 'AM') return 'avail-AM';
-  if (val === 'PM') return 'avail-PM';
-  if (val === '✗') return 'avail-x';
-  return 'avail-dash';
-}
-
-function availLabel(val) {
-  return val === '—' ? '—' : val;
-}
-
-// ==================== STORAGE ====================
-function load(k,def){try{const v=localStorage.getItem('sis_'+k);return v?JSON.parse(v):def}catch(e){return def}}
-function save(k,v){localStorage.setItem('sis_'+k,JSON.stringify(v))}
-
-// ==================== SEED DATA ====================
+// -------- SEED STAFF --------
 const SEED_STAFF = [
   {id:1,first:'Hailey',last:'Salamanca',nick:'Hailey',phone:'',email:'hailey@domokuncafe.com',role:'GM',dept:'MGMT',type:'salary',rate:99800,start:'2026-06-01',status:'active',foodHandler:'Active'},
   {id:2,first:'TBD',last:'Head Chef',nick:'Chef',phone:'',email:'',role:'Head Chef',dept:'BOH',type:'salary',rate:92100,start:'2026-06-13',status:'active',foodHandler:'Active'},
@@ -1025,775 +746,819 @@ const SEED_STAFF = [
   {id:38,first:'Miguel',last:'Salas',nick:'Miguel',phone:'858-212-6236',email:'Miguelsalas085@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
 ];
 
-let staff = load('staff', null);
-if (!staff) { staff = SEED_STAFF; save('staff', staff); }
+// ============================================================
+// STORAGE HELPERS
+// ============================================================
+function load(k,def){try{const v=localStorage.getItem('sis_'+k);return v?JSON.parse(v):def}catch(e){return def}}
+function save(k,v){localStorage.setItem('sis_'+k,JSON.stringify(v))}
+
+let staff = load('staff',null);
+if(!staff){staff=SEED_STAFF;save('staff',staff);}
 let schedule = load('schedule',{});
 let skills = load('skills',{});
-let floorAssignments = load('floorAssignments',{});
-let nextId = load('nextId', 39);
-let currentAvailFilter = 'all';
+let nextId = load('nextId',39);
+let certLevels = load('certLevels',{});    // {staffId_role: 0-4}
+let quizResults = load('quizResults',{});  // {staffId_role: {score,total,passed,date}}
+let evalResults = load('evalResults',{});  // {staffId_role: {avg,passed,notes,date,evalBy}}
+let certLog = load('certLog',[]);          // [{date,staffId,staffName,role,level}]
 
-// ==================== LOGIN ====================
-function doLogin(){
-  const pw = document.getElementById('pwInput').value;
-  if(pw===APP_PW){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('app').style.display='block';
-    initApp();
-  } else {
-    document.getElementById('loginErr').style.display='block';
+// ============================================================
+// SHA-256
+// ============================================================
+async function sha256(msg){
+  const buf = new TextEncoder().encode(msg);
+  const hb = await crypto.subtle.digest('SHA-256',buf);
+  return Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ============================================================
+// AUTH SYSTEM
+// ============================================================
+let currentUser = null; // {id, username, role, staffId, displayName}
+let pendingUserId = null; // for first-login pw change
+
+function loadUsers(){return load('users',[]);}
+function saveUsers(u){save('users',u);}
+
+async function ensureAdminUser(){
+  let users = loadUsers();
+  if(!users.find(u=>u.username==='admin')){
+    const h = await sha256('Domo@2026');
+    users.push({id:'admin',username:'admin',passwordHash:h,role:'admin',staffId:null,displayName:'Izzy (Admin)',disabled:false,firstLogin:false,lastLogin:null});
+    saveUsers(users);
   }
 }
-function doLogout(){
-  document.getElementById('app').style.display='none';
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('pwInput').value='';
+
+async function doLogin(){
+  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+  if(!username||!password){showLoginErr('Enter username and password');return;}
+  const hash = await sha256(password);
+  const users = loadUsers();
+  const user = users.find(u=>u.username===username&&u.passwordHash===hash&&!u.disabled);
+  if(!user){showLoginErr('Invalid username or password');return;}
+  // Update last login
+  user.lastLogin = new Date().toISOString();
+  saveUsers(users);
+  if(user.firstLogin){
+    pendingUserId = user.id;
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('pwChangeScreen').style.display='flex';
+    return;
+  }
+  startSession(user);
 }
 
-// ==================== APP INIT ====================
-function initApp(){
-  const now = new Date();
-  document.getElementById('topDate').textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-  document.getElementById('todayLabel').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+function showLoginErr(msg){
+  const el=document.getElementById('loginErr');
+  el.textContent=msg;
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none',3000);
+}
+
+async function submitPwChange(){
+  const pw1=document.getElementById('newPw1').value;
+  const pw2=document.getElementById('newPw2').value;
+  const errEl=document.getElementById('pwChangeErr');
+  if(pw1.length<8){errEl.textContent='Min 8 characters';errEl.style.display='block';return;}
+  if(pw1!==pw2){errEl.textContent='Passwords do not match';errEl.style.display='block';return;}
+  const hash=await sha256(pw1);
+  const users=loadUsers();
+  const user=users.find(u=>u.id===pendingUserId);
+  if(!user)return;
+  user.passwordHash=hash;
+  user.firstLogin=false;
+  user.lastLogin=new Date().toISOString();
+  saveUsers(users);
+  document.getElementById('pwChangeScreen').style.display='none';
+  startSession(user);
+}
+
+function startSession(user){
+  const session={userId:user.id,username:user.username,role:user.role,staffId:user.staffId,displayName:user.displayName,loginTime:Date.now()};
+  save('session',session);
+  currentUser=session;
+  showApp();
+}
+
+function checkSession(){
+  const s=load('session',null);
+  if(!s)return false;
+  if(Date.now()-s.loginTime>8*60*60*1000){save('session',null);return false;}
+  currentUser=s;
+  return true;
+}
+
+function doLogout(){
+  save('session',null);
+  currentUser=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginUsername').value='';
+  document.getElementById('loginPassword').value='';
+  document.getElementById('loginErr').style.display='none';
+}
+
+// ============================================================
+// APP INIT
+// ============================================================
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('pwChangeScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  const now=new Date();
+  document.getElementById('topDate').textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  document.getElementById('todayLabel').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('topUserBadge').innerHTML=`${currentUser.displayName||currentUser.username} <span class="badge badge-${currentUser.role}" style="margin-left:4px">${currentUser.role}</span>`;
+  renderNavTabs();
   populateWeekSelect();
-  populateFloorDateSelect();
-  renderAll();
+  const firstTab=getTabsForRole(currentUser.role)[0];
+  if(firstTab)showTab(firstTab.id,null,true);
+  checkNewCertNotifications();
+}
+
+function getTabsForRole(role){
+  if(role==='admin') return [
+    {id:'dashboard',label:'📊 Dashboard'},
+    {id:'staff',label:'👥 Staff Directory'},
+    {id:'schedule',label:'📅 Schedule Builder'},
+    {id:'skills',label:'🎯 Skill Matrix'},
+    {id:'optimizer',label:'⚡ Labor Optimizer'},
+    {id:'users',label:'👤 Users'},
+    {id:'certifications',label:'🏆 Certifications'},
+  ];
+  if(role==='manager') return [
+    {id:'dashboard',label:'📊 Dashboard'},
+    {id:'staff',label:'👥 Staff Directory'},
+    {id:'schedule',label:'📅 Schedule Builder'},
+    {id:'skills',label:'🎯 Skill Matrix'},
+    {id:'optimizer',label:'⚡ Labor Optimizer'},
+    {id:'certifications',label:'🏆 Certifications'},
+  ];
+  // staff
+  return [
+    {id:'myprofile',label:'👤 My Profile'},
+    {id:'myschedule',label:'📅 My Schedule'},
+    {id:'mycertifications',label:'🏆 My Certifications'},
+  ];
+}
+
+function renderNavTabs(){
+  const tabs=getTabsForRole(currentUser.role);
+  document.getElementById('navTabs').innerHTML=tabs.map(t=>`<button class="tab-btn" id="navbtn-${t.id}" onclick="showTab('${t.id}',event)">${t.label}</button>`).join('');
+}
+
+function showTab(id,event,skipActive){
+  if(!skipActive){
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  }
+  const el=document.getElementById('tab-'+id);
+  if(el)el.classList.add('active');
+  const btn=document.getElementById('navbtn-'+id);
+  if(btn)btn.classList.add('active');
+  if(id==='dashboard')recalcDashboard();
+  if(id==='optimizer')runOptimizer();
+  if(id==='users')renderUsersTable();
+  if(id==='certifications')renderCertifications();
+  if(id==='skills')renderSkillMatrix();
+  if(id==='staff')renderStaffTable();
+  if(id==='schedule')renderSchedule();
+  if(id==='myprofile')renderMyProfile();
+  if(id==='myschedule')renderMySchedule();
+  if(id==='mycertifications')renderMyCertifications();
 }
 
 function renderAll(){
   renderStaffTable();
-  renderDashboard();
+  recalcDashboard();
   renderSchedule();
   renderSkillMatrix();
-  renderOptimizer();
-  renderFloorMap();
-  renderAvailability();
+  runOptimizer();
 }
 
-// ==================== TABS ====================
-function showTab(id, btn){
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
-  if(id==='dashboard') recalcDashboard();
-  if(id==='optimizer') runOptimizer();
-  if(id==='floormap') renderFloorMap();
-  if(id==='availability') renderAvailability();
+// ============================================================
+// USERS TAB
+// ============================================================
+function generateUsername(s){
+  return s.first.toLowerCase().replace(/\s+/g,'').replace(/[^a-z]/g,'')+s.last.charAt(0).toLowerCase();
 }
 
-// ==================== STAFF ====================
-function renderStaffTable(){
-  const tbody = document.getElementById('staffTableBody');
-  const noCard = staff.filter(s=>s.foodHandler==='No card'&&s.status==='active').length;
-  const renew = staff.filter(s=>s.foodHandler==='Renew soon'&&s.status==='active').length;
-  const alertEl = document.getElementById('staffAlert');
-  if(alertEl){
-    let alerts=[];
-    if(noCard>0) alerts.push(`🚨 ${noCard} staff with no food handler card`);
-    if(renew>0) alerts.push(`⚠️ ${renew} staff need to renew soon`);
-    const ghost = staff.filter(s=>s.status==='training'&&s.id===12);
-    if(ghost.length) alerts.push('👻 Alice Hahn — zero training attendance, needs follow-up');
-    alertEl.innerHTML = alerts.length ? alerts.map(a=>`<div class="alert ${a.startsWith('🚨')?'alert-danger':a.startsWith('⚠️')?'alert-warn':'alert-warn'}" style="margin-bottom:6px">${a}</div>`).join('') : '';
+async function initAllStaff(){
+  if(!confirm('Create accounts for all 38 staff? Existing accounts will be skipped.'))return;
+  let users=loadUsers();
+  const defaultHash=await sha256('Domo2026!');
+  const creds=[];
+  for(const s of staff){
+    const uname=generateUsername(s);
+    if(users.find(u=>u.username===uname))continue;
+    let role='staff';
+    if(s.role==='GM')role='manager';
+    if(s.role==='Head Chef')role='manager';
+    const newUser={
+      id:'u_'+Date.now()+'_'+s.id,
+      username:uname,
+      passwordHash:defaultHash,
+      role,
+      staffId:s.id,
+      displayName:`${s.first} ${s.last}`,
+      disabled:false,
+      firstLogin:true,
+      lastLogin:null
+    };
+    users.push(newUser);
+    creds.push({name:`${s.first} ${s.last}`,username:uname,password:'Domo2026!',role});
   }
-  tbody.innerHTML = staff.map(s=>{
-    const deptBadge = s.dept==='FOH'?'badge-foh':s.dept==='BOH'?'badge-boh':'badge-mgmt';
-    const rateStr = s.type==='salary'?'$'+s.rate.toLocaleString()+'/yr':'$'+s.rate.toFixed(2)+'/hr';
-    const fhBadge = FOOD_HANDLER_BADGE[s.foodHandler||'—']||FOOD_HANDLER_BADGE['—'];
-    return `<tr>
-      <td><strong>${s.first} ${s.last}</strong>${s.nick&&s.nick!==s.first?`<br><span style="font-size:11px;color:var(--muted)">Goes by: ${s.nick}</span>`:''}</td>
-      <td><span class="badge ${deptBadge}">${s.dept||'—'}</span> <span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
-      <td class="font-mono" style="font-size:11px">${s.phone||'—'}</td>
-      <td style="font-size:11px">${s.email||'—'}</td>
-      <td class="font-mono">${rateStr}</td>
-      <td>${fhBadge}</td>
-      <td><span class="badge ${s.status==='active'?'badge-l3':s.status==='training'?'badge-l1':'badge-l0'}">${s.status}</span></td>
-      <td><button class="btn btn-outline btn-sm" onclick="editStaff(${s.id})">Edit</button>
-          <button class="btn btn-sm" style="background:#FEE2E2;color:#991B1B;margin-left:4px" onclick="removeStaff(${s.id})">✕</button></td>
-    </tr>`;
-  }).join('');
-  const foh = staff.filter(s=>s.dept==='FOH'&&s.status==='active').length;
-  const boh = staff.filter(s=>s.dept==='BOH'&&s.status==='active').length;
-  document.getElementById('dir-total').textContent = staff.filter(s=>s.status==='active').length;
-  document.getElementById('dir-foh').textContent = foh;
-  document.getElementById('dir-boh').textContent = boh;
-}
-
-function openAddStaff(prefill=null){
-  document.getElementById('staffModalTitle').textContent = prefill?'Edit Staff Member':'Add Staff Member';
-  document.getElementById('sf-first').value = prefill?.first||'';
-  document.getElementById('sf-last').value = prefill?.last||'';
-  document.getElementById('sf-nick').value = prefill?.nick||'';
-  document.getElementById('sf-phone').value = prefill?.phone||'';
-  document.getElementById('sf-email').value = prefill?.email||'';
-  document.getElementById('sf-dept').value = prefill?.dept||'FOH';
-  document.getElementById('sf-role').value = prefill?.role||'Server';
-  document.getElementById('sf-type').value = prefill?.type||'hourly';
-  document.getElementById('sf-rate').value = prefill?.rate||DEFAULT_RATES['Server'];
-  document.getElementById('sf-start').value = prefill?.start||'';
-  document.getElementById('sf-status').value = prefill?.status||'active';
-  document.getElementById('sf-foodhandler').value = prefill?.foodHandler||'Active';
-  document.getElementById('addStaffModal')._editId = prefill?.id||null;
-  openModal('addStaffModal');
-}
-function editStaff(id){ openAddStaff(staff.find(s=>s.id===id)); }
-
-function saveStaff(){
-  const editId = document.getElementById('addStaffModal')._editId;
-  const entry = {
-    id: editId||nextId++,
-    first: document.getElementById('sf-first').value.trim(),
-    last: document.getElementById('sf-last').value.trim(),
-    nick: document.getElementById('sf-nick').value.trim(),
-    phone: document.getElementById('sf-phone').value.trim(),
-    email: document.getElementById('sf-email').value.trim(),
-    dept: document.getElementById('sf-dept').value,
-    role: document.getElementById('sf-role').value,
-    type: document.getElementById('sf-type').value,
-    rate: parseFloat(document.getElementById('sf-rate').value)||0,
-    start: document.getElementById('sf-start').value,
-    status: document.getElementById('sf-status').value,
-    foodHandler: document.getElementById('sf-foodhandler').value
-  };
-  if(!entry.first){alert('Name required');return}
-  if(editId) staff = staff.map(s=>s.id===editId?entry:s);
-  else staff.push(entry);
-  save('staff',staff);
-  save('nextId',nextId);
-  closeModal('addStaffModal');
-  renderAll();
-}
-
-function removeStaff(id){
-  if(!confirm('Remove this staff member?'))return;
-  staff = staff.filter(s=>s.id!==id);
-  save('staff',staff);
-  renderAll();
-}
-
-// ==================== DASHBOARD ====================
-function recalcDashboard(){
-  const today = new Date();
-  const dow = today.getDay()===0?6:today.getDay()-1;
-  const weekKey = getWeekKey(today);
-  const isWeekend = dow>=5;
-  const hrs = SHIFT_HOURS[isWeekend?'weekend':'weekday'];
-  let laborCost = 0;
-  let staffToday = [];
-
-  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
-  groupedRoles.forEach(role=>{
-    const ck = weekKey+'_d'+dow+'_'+role;
-    (schedule[ck]||[]).forEach(entry=>{
-      const s = staff.find(x=>x.id===entry.staffId);
-      if(!s||s.type==='salary')return;
-      const h = hrs[entry.shiftType]||hrs.full;
-      const cost = s.rate*h;
-      laborCost += cost;
-      staffToday.push({...s, shiftType:entry.shiftType, hours:h, cost});
-    });
-  });
-
-  const projSales = parseFloat(document.getElementById('projSales').value)||0;
-  const laborPct = projSales>0?(laborCost/projSales)*100:0;
-  const salesFor30 = laborCost>0?(laborCost/0.30):0;
-
-  document.getElementById('dash-staff-today').textContent = staffToday.length;
-  document.getElementById('dash-labor-cost').textContent = '$'+laborCost.toFixed(0);
-
-  const pctEl = document.getElementById('dash-labor-pct');
-  pctEl.textContent = laborPct.toFixed(1)+'%';
-  pctEl.className = 'kpi-val '+(laborPct<=30?'green':laborPct<=35?'warn':'red');
-  document.getElementById('dash-sales-needed').textContent = '$'+salesFor30.toLocaleString('en-US',{maximumFractionDigits:0});
-  document.getElementById('dash-labor-target').textContent = laborPct<=30?'✅ On target':laborPct<=35?'⚠️ Watch closely':'🚨 Over target';
-
-  const fill = Math.min(100,(laborPct/50)*100);
-  const fillEl = document.getElementById('prog-fill');
-  fillEl.style.width = fill+'%';
-  fillEl.style.background = laborPct<=30?'var(--success)':laborPct<=35?'var(--warn)':'var(--danger)';
-  document.getElementById('prog-pct-label').textContent = laborPct.toFixed(1)+'%';
-
-  const alertEl = document.getElementById('laborAlert');
-  if(laborPct>35) alertEl.innerHTML = `<div class="alert alert-danger">🚨 Labor at ${laborPct.toFixed(1)}% — $${(laborCost-projSales*0.30).toFixed(0)} over budget. Consider reducing crew by 1–2 staff.</div>`;
-  else if(laborPct>30) alertEl.innerHTML = `<div class="alert alert-warn">⚠️ Labor at ${laborPct.toFixed(1)}% — slightly over 30% target. Monitor closely.</div>`;
-  else if(projSales>0) alertEl.innerHTML = `<div class="alert alert-success">✅ Labor at ${laborPct.toFixed(1)}% — within 30% target. $${(projSales*0.30-laborCost).toFixed(0)} headroom.</div>`;
-  else alertEl.innerHTML='';
-
-  document.getElementById('todayBody').innerHTML = staffToday.map(s=>`
-    <tr><td>${s.first} ${s.last}</td>
-    <td><span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}">${s.role}</span></td>
-    <td><span class="badge ${s.shiftType==='opening'?'badge-l3':s.shiftType==='closing'?'badge-l1':'badge-l2'}">${s.shiftType}</span></td>
-    <td class="font-mono">${s.hours.toFixed(1)}h</td>
-    <td class="font-mono">$${s.cost.toFixed(2)}</td></tr>
-  `).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No shifts scheduled today</td></tr>';
-
-  let weekTotal=0;
-  for(let d=0;d<7;d++){
-    const isW=d>=5;
-    const hs=SHIFT_HOURS[isW?'weekend':'weekday'];
-    const groupedR=[...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
-    groupedR.forEach(role=>{
-      const ck=weekKey+'_d'+d+'_'+role;
-      (schedule[ck]||[]).forEach(e=>{
-        const s=staff.find(x=>x.id===e.staffId);
-        if(!s||s.type==='salary')return;
-        weekTotal+=s.rate*(hs[e.shiftType]||hs.full);
-      });
-    });
-  }
-  document.getElementById('weekSummary').innerHTML = `
-    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Total hourly labor this week</span><span class="font-mono font-bold">$${weekTotal.toFixed(0)}</span></div>
-    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Head Chef (salary, weekly)</span><span class="font-mono">$1,771</span></div>
-    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>GM (salary, weekly)</span><span class="font-mono">$1,919</span></div>
-    <div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:700"><span>Total est. weekly labor</span><span class="font-mono">$${(weekTotal+1771+1919).toFixed(0)}</span></div>
+  saveUsers(users);
+  renderUsersTable();
+  // Show printable cred list
+  document.getElementById('credListBody').innerHTML=`
+    <div style="margin-bottom:12px;font-size:13px"><strong>Default Password: Domo2026!</strong> — Staff must change on first login.</div>
+    <table style="font-size:12px;width:100%"><thead><tr><th>Name</th><th>Username</th><th>Password</th><th>Role</th></tr></thead>
+    <tbody>${creds.map(c=>`<tr><td>${c.name}</td><td class="font-mono">${c.username}</td><td class="font-mono">${c.password}</td><td>${c.role}</td></tr>`).join('')}</tbody></table>
+    ${creds.length===0?'<div style="color:var(--muted);font-size:13px">All staff accounts already exist.</div>':''}
   `;
-}
-function renderDashboard(){ recalcDashboard(); }
-
-// ==================== SCHEDULE ====================
-function getWeekKey(date){
-  const d = new Date(date);
-  const day = d.getDay()===0?6:d.getDay()-1;
-  d.setDate(d.getDate()-day);
-  return d.toISOString().split('T')[0];
+  openModal('credListModal');
 }
 
-function populateWeekSelect(){
-  const sel = document.getElementById('schedWeekOf');
-  sel.innerHTML='';
-  const today = new Date();
-  for(let w=-1;w<=4;w++){
-    const d = new Date(today);
-    d.setDate(d.getDate()-((d.getDay()===0?6:d.getDay()-1))+w*7);
-    const key = d.toISOString().split('T')[0];
-    const label = 'Week of '+d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    const opt = document.createElement('option');
-    opt.value=key; opt.textContent=label;
-    if(w===0)opt.selected=true;
-    sel.appendChild(opt);
-  }
-}
-
-// Calculate weekly hours for a staff member in a given week
-function getWeeklyHours(staffId, weekKey) {
-  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
-  let total = 0;
-  for(let d=0;d<7;d++){
-    const isW=d>=5;
-    const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];
-    groupedRoles.forEach(role=>{
-      const ck=weekKey+'_d'+d+'_'+role;
-      (schedule[ck]||[]).forEach(e=>{
-        if(e.staffId===staffId) total+=(hrs[e.shiftType]||hrs.full);
-      });
-    });
-  }
-  return total;
-}
-
-let currentShiftCell = null;
-
-function renderSchedule(){
-  const weekKey = document.getElementById('schedWeekOf').value;
-  const grid = document.getElementById('schedGrid');
-  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
-
-  let html = '<div></div>';
-  DAYS.forEach(d=>{ html+=`<div class="sch-header">${d}</div>`; });
-
-  groupedRoles.forEach(role=>{
-    const typeBadge = ROLES_FOH.includes(role)?'badge-foh':ROLES_BOH.includes(role)?'badge-boh':'badge-consultant';
-    html+=`<div class="sch-role"><span class="badge ${typeBadge}" style="font-size:10px">${role}</span></div>`;
-    DAYS.forEach((d,di)=>{
-      const cellKey = weekKey+'_d'+di+'_'+role;
-      const cellShifts = schedule[cellKey]||[];
-      const filled = cellShifts.length>0;
-      html+=`<div class="sch-cell ${filled?'filled':''}" onclick="openShiftModal('${weekKey}','${di}','${role}')">`;
-      cellShifts.forEach(e=>{
-        const s = staff.find(x=>x.id===e.staffId);
-        if(s) html+=`<div class="shift-chip ${e.shiftType==='closing'?'closing':e.shiftType==='opening'?'opening':''}">${s.first}<br><span style="font-size:8px;opacity:0.8">${e.shiftType.charAt(0).toUpperCase()}</span></div>`;
-      });
-      html+='</div>';
-    });
-  });
-
-  grid.innerHTML=html;
-
-  // Summary
-  const staffHours = {};
-  staff.filter(s=>s.type!=='salary').forEach(s=>{
-    staffHours[s.id]={name:`${s.first} ${s.last}`,role:s.role,rate:s.rate,hours:[0,0,0,0,0,0,0]};
-  });
-
-  for(let d=0;d<7;d++){
-    const isW=d>=5;
-    const hrs=SHIFT_HOURS[isW?'weekend':'weekday'];
-    groupedRoles.forEach(role=>{
-      const ck=weekKey+'_d'+d+'_'+role;
-      (schedule[ck]||[]).forEach(e=>{
-        if(staffHours[e.staffId]) staffHours[e.staffId].hours[d]+=(hrs[e.shiftType]||hrs.full);
-      });
-    });
-  }
-
-  let weekCost=0;
-  let otWarnings=[];
-  const rows = Object.values(staffHours).map(sh=>{
-    const totalH=sh.hours.reduce((a,b)=>a+b,0);
-    const cost=totalH*sh.rate;
-    weekCost+=cost;
-    const daysWorked=sh.hours.filter(h=>h>0).length;
-    const overWeek=totalH>OT_RULES.maxWeeklyHours;
-    const overDay=sh.hours.some(h=>h>OT_RULES.maxShiftHours);
-    const overDays=daysWorked>OT_RULES.maxConsecutiveDays;
-    if(overWeek) otWarnings.push(`🚨 ${sh.name}: ${totalH}h this week (max 40h)`);
-    if(overDay) otWarnings.push(`⚠️ ${sh.name}: shift over 7h on at least one day`);
-    if(overDays) otWarnings.push(`⚠️ ${sh.name}: ${daysWorked} days this week (max 6 consecutive)`);
-    return `<tr style="${overWeek||overDay?'background:#FEF2F2':''}"><td>${sh.name}${overWeek?'<span style="color:var(--danger);font-size:10px;margin-left:4px">⚠ OT</span>':''}</td><td><span class="badge ${ROLES_FOH.includes(sh.role)?'badge-foh':'badge-boh'}">${sh.role}</span></td>
-      ${sh.hours.map(h=>`<td class="font-mono" style="text-align:center;${h>OT_RULES.maxShiftHours?'color:var(--danger);font-weight:700':''}">${h>0?h+'h':'—'}</td>`).join('')}
-      <td class="font-mono" style="${overWeek?'color:var(--danger);font-weight:700':''}">${totalH}h</td>
-      <td class="font-mono">$${cost.toFixed(0)}</td></tr>`;
-  });
-  const otEl=document.getElementById('schedOTWarnings');
-  if(otEl) otEl.innerHTML=otWarnings.length?otWarnings.map(w=>`<div class="alert ${w.startsWith('🚨')?'alert-danger':'alert-warn'}" style="margin-bottom:4px;padding:8px 12px;font-size:12px">${w}</div>`).join(''):'<div class="alert alert-success" style="padding:8px 12px;font-size:12px">✅ No OT violations this week</div>';
-  document.getElementById('schedSummaryBody').innerHTML=rows.join('')||'<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px">No shifts scheduled this week</td></tr>';
-  document.getElementById('sch-week-cost').textContent='$'+weekCost.toFixed(0);
-}
-
-function openShiftModal(weekKey,dayIdx,role){
-  const di = parseInt(dayIdx);
-  currentShiftCell = {weekKey,dayIdx:di,role};
-  const dayName=DAYS[di];
-  document.getElementById('shiftModalTitle').textContent=`${dayName} — ${role}`;
-
-  // Availability note for this day
-  const availNoteEl = document.getElementById('shiftAvailNote');
-  availNoteEl.style.display='block';
-  availNoteEl.innerHTML=`<div class="alert" style="background:#F0F4FF;border:1px solid #BFDBFE;color:#1E3A8A;font-size:12px;padding:8px 12px;margin:0">
-    📅 <strong>${dayName}</strong> — Availability badges shown next to each staff name. Check budget column (hrs remaining this week).
-  </div>`;
-
-  const roleStaff = staff.filter(s=>s.status==='active'&&s.type!=='salary');
-  const cellKey=weekKey+'_d'+di+'_'+role;
-  const existing=(schedule[cellKey]||[]).map(e=>e.staffId);
-
-  // Calculate weekly hours for each staff member
-  const staffWeeklyHrs = {};
-  roleStaff.forEach(s=>{
-    staffWeeklyHrs[s.id] = getWeeklyHours(s.id, weekKey);
-  });
-
-  document.getElementById('shiftStaffList').innerHTML=`
-    <div class="card-title" style="margin-bottom:8px">Select Staff</div>
-    ${roleStaff.map(s=>{
-      const av = getAvailStatus(s.id, di);
-      let avBadge = '';
-      if(av==='✗') avBadge=`<span class="avail-badge avail-badge-danger">✗ unavailable</span>`;
-      else if(av==='—') avBadge=`<span class="avail-badge avail-badge-warn">— limited</span>`;
-      else if(av==='AM') avBadge=`<span class="avail-badge" style="background:#DBEAFE;color:#1E40AF">AM only</span>`;
-      else if(av==='PM') avBadge=`<span class="avail-badge" style="background:#FEF3C7;color:#92400E">PM only</span>`;
-      else avBadge=`<span class="avail-badge avail-badge-ok">✓ all day</span>`;
-
-      const weekHrs = staffWeeklyHrs[s.id]||0;
-      const shiftH = 7;
-      const remaining = OT_RULES.maxWeeklyHours - weekHrs;
-      const wouldExceed = (weekHrs + shiftH) > OT_RULES.maxWeeklyHours;
-      const hrsLabel = `<span class="hours-remaining ${wouldExceed?'hours-over':''}">${remaining}h left</span>`;
-
-      return `
-        <label style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid ${existing.includes(s.id)?'var(--brown)':'var(--border)'}">
-          <input type="checkbox" value="${s.id}" ${existing.includes(s.id)?'checked':''} style="accent-color:var(--brown)">
-          <span style="font-size:13px;font-weight:600;flex:1">${s.first} ${s.last}</span>
-          ${avBadge}
-          <span class="badge ${ROLES_FOH.includes(s.role)?'badge-foh':'badge-boh'}" style="font-size:10px">${s.role}</span>
-          ${hrsLabel}
-        </label>
-      `;
-    }).join('')||'<div style="color:var(--muted);font-size:13px;padding:12px">No active staff</div>'}
-  `;
-  const existing0=schedule[cellKey];
-  if(existing0&&existing0[0]) document.getElementById('shiftType').value=existing0[0].shiftType||'full';
-  openModal('shiftModal');
-}
-
-function saveShiftCell(){
-  if(!currentShiftCell)return;
-  const {weekKey,dayIdx,role}=currentShiftCell;
-  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
-  const checked=[...document.querySelectorAll('#shiftStaffList input[type=checkbox]:checked')].map(c=>parseInt(c.value));
-  const shiftType=document.getElementById('shiftType').value;
-  schedule[cellKey]=checked.map(id=>({staffId:id,shiftType}));
-  save('schedule',schedule);
-  closeModal('shiftModal');
-  renderSchedule();
-  recalcDashboard();
-}
-
-function clearShiftCell(){
-  if(!currentShiftCell)return;
-  const {weekKey,dayIdx,role}=currentShiftCell;
-  const cellKey=weekKey+'_d'+dayIdx+'_'+role;
-  delete schedule[cellKey];
-  save('schedule',schedule);
-  closeModal('shiftModal');
-  renderSchedule();
-}
-
-function clearWeekSchedule(){
-  if(!confirm('Clear all shifts for this week?'))return;
-  const weekKey=document.getElementById('schedWeekOf').value;
-  Object.keys(schedule).filter(k=>k.startsWith(weekKey)).forEach(k=>delete schedule[k]);
-  save('schedule',schedule);
-  renderSchedule();
-}
-
-// ==================== SKILL MATRIX ====================
-function renderSkillMatrix(){
-  const activeStaff = staff.filter(s=>s.status==='active'&&s.type!=='salary'||s.role==='Head Chef');
-  const tbody = document.getElementById('skillBody');
-  tbody.innerHTML = activeStaff.map(s=>{
-    const sk = skills[s.id]||{};
-    let pinsEarned = 0;
-    const cells = SKILL_ROLES.map(r=>{
-      const lvl = sk[r]||0;
-      if(lvl===3) pinsEarned++;
-      return `<td style="text-align:center"><button class="skill-dot skill-${lvl}" onclick="cycleSkill(${s.id},'${r}')" title="Click to advance">${lvl===0?'—':lvl===1?'T':lvl===2?'C':'★'}</button></td>`;
-    });
-    const readinessPct = Math.round((SKILL_ROLES.reduce((a,r)=>(a+(sk[r]||0)),0)/(SKILL_ROLES.length*3))*100);
-    return `<tr>
-      <td><strong>${s.first} ${s.last}</strong><br><span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
-      ${cells.join('')}
-      <td class="pin-cell"><span style="font-size:14px;font-weight:700;color:var(--brown)">${pinsEarned}</span><span style="font-size:11px;color:var(--muted)"> / ${SKILL_ROLES.length}</span></td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${readinessPct}%;background:${readinessPct>=80?'var(--success)':readinessPct>=50?'var(--warn)':'var(--danger)'}"></div></div>
-          <span class="font-mono" style="font-size:11px">${readinessPct}%</span>
-        </div>
+function renderUsersTable(){
+  const users=loadUsers();
+  const tbody=document.getElementById('usersTableBody');
+  if(!tbody)return;
+  tbody.innerHTML=users.map(u=>{
+    const s=u.staffId?staff.find(x=>x.id===u.staffId):null;
+    const name=u.displayName||(s?`${s.first} ${s.last}`:u.username);
+    const lastLogin=u.lastLogin?new Date(u.lastLogin).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'Never';
+    return`<tr>
+      <td><strong>${name}</strong></td>
+      <td class="font-mono">${u.username}</td>
+      <td><span class="badge badge-${u.role}">${u.role}</span></td>
+      <td class="text-xs">${lastLogin}</td>
+      <td><span class="badge ${u.disabled?'badge-l0':'badge-l3'}">${u.disabled?'Disabled':'Active'}</span></td>
+      <td style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="openEditUserModal('${u.id}')">Edit Role</button>
+        <button class="btn btn-sm" style="background:#EDE9FE;color:#5B21B6" onclick="openResetPw('${u.id}')">Reset PW</button>
+        ${u.username!=='admin'?`<button class="btn btn-sm" style="background:${u.disabled?'#D1FAE5;color:#065F46':'#FEE2E2;color:#991B1B'}" onclick="toggleUserDisabled('${u.id}')">${u.disabled?'Enable':'Disable'}</button>`:''}
       </td>
     </tr>`;
-  }).join('')||'<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px">No active staff yet</td></tr>';
+  }).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No users yet. Click "Initialize All Staff" to create accounts.</td></tr>';
+}
 
-  const pinGrid = document.getElementById('pinGrid');
-  pinGrid.innerHTML = SKILL_ROLES.map(r=>{
-    const earnedCount = activeStaff.filter(s=>(skills[s.id]||{})[r]===3).length;
-    const names = activeStaff.filter(s=>(skills[s.id]||{})[r]===3).map(s=>s.first).join(', ');
-    return `<div class="card" style="text-align:center;padding:16px">
-      <div style="font-size:28px;margin-bottom:8px">${PIN_EMOJIS[r]}</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">${r}</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">${earnedCount} earned</div>
-      ${names?`<div style="font-size:10px;color:var(--brown);margin-top:4px">${names}</div>`:''}
-      <div style="margin-top:8px"><span class="badge ${earnedCount>0?'badge-l3':'badge-l0'}" style="font-size:10px">${earnedCount>0?'🎖 Active':'Locked'}</span></div>
+function openEditUserModal(uid){
+  const users=loadUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u)return;
+  document.getElementById('editUserName').textContent=u.displayName||u.username;
+  document.getElementById('editUserRole').value=u.role;
+  document.getElementById('editUserModal')._uid=uid;
+  openModal('editUserModal');
+}
+
+function submitEditUserRole(){
+  const uid=document.getElementById('editUserModal')._uid;
+  const users=loadUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u)return;
+  u.role=document.getElementById('editUserRole').value;
+  saveUsers(users);
+  closeModal('editUserModal');
+  renderUsersTable();
+}
+
+function openResetPw(uid){
+  const users=loadUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u)return;
+  document.getElementById('resetPwName').textContent=u.displayName||u.username;
+  document.getElementById('resetPwInput').value='';
+  document.getElementById('resetPwModal')._uid=uid;
+  openModal('resetPwModal');
+}
+
+async function submitResetPw(){
+  const uid=document.getElementById('resetPwModal')._uid;
+  const pw=document.getElementById('resetPwInput').value;
+  if(pw.length<6){alert('Password must be at least 6 characters');return;}
+  const hash=await sha256(pw);
+  const users=loadUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u)return;
+  u.passwordHash=hash;
+  u.firstLogin=true;
+  saveUsers(users);
+  closeModal('resetPwModal');
+  showToast('Password reset. User must change on next login.');
+}
+
+function toggleUserDisabled(uid){
+  const users=loadUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u)return;
+  u.disabled=!u.disabled;
+  saveUsers(users);
+  renderUsersTable();
+}
+
+// ============================================================
+// CERTIFICATION SYSTEM
+// ============================================================
+function certKey(staffId,role){return staffId+'_'+role;}
+
+function getCertLevel(staffId,role){return certLevels[certKey(staffId,role)]||0;}
+function setCertLevel(staffId,role,level){
+  certLevels[certKey(staffId,role)]=level;
+  save('certLevels',certLevels);
+}
+
+function renderCertifications(){
+  const filter=document.getElementById('certFilter')?.value||'all';
+  const activeStaff=staff.filter(s=>s.status!=='inactive'&&(filter==='all'||(filter==='FOH'&&s.dept==='FOH')||(filter==='BOH'&&s.dept==='BOH')));
+
+  // Readiness grid
+  const header=document.getElementById('certReadinessHeader');
+  const tbody=document.getElementById('certReadinessBody');
+  header.innerHTML='<th style="text-align:left;min-width:120px">Staff</th>'+CERT_ROLES.map(r=>`<th>${PIN_EMOJIS[r]||''}<br><span style="font-weight:600">${r}</span></th>`).join('');
+  tbody.innerHTML=activeStaff.map(s=>{
+    const deptBadge=s.dept==='FOH'?'badge-foh':s.dept==='BOH'?'badge-boh':'badge-mgmt';
+    return`<tr>
+      <td style="text-align:left"><strong>${s.first} ${s.last}</strong><br><span class="badge ${deptBadge}" style="font-size:9px">${s.role}</span></td>
+      ${CERT_ROLES.map(r=>{
+        const lvl=getCertLevel(s.id,r);
+        const isMyRole=s.role===r||CERT_ROLES.includes(s.role);
+        return`<td><div class="readiness-cell">
+          <span class="cert-dot cert-${lvl}" title="Level ${lvl}: ${['Not Assigned','In Training','Knowledge Cert.','Service Cert.','Expert'][lvl]}">${lvl===0?'—':lvl===1?'T':lvl===2?'K':lvl===3?'✓':'★'}</span>
+          ${lvl===1?`<button class="btn btn-sm" style="font-size:9px;padding:2px 6px;margin-top:2px;background:var(--brown);color:#fff" onclick="setManagerCertLevel(${s.id},'${r}',2,'assign')">Assign L2</button>`:''}
+          ${lvl===0?`<button class="btn btn-sm" style="font-size:9px;padding:2px 6px;margin-top:2px" onclick="assignTraining(${s.id},'${r}')">+ Assign</button>`:''}
+          ${lvl===3?`<button class="btn btn-sm" style="font-size:9px;padding:2px 6px;margin-top:2px;background:#EDE9FE;color:#5B21B6" onclick="setManagerCertLevel(${s.id},'${r}',4,'expert')">→ Expert</button>`:''}
+        </div></td>`;
+      }).join('')}
+    </tr>`;
+  }).join('');
+
+  // Ready for evaluation
+  const readyEl=document.getElementById('readyForEval');
+  const readyList=[];
+  staff.forEach(s=>{
+    CERT_ROLES.forEach(r=>{
+      const lvl=getCertLevel(s.id,r);
+      const qr=quizResults[certKey(s.id,r)];
+      if(lvl===2&&qr&&qr.passed){readyList.push({staff:s,role:r,quizDate:qr.date});}
+    });
+  });
+  readyEl.innerHTML=readyList.length?readyList.map(x=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <strong>${x.staff.first} ${x.staff.last}</strong>
+        <span class="badge badge-l2" style="margin-left:6px">${x.role}</span>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Quiz passed: ${new Date(x.quizDate).toLocaleDateString()}</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openEvalModal(${x.staff.id},'${x.role}')">Evaluate</button>
+    </div>
+  `).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No staff awaiting evaluation</div>';
+
+  // Recent certs
+  const recentEl=document.getElementById('recentCerts');
+  const recent=[...certLog].reverse().slice(0,10);
+  recentEl.innerHTML=recent.length?recent.map(e=>`
+    <div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+      <span style="font-weight:600">${e.staffName}</span>
+      <span class="badge cert-${e.level}" style="margin:0 6px;padding:2px 8px;border-radius:4px;font-size:10px">L${e.level} ${e.role}</span>
+      <span style="color:var(--muted)">${new Date(e.date).toLocaleDateString()}</span>
+    </div>
+  `).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No certifications yet</div>';
+}
+
+function assignTraining(staffId,role){
+  if(!confirm(`Assign ${staff.find(s=>s.id===staffId)?.first} to train in ${role}?`))return;
+  setCertLevel(staffId,role,1);
+  logCert(staffId,role,1,'Training Assigned');
+  renderCertifications();
+  showToast(`Training assigned for ${role}`);
+}
+
+function setManagerCertLevel(staffId,role,level,type){
+  const s=staff.find(x=>x.id===staffId);
+  if(!confirm(`Set ${s?.first} to Level ${level} (${['','In Training','Knowledge Cert.','Service Cert.','Expert'][level]}) for ${role}?`))return;
+  setCertLevel(staffId,role,level);
+  logCert(staffId,role,level,'Manager Set');
+  renderCertifications();
+  showToast(`Level updated to ${level}`);
+}
+
+function logCert(staffId,role,level,type){
+  const s=staff.find(x=>x.id===staffId);
+  certLog.push({date:new Date().toISOString(),staffId,staffName:`${s?.first} ${s?.last}`,role,level,type});
+  save('certLog',certLog);
+}
+
+// -------- EVAL MODAL --------
+let evalState={};
+
+function openEvalModal(staffId,role){
+  // Populate staff dropdown
+  let html='';
+  if(staffId&&role){
+    // Pre-selected
+    evalState={staffId,role};
+    html=buildEvalForm(staffId,role);
+  } else {
+    // Show selectors
+    const awaiting=[];
+    staff.forEach(s=>{
+      CERT_ROLES.forEach(r=>{
+        const lvl=getCertLevel(s.id,r);
+        const qr=quizResults[certKey(s.id,r)];
+        if(lvl===2&&qr&&qr.passed)awaiting.push({staffId:s.id,role:r,name:`${s.first} ${s.last}`});
+      });
+    });
+    html=`
+      <div class="form-group" style="margin-bottom:16px">
+        <label>Select Staff & Role</label>
+        <select id="evalStaffSelect" onchange="updateEvalForm()">
+          <option value="">Select...</option>
+          ${awaiting.map(a=>`<option value="${a.staffId}|${a.role}">${a.name} — ${a.role}</option>`).join('')}
+        </select>
+      </div>
+      <div id="evalFormInner"></div>
+    `;
+  }
+  document.getElementById('evalBody').innerHTML=html;
+  if(staffId&&role){
+    // Render form directly
+    document.getElementById('evalBody').innerHTML=buildEvalForm(staffId,role);
+  }
+  openModal('evalModal');
+}
+
+function updateEvalForm(){
+  const val=document.getElementById('evalStaffSelect').value;
+  if(!val){document.getElementById('evalFormInner').innerHTML='';return;}
+  const [sid,role]=val.split('|');
+  evalState={staffId:parseInt(sid),role};
+  document.getElementById('evalFormInner').innerHTML=buildEvalCriteria(parseInt(sid),role);
+}
+
+function buildEvalForm(staffId,role){
+  const s=staff.find(x=>x.id===staffId);
+  return`<div style="margin-bottom:16px">
+    <strong>${s?.first} ${s?.last}</strong> — <span class="badge badge-l2">${role}</span>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px">Pass threshold: average ≥4.0/5.0 on all criteria</div>
+  </div>
+  ${buildEvalCriteria(staffId,role)}`;
+}
+
+function buildEvalCriteria(staffId,role){
+  const criteria=EVAL_CRITERIA[role]||[];
+  return`<div id="evalCriteriaSection">
+    ${criteria.map((c,i)=>`
+      <div style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:6px">${i+1}. ${c}</div>
+        <div class="star-rating" id="stars_${i}">
+          ${[1,2,3,4,5].map(n=>`<span class="star" data-idx="${i}" data-val="${n}" onclick="setEvalStar(${i},${n})">⭐</span>`).join('')}
+        </div>
+        <input type="hidden" id="evalScore_${i}" value="0">
+      </div>
+    `).join('')}
+    <div class="form-group" style="margin-top:16px">
+      <label>Notes (required if failed)</label>
+      <textarea id="evalNotes" placeholder="Observations, strengths, areas for improvement..."></textarea>
+    </div>
+    <div id="evalResultPreview" style="margin-top:12px;font-size:13px;color:var(--muted)">Rate all criteria to see result preview</div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-outline" onclick="closeModal('evalModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitEval()">Submit Evaluation</button>
+    </div>
+  </div>`;
+}
+
+function setEvalStar(idx,val){
+  document.getElementById('evalScore_'+idx).value=val;
+  const stars=document.querySelectorAll(`#stars_${idx} .star`);
+  stars.forEach((s,i)=>s.classList.toggle('active',i<val));
+  updateEvalPreview();
+}
+
+function updateEvalPreview(){
+  const role=evalState.role;
+  const criteria=EVAL_CRITERIA[role]||[];
+  const scores=criteria.map((_,i)=>parseInt(document.getElementById('evalScore_'+i)?.value||0));
+  const filled=scores.every(s=>s>0);
+  if(!filled){document.getElementById('evalResultPreview').textContent='Rate all criteria to see result preview';return;}
+  const avg=scores.reduce((a,b)=>a+b,0)/scores.length;
+  const passed=avg>=4.0;
+  document.getElementById('evalResultPreview').innerHTML=`
+    <div style="padding:10px;border-radius:8px;background:${passed?'#D1FAE5':'#FEE2E2'};color:${passed?'#065F46':'#991B1B'}">
+      <strong>${passed?'✅ PASS':'❌ FAIL'}</strong> — Average: ${avg.toFixed(2)}/5.0 ${passed?'(≥4.0 required)':'(<4.0 required)'}
+    </div>
+  `;
+}
+
+async function submitEval(){
+  const {staffId,role}=evalState;
+  const criteria=EVAL_CRITERIA[role]||[];
+  const scores=criteria.map((_,i)=>parseInt(document.getElementById('evalScore_'+i)?.value||0));
+  if(scores.some(s=>s===0)){alert('Please rate all criteria');return;}
+  const avg=scores.reduce((a,b)=>a+b,0)/scores.length;
+  const passed=avg>=4.0;
+  const notes=document.getElementById('evalNotes').value;
+  if(!passed&&!notes.trim()){alert('Notes required when evaluation fails');return;}
+  const result={scores,avg,passed,notes,date:new Date().toISOString(),evalBy:currentUser.username};
+  evalResults[certKey(staffId,role)]=result;
+  save('evalResults',evalResults);
+  if(passed){
+    setCertLevel(staffId,role,3);
+    logCert(staffId,role,3,'Service Eval Passed');
+  }
+  closeModal('evalModal');
+  if(passed){
+    launchConfetti();
+    showToast(`🎉 ${staff.find(s=>s.id===staffId)?.first} is now ${role} Certified!`);
+  } else {
+    showToast(`Evaluation submitted — staff needs more practice`);
+  }
+  renderCertifications();
+}
+
+// ============================================================
+// MY CERTIFICATIONS (STAFF VIEW)
+// ============================================================
+function renderMyCertifications(){
+  if(!currentUser||currentUser.role!=='staff'){
+    document.getElementById('myCertContent').innerHTML='<div class="alert alert-warn">Access restricted.</div>';
+    return;
+  }
+  const s=staff.find(x=>x.id===currentUser.staffId);
+  if(!s){document.getElementById('myCertContent').innerHTML='<div class="alert alert-warn">Staff record not found.</div>';return;}
+  const assigned=CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=1);
+  if(assigned.length===0){
+    document.getElementById('myCertContent').innerHTML=`<div class="card"><div style="text-align:center;padding:40px;color:var(--muted)">No roles assigned yet. Check with your manager.</div></div>`;
+    return;
+  }
+  document.getElementById('myCertContent').innerHTML=assigned.map(role=>{
+    const lvl=getCertLevel(s.id,role);
+    const qr=quizResults[certKey(s.id,role)];
+    const er=evalResults[certKey(s.id,role)];
+    const quiz=QUIZZES[role];
+    const canTakeQuiz=lvl===1;
+    const awaitingEval=lvl===2&&qr?.passed;
+    const certified=lvl>=3;
+    const levelLabels=['Not Assigned','In Training','Knowledge Certified','Service Certified','Expert/Trainer'];
+    return`<div class="card mt-16" style="border-left:4px solid ${certified?'var(--success)':lvl===2?'var(--brown)':'var(--border)'}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:18px;font-weight:700;font-family:'Space Grotesk',sans-serif">${PIN_EMOJIS[role]||''} ${role}</div>
+          <span class="badge cert-${lvl}" style="margin-top:6px">${levelLabels[lvl]}</span>
+        </div>
+        ${certified?`<div style="font-size:32px" title="Certified!">🎖</div>`:''}
+      </div>
+      <div class="progress-wrap" style="margin-top:12px">
+        <div class="progress-label"><span>Progress</span><span>Level ${lvl}/4</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${lvl*25}%;background:${lvl>=3?'var(--success)':lvl>=2?'var(--brown)':'var(--warn)'}"></div></div>
+      </div>
+      ${qr?`<div style="font-size:12px;margin-top:8px;color:var(--muted)">Quiz: ${qr.score}/${qr.total} (${qr.passed?'✅ Passed':'❌ Failed'})</div>`:''}
+      ${er&&er.passed?`<div style="font-size:12px;color:var(--success)">Service Eval: ${er.avg.toFixed(2)}/5.0 ✅</div>`:''}
+      ${er&&!er.passed?`<div style="font-size:12px;color:var(--danger)">Service Eval: ${er.avg.toFixed(2)}/5.0 ❌ — ${er.notes}</div>`:''}
+      ${awaitingEval?`<div class="badge badge-l2" style="margin-top:8px;padding:6px 12px">⏳ Awaiting Service Evaluation</div>`:''}
+      ${canTakeQuiz?`<button class="btn btn-primary" style="margin-top:12px" onclick="startQuiz(${s.id},'${role}')">📝 Take Knowledge Quiz (need ${quiz?.passMark}/${quiz?.questions.length})</button>`:''}
+      ${lvl===1&&qr&&!qr.passed?`<div style="margin-top:8px;font-size:12px;color:var(--danger)">Quiz failed (${qr.score}/${qr.total}). Study up and try again!</div><button class="btn btn-outline" style="margin-top:8px" onclick="startQuiz(${s.id},'${role}')">🔄 Retake Quiz</button>`:''}
     </div>`;
   }).join('');
 }
 
-function cycleSkill(staffId,role){
-  if(!skills[staffId])skills[staffId]={};
-  const current=skills[staffId][role]||0;
-  skills[staffId][role]=(current+1)%4;
-  save('skills',skills);
-  renderSkillMatrix();
-}
-
-// ==================== OPTIMIZER ====================
-const OPT_ROLES = [
-  {role:'Server',type:'FOH',rate:16.90},
-  {role:'Barista',type:'FOH',rate:16.90},
-  {role:'Runner',type:'FOH',rate:16.90},
-  {role:'Busser',type:'FOH',rate:16.90},
-  {role:'Line Cook',type:'BOH',rate:18.90},
-  {role:'Expo',type:'BOH',rate:18.90},
-  {role:'Ops Consultant',type:'Mgmt',rate:35.00},
-];
-const OPT_DEFAULTS = {Server:3,Barista:2,Runner:2,Busser:2,'Line Cook':3,Expo:1,'Ops Consultant':1};
-let optCounts = load('optCounts',{...OPT_DEFAULTS});
-
-function renderOptimizer(){
-  const container=document.getElementById('optimizerRoles');
-  container.innerHTML=OPT_ROLES.map(r=>`
-    <div class="optimizer-row">
-      <div>
-        <div class="opt-role">${r.role} <span class="badge ${r.type==='FOH'?'badge-foh':r.type==='BOH'?'badge-boh':'badge-consultant'">${r.type}</span></div>
-        <div class="opt-cost">$${r.rate.toFixed(2)}/hr</div>
-      </div>
-      <div class="opt-count">
-        <button onclick="adjOpt('${r.role}',-1)">−</button>
-        <div class="opt-num" id="opt-cnt-${r.role.replace(/ /g,'-')}">${optCounts[r.role]||0}</div>
-        <button onclick="adjOpt('${r.role}',1)">+</button>
-        <div class="opt-cost" id="opt-cost-${r.role.replace(/ /g,'-')}">$0</div>
-      </div>
-    </div>
-  `).join('');
-  runOptimizer();
-}
-
-function adjOpt(role,delta){
-  optCounts[role]=Math.max(0,(optCounts[role]||0)+delta);
-  save('optCounts',optCounts);
-  runOptimizer();
-}
-
-function runOptimizer(){
-  const sales=parseFloat(document.getElementById('opt-sales')?.value)||0;
-  const target=parseFloat(document.getElementById('opt-target')?.value)||30;
-  const daytype=document.getElementById('opt-daytype')?.value||'weekday';
-  const hrs=SHIFT_HOURS[daytype].full;
-  const budget=sales*(target/100);
-  let totalCost=0;
-  OPT_ROLES.forEach(r=>{
-    const cnt=optCounts[r.role]||0;
-    const cost=cnt*r.rate*hrs;
-    totalCost+=cost;
-    const cntEl=document.getElementById('opt-cnt-'+r.role.replace(/ /g,'-'));
-    const costEl=document.getElementById('opt-cost-'+r.role.replace(/ /g,'-'));
-    if(cntEl)cntEl.textContent=cnt;
-    if(costEl)costEl.textContent='$'+cost.toFixed(0);
-  });
-  const pct=sales>0?(totalCost/sales)*100:0;
-  const variance=budget-totalCost;
-  if(document.getElementById('opt-budget'))document.getElementById('opt-budget').textContent='$'+budget.toFixed(0);
-  if(document.getElementById('opt-current-cost'))document.getElementById('opt-current-cost').textContent='$'+totalCost.toFixed(0);
-  if(document.getElementById('opt-variance')){
-    const vEl=document.getElementById('opt-variance');
-    vEl.textContent=(variance>=0?'+':'')+`$${variance.toFixed(0)}`;
-    vEl.className='font-mono font-bold '+(variance>=0?'green':'red');
-  }
-  if(document.getElementById('opt-actual-pct')){
-    const pEl=document.getElementById('opt-actual-pct');
-    pEl.textContent=pct.toFixed(1)+'%';
-    pEl.className='font-mono font-bold '+(pct<=target?'green':pct<=target+5?'warn':'red');
-  }
-  const fill=Math.min(100,(pct/(target*2))*100);
-  const fillEl=document.getElementById('opt-prog-fill');
-  if(fillEl){fillEl.style.width=fill+'%';fillEl.style.background=pct<=target?'var(--success)':pct<=target+5?'var(--warn)':'var(--danger)';}
-  if(document.getElementById('opt-prog-label'))document.getElementById('opt-prog-label').textContent=pct.toFixed(1)+'% / '+target+'% target';
-}
-
-function autoOptimize(){
-  const sales=parseFloat(document.getElementById('opt-sales').value)||0;
-  const target=parseFloat(document.getElementById('opt-target').value)||30;
-  const daytype=document.getElementById('opt-daytype').value;
-  const hrs=SHIFT_HOURS[daytype].full;
-  const budget=sales*(target/100);
-  const mins={Server:2,Barista:1,Runner:1,Busser:1,'Line Cook':2,Expo:1,'Ops Consultant':0};
-  let counts={...mins};
-  let cost=OPT_ROLES.reduce((a,r)=>a+((counts[r.role]||0)*r.rate*hrs),0);
-  const priority=['Server','Line Cook','Barista','Runner','Busser','Expo','Ops Consultant'];
-  let iter=0;
-  while(cost<budget*0.92&&iter<30){
-    let added=false;
-    for(const role of priority){
-      const r=OPT_ROLES.find(x=>x.role===role);
-      const tryCost=cost+r.rate*hrs;
-      if(tryCost<=budget){counts[role]=(counts[role]||0)+1;cost=tryCost;added=true;break;}
+function checkNewCertNotifications(){
+  if(currentUser?.role!=='staff'||!currentUser?.staffId)return;
+  const s=staff.find(x=>x.id===currentUser.staffId);
+  if(!s)return;
+  CERT_ROLES.forEach(role=>{
+    const er=evalResults[certKey(s.id,role)];
+    if(er&&!er.notified){
+      er.notified=true;
+      save('evalResults',evalResults);
+      if(er.passed){
+        setTimeout(()=>{showToast(`🎉 Congrats! You're now ${role} Certified!`);launchConfetti();},1000);
+      }
     }
-    if(!added)break;
-    iter++;
-  }
-  optCounts={...counts};
-  save('optCounts',optCounts);
-  const rec=document.getElementById('opt-recommendation');
-  const recBody=document.getElementById('opt-rec-body');
-  rec.style.display='block';
-  recBody.innerHTML=`
-    <div style="font-size:13px;margin-bottom:12px">Optimized crew for <strong>$${sales.toLocaleString()}</strong> sales at <strong>${target}%</strong> labor target (${daytype}):</div>
-    ${OPT_ROLES.map(r=>`
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
-        <span>${counts[r.role]||0}× ${r.role}</span>
-        <span class="font-mono">$${((counts[r.role]||0)*r.rate*hrs).toFixed(0)}</span>
-      </div>
-    `).join('')}
-    <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;font-weight:700">
-      <span>Total hourly labor</span>
-      <span class="font-mono">$${cost.toFixed(0)} (${(cost/sales*100).toFixed(1)}%)</span>
+  });
+}
+
+// ============================================================
+// QUIZ SYSTEM
+// ============================================================
+let quizState={};
+
+function startQuiz(staffId,role){
+  const quiz=QUIZZES[role];
+  if(!quiz){alert('No quiz available for '+role);return;}
+  quizState={staffId,role,questions:quiz.questions,passMark:quiz.passMark,currentQ:0,answers:[],showingResult:false};
+  document.getElementById('quizModalTitle').textContent=`${role} Knowledge Quiz`;
+  renderQuizQuestion();
+  openModal('quizModal');
+}
+
+function renderQuizQuestion(){
+  const {questions,currentQ,passMark}=quizState;
+  if(quizState.showingResult){renderQuizResult();return;}
+  const q=questions[currentQ];
+  document.getElementById('quizBody').innerHTML=`
+    <div class="quiz-progress">Question ${currentQ+1} of ${questions.length} — Need ${passMark}/${questions.length} to pass</div>
+    <div class="quiz-question">${q.q}</div>
+    <div id="quizOptions">
+      ${q.opts.map((opt,i)=>`
+        <div class="quiz-option" id="qopt-${i}" onclick="selectQuizOption(${i})">
+          <span style="font-weight:700;margin-right:8px">${['A','B','C','D'][i]}.</span>${opt}
+        </div>
+      `).join('')}
+    </div>
+    <div id="quizFeedback" style="margin-top:12px;display:none"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-primary" id="quizNextBtn" onclick="quizNext()" style="display:none">Next →</button>
     </div>
   `;
-  renderOptimizer();
+  quizState.selectedOpt=null;
 }
 
-// ==================== FLOOR MAP ====================
-const FLOOR_ZONES = ['section-a','section-b','section-c','2tops','bar','expo','kitchen'];
+function selectQuizOption(idx){
+  if(quizState.selectedOpt!=null)return; // Already answered
+  quizState.selectedOpt=idx;
+  const q=quizState.questions[quizState.currentQ];
+  const correct=idx===q.ans;
+  quizState.answers.push({selected:idx,correct});
+  // Style options
+  document.querySelectorAll('.quiz-option').forEach((el,i)=>{
+    if(i===q.ans)el.classList.add('correct');
+    else if(i===idx&&!correct)el.classList.add('wrong');
+  });
+  // Feedback
+  const fb=document.getElementById('quizFeedback');
+  fb.style.display='block';
+  fb.innerHTML=correct?`<div class="alert alert-success">✅ Correct!</div>`:`<div class="alert alert-danger">❌ The correct answer is: <strong>${['A','B','C','D'][q.ans]}. ${q.opts[q.ans]}</strong></div>`;
+  document.getElementById('quizNextBtn').style.display='block';
+}
 
-function populateFloorDateSelect(){
-  const sel = document.getElementById('floorDateSelect');
-  sel.innerHTML='';
-  const today = new Date();
-  for(let d=-1;d<=6;d++){
-    const dt = new Date(today);
-    dt.setDate(dt.getDate()+d);
-    const key = dt.toISOString().split('T')[0];
-    const label = dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-    const opt = document.createElement('option');
-    opt.value=key; opt.textContent=label;
-    if(d===0)opt.selected=true;
-    sel.appendChild(opt);
+function quizNext(){
+  quizState.currentQ++;
+  if(quizState.currentQ>=quizState.questions.length){
+    quizState.showingResult=true;
+    finalizeQuiz();
+  } else {
+    renderQuizQuestion();
   }
 }
 
-function getFloorDateKey(){
-  return document.getElementById('floorDateSelect')?.value || new Date().toISOString().split('T')[0];
-}
-
-function getTodayScheduledStaff(dateKey){
-  // Get day of week for the date
-  const dt = new Date(dateKey+'T12:00:00');
-  const dow = dt.getDay()===0?6:dt.getDay()-1;
-  const weekKey = getWeekKey(dt);
-  const groupedRoles = [...ROLES_FOH,...ROLES_BOH,'Ops Consultant'];
-  const staffIds = new Set();
-  groupedRoles.forEach(role=>{
-    const ck = weekKey+'_d'+dow+'_'+role;
-    (schedule[ck]||[]).forEach(e=>staffIds.add(e.staffId));
-  });
-  return staff.filter(s=>staffIds.has(s.id)&&s.type!=='salary');
-}
-
-function renderFloorMap(){
-  const dateKey = getFloorDateKey();
-  const scheduledStaff = getTodayScheduledStaff(dateKey);
-  const fa = floorAssignments[dateKey] || {};
-
-  // Build set of assigned staff IDs
-  const assignedIds = new Set();
-  FLOOR_ZONES.forEach(z=>{ (fa[z]||[]).forEach(id=>assignedIds.add(id)); });
-
-  // Render FOH chips
-  const fohStaff = scheduledStaff.filter(s=>s.dept==='FOH');
-  const bohStaff = scheduledStaff.filter(s=>s.dept!=='FOH');
-
-  document.getElementById('floorChipsFOH').innerHTML = fohStaff.length
-    ? fohStaff.map(s=>chipHTML(s, assignedIds.has(s.id))).join('')
-    : '<div class="no-schedule-msg">No FOH scheduled</div>';
-
-  document.getElementById('floorChipsBOH').innerHTML = bohStaff.length
-    ? bohStaff.map(s=>chipHTML(s, assignedIds.has(s.id))).join('')
-    : '<div class="no-schedule-msg">No BOH scheduled</div>';
-
-  // Render zone chips
-  FLOOR_ZONES.forEach(zone=>{
-    const el = document.getElementById('zone-chips-'+zone);
-    if(!el) return;
-    const zoneStaffIds = fa[zone]||[];
-    el.innerHTML = zoneStaffIds.map(id=>{
-      const s = staff.find(x=>x.id===id);
-      if(!s) return '';
-      const cls = s.dept==='FOH'?'foh-chip':'boh-chip';
-      return `<div class="staff-chip ${cls}" onclick="unassignFromZone('${zone}',${id})" title="Click to unassign">${s.nick||s.first}</div>`;
-    }).join('');
-    if(!zoneStaffIds.length) el.innerHTML='<div style="font-size:11px;color:var(--muted);opacity:0.6">drop here</div>';
-  });
-}
-
-function chipHTML(s, assigned){
-  const cls = s.dept==='FOH'?'foh-chip':'boh-chip';
-  if(assigned){
-    return `<div class="staff-chip ${cls} chip-assigned" title="Already assigned to a zone">${s.nick||s.first}</div>`;
+function finalizeQuiz(){
+  const {staffId,role,answers,passMark}=quizState;
+  const score=answers.filter(a=>a.correct).length;
+  const total=quizState.questions.length;
+  const passed=score>=passMark;
+  const result={score,total,passed,date:new Date().toISOString()};
+  quizResults[certKey(staffId,role)]=result;
+  save('quizResults',quizResults);
+  if(passed){
+    const currentLvl=getCertLevel(staffId,role);
+    if(currentLvl<2){setCertLevel(staffId,role,2);logCert(staffId,role,2,'Quiz Passed');}
   }
-  return `<div class="staff-chip ${cls}" draggable="true" data-staff-id="${s.id}"
-    ondragstart="dragStart(event,${s.id})"
-    title="Drag to assign">${s.nick||s.first}</div>`;
+  renderQuizResult();
 }
 
-let dragStaffId = null;
-
-function dragStart(event, staffId){
-  dragStaffId = staffId;
-  event.dataTransfer.effectAllowed = 'move';
-  event.dataTransfer.setData('text/plain', String(staffId));
+function renderQuizResult(){
+  const {staffId,role,answers,passMark}=quizState;
+  const score=answers.filter(a=>a.correct).length;
+  const total=quizState.questions.length;
+  const passed=score>=passMark;
+  document.getElementById('quizBody').innerHTML=`
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:60px;margin-bottom:16px">${passed?'🎉':'😓'}</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:${passed?'var(--success)':'var(--danger)'}">${passed?'PASSED!':'NOT YET'}</div>
+      <div style="font-size:32px;font-weight:700;margin:12px 0">${score} / ${total}</div>
+      <div style="font-size:14px;color:var(--muted)">${passed?'Knowledge certification unlocked! Awaiting service evaluation.':score+'/${total} — need '+passMark+' to pass. Review and try again.'}</div>
+      ${passed?`<div class="alert alert-success" style="margin-top:16px;text-align:left">✅ You are now <strong>Knowledge Certified</strong> for ${role}. Your manager will schedule a service evaluation.</div>`:''}
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:16px">
+      ${!passed?`<button class="btn btn-outline" onclick="startQuiz(${staffId},'${role}')">🔄 Try Again</button>`:'<div></div>'}
+      <button class="btn btn-primary" onclick="closeModal('quizModal');renderMyCertifications()">Done</button>
+    </div>
+  `;
+  if(passed)launchConfetti();
 }
 
-function dropToZone(event, zone){
-  event.preventDefault();
-  const zoneEl = document.getElementById('zone-'+zone);
-  if(zoneEl) zoneEl.classList.remove('drag-over');
-  const id = parseInt(event.dataTransfer.getData('text/plain')) || dragStaffId;
-  if(!id) return;
-  const dateKey = getFloorDateKey();
-  if(!floorAssignments[dateKey]) floorAssignments[dateKey]={};
-  if(!floorAssignments[dateKey][zone]) floorAssignments[dateKey][zone]=[];
-  // Remove from other zones first
-  FLOOR_ZONES.forEach(z=>{
-    floorAssignments[dateKey][z] = (floorAssignments[dateKey][z]||[]).filter(x=>x!==id);
-  });
-  // Add to this zone
-  if(!floorAssignments[dateKey][zone].includes(id)){
-    floorAssignments[dateKey][zone].push(id);
-  }
-  save('floorAssignments',floorAssignments);
-  renderFloorMap();
+// ============================================================
+// MY PROFILE (Staff)
+// ============================================================
+function renderMyProfile(){
+  if(!currentUser?.staffId){document.getElementById('myProfileContent').innerHTML='<div class="alert alert-warn">No staff record linked.</div>';return;}
+  const s=staff.find(x=>x.id===currentUser.staffId);
+  if(!s){document.getElementById('myProfileContent').innerHTML='<div class="alert alert-warn">Staff record not found.</div>';return;}
+  const certCount=CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=3).length;
+  const pinsEarned=certCount;
+  document.getElementById('myProfileContent').innerHTML=`
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--brown);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700">${s.first.charAt(0)}</div>
+        <div>
+          <div style="font-size:22px;font-weight:700;font-family:'Space Grotesk',sans-serif">${s.first} ${s.last}</div>
+          ${s.nick&&s.nick!==s.first?`<div style="font-size:13px;color:var(--muted)">Goes by: ${s.nick}</div>`:''}
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <span class="badge ${s.dept==='FOH'?'badge-foh':s.dept==='BOH'?'badge-boh':'badge-mgmt'}">${s.dept}</span>
+            <span class="badge badge-l2">${s.role}</span>
+            <span class="badge ${s.status==='active'?'badge-l3':'badge-l1'}">${s.status}</span>
+          </div>
+        </div>
+      </div>
+      <div class="sep"></div>
+      <div class="grid-4" style="gap:12px">
+        <div class="profile-stat"><div class="val">${pinsEarned}</div><div class="lbl">Pins Earned</div></div>
+        <div class="profile-stat"><div class="val">${CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=1).length}</div><div class="lbl">Roles Assigned</div></div>
+        <div class="profile-stat"><div class="val">${FOOD_HANDLER_BADGE[s.foodHandler]?s.foodHandler:'—'}</div><div class="lbl">Food Handler</div></div>
+        <div class="profile-stat"><div class="val">${s.start||'—'}</div><div class="lbl">Start Date</div></div>
+      </div>
+      ${pinsEarned>0?`<div class="sep"></div><div class="card-title">🎖 Earned Pins</div><div style="display:flex;gap:12px;flex-wrap:wrap">${CERT_ROLES.filter(r=>getCertLevel(s.id,r)>=3).map(r=>`<div style="text-align:center"><div style="font-size:32px">${PIN_EMOJIS[r]||'🏅'}</div><div style="font-size:11px;font-weight:600">${r}</div></div>`).join('')}</div>`:''}
+    </div>
+  `;
 }
 
-function unassignFromZone(zone, staffId){
-  const dateKey = getFloorDateKey();
-  if(!floorAssignments[dateKey]) return;
-  floorAssignments[dateKey][zone] = (floorAssignments[dateKey][zone]||[]).filter(x=>x!==staffId);
-  save('floorAssignments',floorAssignments);
-  renderFloorMap();
-}
-
-function clearFloorAssignments(){
-  if(!confirm('Clear all floor assignments for this date?')) return;
-  const dateKey = getFloorDateKey();
-  delete floorAssignments[dateKey];
-  save('floorAssignments',floorAssignments);
-  renderFloorMap();
-}
-
-// ==================== AVAILABILITY ====================
-function renderAvailability(){
-  const tbody = document.getElementById('availBody');
-  const fohStaff = staff.filter(s=>s.dept==='FOH'&&s.status==='active'&&s.type!=='salary');
-  const bohStaff = staff.filter(s=>s.dept==='BOH'&&s.status==='active'&&s.type!=='salary');
-
-  // Pre-opening events (Jun 2026, Mon=0)
-  // Jun 5 = Fri (di=4), Jun 6 = Sat (di=5), Jun 7 = Sun (di=6), Jun 11 = Thu (di=3), Jun 13 = Sat (di=5)
-  const events = [
-    {label:'🎉 F&F Dinner — Jun 5',cols:[null,null,null,null,'F&F',null,null]},
-    {label:'🟢 Soft Open — Jun 6–7',cols:[null,null,null,null,null,'SOFT','SOFT']},
-    {label:'📸 Media Day — Jun 11',cols:[null,null,null,'MEDIA',null,null,null]},
-    {label:'🎊 Grand Opening — Jun 13',cols:[null,null,null,null,null,'OPEN',null]},
-  ];
-
-  let html = '';
-
-  // Events rows
-  events.forEach(ev=>{
-    html+=`<tr class="avail-event-row"><td style="font-size:11px;font-weight:600;color:#4C1D95">${ev.label}</td>`;
-    ev.cols.forEach(c=>{
-      html+=`<td>${c?`<span style="font-size:10px;font-weight:700;color:#5B21B6">${c}</span>`:''}</td>`;
+// ============================================================
+// MY SCHEDULE (Staff)
+// ============================================================
+function renderMySchedule(){
+  if(!currentUser?.staffId){document.getElementById('myScheduleContent').innerHTML='<div class="alert alert-warn">No staff record linked.</div>';return;}
+  const sid=currentUser.staffId;
+  const now=new Date();
+  const weekKey=getWeekKey(now);
+  const rows=[];
+  for(let d=0;d<7;d++){
+    ROLES_FOH.concat(ROLES_BOH).concat(['Ops Consultant']).forEach(role=>{
+      const ck=weekKey+'_d'+d+'_'+role;
+      const shifts=schedule[ck]||[];
+      const myShift=shifts.find(e=>e.staffId===sid);
+      if(myShift){
+        const isW=d>=5;
+        const hrs=SHIFT_HOURS[isW?'weekend':'weekday'][myShift.shiftType]||7;
+        rows.push({day:DAYS[d],role,shiftType:myShift.shiftType,hours:hrs});
+      }
     });
-    html+='</tr>';
-  });
-
-  function staffRows(list, groupLabel, filterKey){
-    if(currentAvailFilter!=='all'&&currentAvailFilter!==filterKey) return '';
-    let r=`<tr class="avail-group-header"><td colspan="8">${groupLabel}</td></tr>`;
-    list.forEach(s=>{
-      const av = AVAILABILITY[s.id]||['ALL','ALL','ALL','ALL','ALL','ALL','ALL'];
-      r+=`<tr>
-        <td><strong>${s.first} ${s.last}</strong><br><span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
-        ${av.map(v=>`<td style="text-align:center"><span class="avail-cell ${availClass(v)}">${availLabel(v)}</span></td>`).join('')}
-      </tr>`;
-    });
-    return r;
   }
-
-  html += staffRows(fohStaff,'👥 Front of House (FOH)','foh');
-  html += staffRows(bohStaff,'🍳 Back of House (BOH)','boh');
-  tbody.innerHTML = html;
+  const totalHrs=rows.reduce((a,b)=>a+b.hours,0);
+  document.getElementById('myScheduleContent').innerHTML=rows.length?`
+    <div class="card">
+      <div class="card-title">Week of ${new Date(weekKey).toLocaleDateString('en-US',{month:'long',day:'numeric'})}</div>
+      <table>
+        <thead><tr><th>Day</th><th>Role</th><th>Shift</th><th>Hours</th></tr></thead>
+        <tbody>${rows.map(r=>`<tr><td><strong>${r.day}</strong></td><td><span class="badge ${ROLES_FOH.includes(r.role)?'badge-foh':'badge-boh'}">${r.role}</span></td><td><span class="badge ${r.shiftType==='opening'?'badge-l3':r.shiftType==='closing'?'badge-l1':'badge-l2'}">${r.shiftType}</span></td><td class="font-mono">${r.hours}h</td></tr>`).join('')}</tbody>
+      </table>
+      <div class="sep"></div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600"><span>Total hours this week</span><span class="font-mono">${totalHrs}h</span></div>
+    </div>
+  `:'<div class="card" style="text-align:center;padding:40px;color:var(--muted)">No shifts scheduled this week.<br><span style="font-size:13px">Check with your manager.</span></div>';
 }
 
-function filterAvail(filter, btn){
-  currentAvailFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  renderAvailability();
+// ============================================================
+// CONFETTI & TOAST
+// ============================================================
+function launchConfetti(){
+  const c=document.createElement('div');
+  c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden';
+  const colors=['#8B4513','#CC2222','#F59E0B','#16A34A','#3B82F6','#8B5CF6'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div');
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    const size=6+Math.random()*10;
+    const left=Math.random()*100;
+    const delay=Math.random()*0.8;
+    const duration=1.5+Math.random()*1.5;
+    p.style.cssText=`position:absolute;width:${size}px;height:${size}px;background:${color};left:${left}%;top:-20px;border-radius:${Math.random()>0.5?'50%':'2px'};animation:fall ${duration}s ease-in ${delay}s forwards`;
+    c.appendChild(p);
+  }
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),100+60*60);
 }
 
-// ==================== MODAL ====================
-function openModal(id){document.getElementById(id).classList.add('open')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
-document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('open')});
+// ============================================================
+// BOOTSTRAP — called on page load
+// ============================================================
+document.addEventListener('DOMContentLoaded', async function(){
+  await ensureAdminUser();
+  // Set today's date in topbar
+  const now = new Date();
+  const topDate = document.getElementById('topDate');
+  if(topDate) topDate.textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  // Auto-check if already logged in
+  const sessionRaw = localStorage.getItem('sis_session');
+  if(sessionRaw){
+    try{
+      const sess = JSON.parse(sessionRaw);
+      if(sess && sess.expiry && Date.now() < sess.expiry){
+        currentUser = sess.user;
+        document.getElementById('loginScreen').style.display='none';
+        document.getElementById('app').style.display='block';
+        renderAll();
+        return;
+      }
+    }catch(e){}
+  }
+  // Show login screen
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+});
 </script>
 </body>
 </html>
