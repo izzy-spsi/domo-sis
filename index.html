@@ -266,10 +266,11 @@ tr:hover td{background:#FAFAF8}
       <h2>Staff Directory</h2>
       <button class="btn btn-primary" onclick="openAddStaff()">+ Add Staff</button>
     </div>
-    <div class="card">
+    <div id="staffAlert"></div>
+    <div class="card" style="overflow-x:auto">
       <table>
         <thead>
-          <tr><th>Name</th><th>Role</th><th>Type</th><th>Rate</th><th>Start Date</th><th>Status</th><th>Actions</th></tr>
+          <tr><th>Name</th><th>Dept / Role</th><th>Phone</th><th>Email</th><th>Rate</th><th>Food Handler</th><th>Status</th><th>Actions</th></tr>
         </thead>
         <tbody id="staffTableBody"></tbody>
       </table>
@@ -456,6 +457,30 @@ tr:hover td{background:#FAFAF8}
     </div>
     <div class="form-row">
       <div class="form-group">
+        <label>Preferred / Goes By</label>
+        <input type="text" id="sf-nick" placeholder="Nickname">
+      </div>
+      <div class="form-group">
+        <label>Department</label>
+        <select id="sf-dept">
+          <option value="FOH">FOH (Front of House)</option>
+          <option value="BOH">BOH (Back of House)</option>
+          <option value="MGMT">Management</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" id="sf-phone" placeholder="714-000-0000">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="sf-email" placeholder="email@gmail.com">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
         <label>Primary Role</label>
         <select id="sf-role">
           <option value="Server">Server (FOH)</option>
@@ -488,13 +513,23 @@ tr:hover td{background:#FAFAF8}
         <input type="date" id="sf-start">
       </div>
     </div>
-    <div class="form-group" style="margin-bottom:16px">
-      <label>Status</label>
-      <select id="sf-status">
-        <option value="active">Active</option>
-        <option value="training">In Training</option>
-        <option value="inactive">Inactive</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Food Handler Status</label>
+        <select id="sf-foodhandler">
+          <option value="Active">✅ Active</option>
+          <option value="No card">🚨 No Card</option>
+          <option value="Renew soon">⚠️ Renew Soon</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="sf-status">
+          <option value="active">Active</option>
+          <option value="training">In Training</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btn-outline" onclick="closeModal('addStaffModal')">Cancel</button>
@@ -545,6 +580,13 @@ const DEFAULT_RATES = {
   'Line Cook':18.90,'Expo':18.90,'Head Chef':92100,'GM':99800,'Ops Consultant':35
 };
 
+const FOOD_HANDLER_BADGE = {
+  'Active':'<span class="badge" style="background:#D1FAE5;color:#065F46">✅ Active</span>',
+  'No card':'<span class="badge" style="background:#FEE2E2;color:#991B1B">🚨 No Card</span>',
+  'Renew soon':'<span class="badge" style="background:#FEF3C7;color:#92400E">⚠️ Renew</span>',
+  '—':'<span class="badge badge-l0">—</span>'
+};
+
 // Shift hours
 const SHIFT_HOURS = {
   weekday:{opening:9+1,full:9,closing:9+1.5,split:6},
@@ -553,16 +595,55 @@ const SHIFT_HOURS = {
 
 function dayType(d){return(d>=5)?'weekend':'weekday'}
 
-function load(k,def){try{return JSON.parse(localStorage.getItem('sis_'+k))||def}catch(e){return def}}
+function load(k,def){try{const v=localStorage.getItem('sis_'+k);return v?JSON.parse(v):def}catch(e){return def}}
 function save(k,v){localStorage.setItem('sis_'+k,JSON.stringify(v))}
 
-let staff = load('staff',[
-  {id:1,first:'Hailey',last:'Salamanca',role:'GM',type:'salary',rate:99800,start:'2026-06-01',status:'active'},
-  {id:2,first:'Chef',last:'TBD',role:'Head Chef',type:'salary',rate:92100,start:'2026-06-01',status:'active'},
-]);
+const SEED_STAFF = [
+  {id:1,first:'Hailey',last:'Salamanca',nick:'Hailey',phone:'',email:'hailey@domokuncafe.com',role:'GM',dept:'MGMT',type:'salary',rate:99800,start:'2026-06-01',status:'active',foodHandler:'Active'},
+  {id:2,first:'TBD',last:'Head Chef',nick:'Chef',phone:'',email:'',role:'Head Chef',dept:'BOH',type:'salary',rate:92100,start:'2026-06-13',status:'active',foodHandler:'Active'},
+  {id:3,first:'Nickolaus',last:'Gonzales',nick:'Nick',phone:'714-819-6433',email:'nickgonzales1129@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:4,first:'Gabriel',last:'Heater',nick:'Gabriel',phone:'562-467-3446',email:'heatergabriel82413@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:5,first:'Hope',last:'Allan',nick:'Hope',phone:'714-681-0486',email:'hope.allan07@icloud.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:6,first:'Chantel',last:'Reyes',nick:'Chantel',phone:'714-612-5940',email:'itschnt31@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:7,first:'Sophia',last:'Lomeli',nick:'Sophia',phone:'714-420-8298',email:'szophiaaa@icloud.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:8,first:'Catherine',last:'Tran',nick:'Catherine',phone:'714-818-2912',email:'tran.catherine.n@gmail.com',role:'Barista',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:9,first:'Jillian',last:'Penera',nick:'Jillian',phone:'562-584-3022',email:'jillianpeneraa@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:10,first:'Alana',last:'Aguilar',nick:'Irene',phone:'657-582-0408',email:'irene14aguilar@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:11,first:'Sierra',last:'Sharpless',nick:'Sierra',phone:'714-470-5437',email:'sierrasharpless13@gmail.com',role:'Runner',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:12,first:'Alice',last:'Hahn',nick:'Ally',phone:'714-820-3460',email:'aliceahahn@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'training',foodHandler:'Active'},
+  {id:13,first:'Dalia',last:'Sanchez',nick:'Dalia',phone:'213-723-8131',email:'sanchezd346@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:14,first:'Jaelynn',last:'Lane',nick:'Jaelynn',phone:'562-271-3228',email:'Jaelane06@gmail.com',role:'Runner',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:15,first:'Stephanie',last:'Delgado',nick:'Steph',phone:'714-495-5683',email:'stephaniedc101@gmail.com',role:'Busser',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:16,first:'Lauren',last:'Nguyen',nick:'Lauren',phone:'714-766-4766',email:'laurennguyen898@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:17,first:'Jada',last:'Delgado',nick:'Jada',phone:'714-657-5620',email:'djada0707@gmail.com',role:'Busser',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:18,first:'Laura',last:'Renteria',nick:'Laura',phone:'714-472-7489',email:'Laura.Renteria31@outlook.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:19,first:'Kiana',last:'Meno',nick:'Kiana',phone:'714-604-3887',email:'kianakmeno@gmail.com',role:'Barista',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:20,first:'Sarah',last:'Ramirez',nick:'Sarah',phone:'714-451-9706',email:'mustang2003girl@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:21,first:'Yash',last:'Patel',nick:'Yash',phone:'951-476-9723',email:'yp7buenapark@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:22,first:'Daniel',last:'Flores',nick:'Daniel',phone:'562-459-9642',email:'danieljune007@gmail.com',role:'Runner',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:23,first:'Isabella',last:'Rodriguez',nick:'Isabella',phone:'661-520-8595',email:'isabella.rdgz9@gmail.com',role:'Server',dept:'FOH',type:'hourly',rate:16.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:24,first:'James',last:'Clark',nick:'James',phone:'657-706-0453',email:'jvclark222@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:25,first:'Bryce',last:'Machado',nick:'Bryce',phone:'714-390-6332',email:'brycemachado34@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Renew soon'},
+  {id:26,first:'Eduardo',last:'Santos',nick:'Eduardo',phone:'714-951-4528',email:'Eduardo.santoss05@icloud.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:27,first:'Jessica',last:'Gomez',nick:'Jessica',phone:'714-869-7477',email:'jgomez090701@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:28,first:'Ashley',last:'Lazcano',nick:'Ashley',phone:'714-727-5432',email:'Ashleylazcano505@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:29,first:'Rebekah',last:'Snyder',nick:'Rebekah',phone:'314-337-3720',email:'rebekah07ns@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:30,first:'Jubilee',last:'Xieu',nick:'Jubilee',phone:'562-348-5173',email:'jubileexieu@gmail.com',role:'Expo',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Renew soon'},
+  {id:31,first:'Janet',last:'Delgado',nick:'Janet',phone:'714-805-3381',email:'janetdelgado.g7@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:32,first:'Josue',last:'Irineo',nick:'Josue',phone:'818-582-0377',email:'josueirineo@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:33,first:'Isaac',last:'Cho',nick:'Isaac',phone:'714-204-2465',email:'isch51805@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'No card'},
+  {id:34,first:'Jesus',last:'Alarcon',nick:'Jesus',phone:'657-375-9398',email:'jesusalarcon1801@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:35,first:'Viviana',last:'Sanchez',nick:'Viviana',phone:'909-205-5784',email:'Viviana404@icloud.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:36,first:'Graciela',last:'Arias',nick:'Grace',phone:'714-598-7298',email:'ariasgraciela3@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:37,first:'Gian Gabriel',last:'Guillermo',nick:'Gian',phone:'714-512-0161',email:'lawlap04@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+  {id:38,first:'Miguel',last:'Salas',nick:'Miguel',phone:'858-212-6236',email:'Miguelsalas085@gmail.com',role:'Line Cook',dept:'BOH',type:'hourly',rate:18.90,start:'2026-05-29',status:'active',foodHandler:'Active'},
+];
+
+let staff = load('staff', null);
+if (!staff) { staff = SEED_STAFF; save('staff', staff); }
 let schedule = load('schedule',{});
 let skills = load('skills',{});
-let nextId = load('nextId',3);
+let nextId = load('nextId', 39);
 
 // ==================== LOGIN ====================
 function doLogin(){
@@ -611,24 +692,36 @@ function showTab(id){
 // ==================== STAFF ====================
 function renderStaffTable(){
   const tbody = document.getElementById('staffTableBody');
-  const activeStaff = staff.filter(s=>s.status!=='inactive');
+  const noCard = staff.filter(s=>s.foodHandler==='No card'&&s.status==='active').length;
+  const renew = staff.filter(s=>s.foodHandler==='Renew soon'&&s.status==='active').length;
+  const alertEl = document.getElementById('staffAlert');
+  if(alertEl){
+    let alerts=[];
+    if(noCard>0) alerts.push(`🚨 ${noCard} staff with no food handler card`);
+    if(renew>0) alerts.push(`⚠️ ${renew} staff need to renew soon`);
+    const ghost = staff.filter(s=>s.status==='training'&&s.id===12);
+    if(ghost.length) alerts.push('👻 Alice Hahn — zero training attendance, needs follow-up');
+    alertEl.innerHTML = alerts.length ? alerts.map(a=>`<div class="alert ${a.startsWith('🚨')?'alert-danger':a.startsWith('⚠️')?'alert-warn':'alert-warn'}" style="margin-bottom:6px">${a}</div>`).join('') : '';
+  }
   tbody.innerHTML = staff.map(s=>{
     const typeBadge = s.type==='salary'?'badge-mgmt':s.type==='contract'?'badge-consultant':'badge-foh';
-    const roleType = ROLES_FOH.includes(s.role)?'badge-foh':ROLES_BOH.includes(s.role)?'badge-boh':'badge-mgmt';
+    const deptBadge = s.dept==='FOH'?'badge-foh':s.dept==='BOH'?'badge-boh':'badge-mgmt';
     const rateStr = s.type==='salary'?'$'+s.rate.toLocaleString()+'/yr':'$'+s.rate.toFixed(2)+'/hr';
+    const fhBadge = FOOD_HANDLER_BADGE[s.foodHandler||'—']||FOOD_HANDLER_BADGE['—'];
     return `<tr>
-      <td><strong>${s.first} ${s.last}</strong></td>
-      <td><span class="badge ${roleType}">${s.role}</span></td>
-      <td><span class="badge ${typeBadge}">${s.type}</span></td>
+      <td><strong>${s.first} ${s.last}</strong>${s.nick&&s.nick!==s.first?`<br><span style="font-size:11px;color:var(--muted)">Goes by: ${s.nick}</span>`:''}</td>
+      <td><span class="badge ${deptBadge}">${s.dept||'—'}</span> <span style="font-size:11px;color:var(--muted)">${s.role}</span></td>
+      <td class="font-mono" style="font-size:11px">${s.phone||'—'}</td>
+      <td style="font-size:11px">${s.email||'—'}</td>
       <td class="font-mono">${rateStr}</td>
-      <td>${s.start||'—'}</td>
+      <td>${fhBadge}</td>
       <td><span class="badge ${s.status==='active'?'badge-l3':s.status==='training'?'badge-l1':'badge-l0'}">${s.status}</span></td>
       <td><button class="btn btn-outline btn-sm" onclick="editStaff(${s.id})">Edit</button>
           <button class="btn btn-sm" style="background:#FEE2E2;color:#991B1B;margin-left:4px" onclick="removeStaff(${s.id})">✕</button></td>
     </tr>`;
   }).join('');
-  const foh = staff.filter(s=>ROLES_FOH.includes(s.role)&&s.status==='active').length;
-  const boh = staff.filter(s=>ROLES_BOH.includes(s.role)&&s.status==='active').length;
+  const foh = staff.filter(s=>s.dept==='FOH'&&s.status==='active').length;
+  const boh = staff.filter(s=>s.dept==='BOH'&&s.status==='active').length;
   document.getElementById('dir-total').textContent = staff.filter(s=>s.status==='active').length;
   document.getElementById('dir-foh').textContent = foh;
   document.getElementById('dir-boh').textContent = boh;
@@ -638,11 +731,16 @@ function openAddStaff(prefill=null){
   document.getElementById('staffModalTitle').textContent = prefill?'Edit Staff Member':'Add Staff Member';
   document.getElementById('sf-first').value = prefill?.first||'';
   document.getElementById('sf-last').value = prefill?.last||'';
+  document.getElementById('sf-nick').value = prefill?.nick||'';
+  document.getElementById('sf-phone').value = prefill?.phone||'';
+  document.getElementById('sf-email').value = prefill?.email||'';
+  document.getElementById('sf-dept').value = prefill?.dept||'FOH';
   document.getElementById('sf-role').value = prefill?.role||'Server';
   document.getElementById('sf-type').value = prefill?.type||'hourly';
   document.getElementById('sf-rate').value = prefill?.rate||DEFAULT_RATES['Server'];
   document.getElementById('sf-start').value = prefill?.start||'';
   document.getElementById('sf-status').value = prefill?.status||'active';
+  document.getElementById('sf-foodhandler').value = prefill?.foodHandler||'Active';
   document.getElementById('addStaffModal')._editId = prefill?.id||null;
   openModal('addStaffModal');
 }
@@ -657,11 +755,16 @@ function saveStaff(){
     id: editId||nextId++,
     first: document.getElementById('sf-first').value.trim(),
     last: document.getElementById('sf-last').value.trim(),
+    nick: document.getElementById('sf-nick').value.trim(),
+    phone: document.getElementById('sf-phone').value.trim(),
+    email: document.getElementById('sf-email').value.trim(),
+    dept: document.getElementById('sf-dept').value,
     role: document.getElementById('sf-role').value,
     type: document.getElementById('sf-type').value,
     rate: parseFloat(document.getElementById('sf-rate').value)||0,
     start: document.getElementById('sf-start').value,
-    status: document.getElementById('sf-status').value
+    status: document.getElementById('sf-status').value,
+    foodHandler: document.getElementById('sf-foodhandler').value
   };
   if(!entry.first){alert('Name required');return}
   if(editId) staff = staff.map(s=>s.id===editId?entry:s);
