@@ -1101,7 +1101,7 @@ function saveUsers(u){save('users',u);}
 async function ensureAdminUser(){
   let users=loadUsers();
   if(!users.find(u=>u.username==='admin')){
-    const h=await sha256('Domo@2026');
+    const h=await sha256('izzy@2026');
     users.push({id:'admin',username:'admin',passwordHash:h,role:'admin',staffId:null,displayName:'Izzy (Admin)',disabled:false,firstLogin:false,lastLogin:null});
     saveUsers(users);
   }
