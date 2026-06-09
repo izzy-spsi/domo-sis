@@ -2263,6 +2263,15 @@ document.addEventListener('click',e=>{if(e.target.classList.contains('modal-over
 // ============================================================
 window.addEventListener('DOMContentLoaded',async()=>{
   await ensureAdminUser();
+  // Jarvis SSO — auto-login if dashboard token present
+  const ssoToken = 'JARVIS_SSO_2026';
+  const urlSso = new URLSearchParams(window.location.search).get('sso');
+  if(localStorage.getItem('j_sso')===ssoToken || urlSso===ssoToken){
+    if(urlSso===ssoToken) localStorage.setItem('j_sso',ssoToken);
+    const adminSession={userId:'admin',username:'admin',role:'admin',staffId:null,displayName:'Izzy (Admin)',loginTime:Date.now()};
+    save('session',adminSession); currentUser=adminSession; showApp();
+    return;
+  }
   if(checkSession()){showApp();}
 });
 
